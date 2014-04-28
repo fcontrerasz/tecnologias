@@ -1,0 +1,96 @@
+Building configuration...
+
+Current configuration : 1098 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname LAGARX
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$GDGm$I4RkN90OyhXfJSkesWDvi.
+!
+no aaa new-model
+!
+resource policy
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+ip subnet-zero
+!
+!
+ip cef
+no ip dhcp use vrf connected
+!
+!
+no ip domain lookup
+no ip ips deny-action ips-interface
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0
+ ip address 192.168.10.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2
+!
+interface FastEthernet3
+!
+interface FastEthernet4
+!
+interface FastEthernet5
+!
+interface FastEthernet6
+!
+interface FastEthernet7
+!
+interface FastEthernet8
+!
+interface FastEthernet9
+!
+interface Vlan1
+ no ip address
+!
+interface Async1
+ no ip address
+!
+ip classless
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line 1
+line aux 0
+line vty 0 4
+ password 3t71t*
+ login
+!
+no scheduler allocate
+end

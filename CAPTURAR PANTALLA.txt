@@ -1,0 +1,28 @@
+- BAJAR CODEC "Screen Capture DirectShow source filter."
+http://www.umediaserver.net/umediaserver/download.html
+
+- COMO TRABAJAR
+http://nerdlogger.com/2011/11/03/stream-your-windows-desktop-using-ffmpeg/
+
+- BAJAR FFMPEG
+
+<
+
+- LISTAR DIPOSITIVOS
+
+> ffmpeg -list_devices true -f dshow -i dummy
+
+- EJECUTAR 
+
+> ffmpeg -f d show -i video="UScreenCapture" output.flv
+
+- PARA MOSTRAR REMOTO
+
+>ffmpeg -f dshow  -i video="UScreenCapture"  -r 30 -vcodec mpeg4 -q 12 -f mpegts udp://172.16.11.62:6666?pkt_size=188?buffer_size=65535
+
+- comandos
+
+leer stream >ffmpeg -i "udp://172.16.11.62:6666" -b 1024k c:\output.mkv
+
+crear stream >ffmpeg -f dshow  -i video="UScreenCapture" -s 400x300 -r 30 -vcodec mpeg4 -q 12 -f mpegts udp://172.16.11.62:6666?pkt_size=188?buffer_size=65535
+

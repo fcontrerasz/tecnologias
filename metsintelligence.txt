@@ -1,0 +1,9 @@
+TargetDataSourceFolder: Data Sources
+
+TarjetReportFolder: CarpetaRaíz/Subcarpeta
+
+TargetServerURL:
+
+     Asimov (asimov.mets.cl/reports: http://asimov.mets.cl/reportserver 
+     Arquimides (Metsintelligence.mets.cl): http://metsintelligence.mets.cl/reportserver
+

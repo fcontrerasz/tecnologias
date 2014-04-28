@@ -1,0 +1,26 @@
+nagios: mMonitoreo de Redes-
+icinga: Monitoreo de Redes-
+zentyal: Servidor Gateway similar a pfsense.compartir archivos e impresoras, unificar las comunicaciones o una combinación de estas.
+Ophcrack: Usando el Live CD para recuperar la contraseña de un equipo si borrar toda la tabla de usuarios.
+Piwik: es una aplicación de analítica web como Google Analitics
+eyeOS: Cloudcomputing accede a tus datos, archivos y aplicaciones desde donde sea.
+iStat: 
+Ploplinux: Es posible que alguna vez nos encontremos con el caso de que la BIOS sea algo antigua y no reconozca el dispositivo USB.
+Para estas situaciones extremas disponemos de Plop Linux junto con Boot Manager, un gestor de arranque independiente, que nos permite entrar en el sistema desde un USB o incluso una red
+VisualSVN: Montar SErvidor Subversion en Windows. Luego aplicar cliente tortoise.
+GPARTED: Administrar Particiones Linux, bueno para formatear.
+Apache Axis: Apache Axis es una implementación OpenSource de SOAP que proporciona un entorno de ejecución para Servicios Web implementados en Java.
+Red5: Servidor Streaming.
+RedFire: Streaming + Chat http://code.google.com/p/redfire/
+CloneZilla: Programa para clonar el Sistema Operativo.
+SystemRescueCd: (sourceforge) Herramientas de recuperacion de S.O.
+VHCS: Administrador de Hosting Simple.
+WEBSOCKET: mensajeria instantánea.
+ankhsvn: es un plugin para subversion en visual studio https://ankhsvn.open.collab.net/
+freeswitch: servidor de telefonia como asterisk.
+webrtc: protocolo de audio/video de transmision.
+WOWZA MEDIA: Servidor de streaming.
+- http://stackoverflow.com/questions/1253683/what-browsers-support-html5-websocket-api
+- http://en.wikipedia.org/wiki/WebSocket
+- http://webtide.intalio.com/2011/04/getting-started-with-websockets/
+- http://blogs.webtide.com/gregw/entry/websocket_chat

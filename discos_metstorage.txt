@@ -1,0 +1,76 @@
+Disk /dev/sdx: 128 MB, 128057344 bytes
+8 heads, 32 sectors/track, 977 cylinders
+Units = cylinders of 256 * 512 = 131072 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdx1               1           8        1008   83  Linux
+/dev/sdx2               9         440       55296   83  Linux
+/dev/sdx3             441         872       55296   83  Linux
+/dev/sdx4             873         977       13440    5  Extended
+/dev/sdx5             873         913        5232   83  Linux
+/dev/sdx6             914         977        8176   83  Linux
+
+Disk /dev/sda: 1000.2 GB, 1000204886016 bytes
+255 heads, 63 sectors/track, 121601 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          66      530113+  83  Linux
+/dev/sda2              67         132      530145   82  Linux swap / Solaris
+/dev/sda3             133      121538   975193695   83  Linux
+/dev/sda4          121539      121600      498015   83  Linux
+
+Disk /dev/sda4: 469 MB, 469893120 bytes
+2 heads, 4 sectors/track, 114720 cylinders
+Units = cylinders of 8 * 512 = 4096 bytes
+
+Disk /dev/sda4 doesn't contain a valid partition table
+
+Disk /dev/sdb: 1000.2 GB, 1000204886016 bytes
+255 heads, 63 sectors/track, 121601 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1   *           1          66      530113+  83  Linux
+/dev/sdb2              67         132      530145   82  Linux swap / Solaris
+/dev/sdb3             133      121538   975193695   83  Linux
+/dev/sdb4          121539      121600      498015   83  Linux
+
+Disk /dev/sdc: 1000.2 GB, 1000204886016 bytes
+255 heads, 63 sectors/track, 121601 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdc1   *           1          66      530113+  83  Linux
+/dev/sdc2              67         132      530145   82  Linux swap / Solaris
+/dev/sdc3             133      121538   975193695   83  Linux
+/dev/sdc4          121539      121600      498015   83  Linux
+
+Disk /dev/sdd: 1000.2 GB, 1000204886016 bytes
+255 heads, 63 sectors/track, 121601 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdd1   *           1          66      530113+  83  Linux
+/dev/sdd2              67         132      530145   82  Linux swap / Solaris
+/dev/sdd3             133      121538   975193695   83  Linux
+/dev/sdd4          121539      121600      498015   83  Linux
+
+Disk /dev/sds: 1000.2 GB, 1000204886016 bytes
+255 heads, 63 sectors/track, 121601 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sds1               1      121601   976760001    7  HPFS/NTFS
+
+Disk /dev/md9: 542 MB, 542769152 bytes
+2 heads, 4 sectors/track, 132512 cylinders
+Units = cylinders of 8 * 512 = 4096 bytes
+
+Disk /dev/md9 doesn't contain a valid partition table
+
+Disk /dev/md4: 542 MB, 542769152 bytes
+2 heads, 4 sectors/track, 132512 cylinders
+Units = cylinders of 8 * 512 = 4096 bytes
+
+Disk /dev/md4 doesn't contain a valid partition table

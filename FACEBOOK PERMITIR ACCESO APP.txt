@@ -1,0 +1,22 @@
+1) Login to facebook.
+
+2) Grant your application offline access to your account: http://m.facebook.com/authorize.php?api_key=YOUR_API_KEY&v=1.0&ext_perm=offline_access
+
+3) Add read stream permission http://m.facebook.com/authorize.php?api_key=YOUR_API_KEY&v=1.0&ext_perm=read_stream
+
+4) Generate a key code http://www.facebook.com/code_gen.php?v=1.0&api_key=YOUR_API_KEY
+
+5) Run this script once and copy the "session_key".
+
+$facebook = new Facebook($api_key, $api_secret);
+$infinite_key = $facebook->api_client->auth_getSession(YOUR_KEY_CODE);
+print_r($infinite_key);
+6) Plug and play!
+
+$facebook->api_client->user = YOUR_FACEBOOK_USER_ID
+$facebook->api_client->session_key = YOUR_INFINITE_KEY
+$facebook->api_client->expires = 0;
+$feed = $facebook->api_client->stream_get(YOUR_FACEBOOK_USER_ID, FAN_PAGE_ID);
+So bascially, this will grab the feed from your "perspective" but filter it only to show items from the specified Fan page.
+
+Disclaimer: This works, but I'm not sure whether this is a "supported" method for grabbing data, or even allowed at all.

@@ -1,0 +1,9 @@
+Quitar programas o programas
+Para quitar un programa o conjunto de programas, ejecute el comando siguiente con el GUID adecuado del producto
+msiexec.exe /x {guid}
+donde GUID es el número GUID sin comprimir entre llaves.
+
+Por ejemplo, el comando siguiente quita Microsoft Office 2000 Premium sin ninguna intervención del usuario:
+msiexec.exe /x {00000409 - 78E1 - 11 D 2-B60F-006097C998E7} /qn
+Si es necesario, también puede crear un archivo de registro durante la eliminación. Para ello, anexe lo siguiente al final de la línea de comandos:
+/ l * v C:\uninstall.log

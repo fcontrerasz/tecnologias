@@ -1,0 +1,2 @@
+VDN
+Siglas en inglés de Vector Directory Number, o Directorio de Números de Vectores, un direccionamiento de líneas telefónicas en la PBX o ACD a través de vectores. Es el identificador de grupo de salto (cola) de la centralita

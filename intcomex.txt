@@ -1,0 +1,7 @@
+cliente: 004945
+user: ventas
+pass: ventas2
+
+www.masgrafica.cl
+
+metro sta lucia regalos publicitarios

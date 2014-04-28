@@ -1,0 +1,41 @@
+Dependiendo del método/algoritmo que escojamos, podremos balancear la carga entre todos los esclavos. Los algoritmos implementados son:
+
+- Balance-rr (Round-Robin)
+- Active Backup
+- Balance XOR
+- Broadcast
+- IEEE 802.3ad
+- Balance-tlb (Adaptive Transmit Load Balancing)
+- Balance-alb (Adaptive Load Balancing)
+
+Balance-rr (modo 0): se emplea un algoritmo round robin entre la cola virtual y las de los esclavos. Es algo así como: un paquete para un esclavo, otro para otro esclavo, un paquete para un esclavo, otro para el otro… etc.
+
+Active-backup (modo 1): realmente no balancea la carga, usa sólo un esclavo y en caso de fallar, usa el siguiente disponible.
+
+Balance-xor (modo 2): emplea una fórmula para decidir por qué interfaz esclavo (slave) sale la información: (source-MAC xor dest-MAC) mod n-slaves.  Este método ofrece balanceo de carga y tolerancia a errores en caso de pérdida de una de las conexiones.
+
+Broadcast (modo 3): se transmite todo por todas las interfaces/tarjetas. Este método no balancea la carga, pero provee tolerancia en caso de fallo en cualquiera de las interfaces.
+
+802.3ad (modo 4): Configura una política de agregación de enlace dinámico IEEE 802.3ad. Crea grupos de agregación que comparten las mismas especificaciones de velocidad y duplex. Transmite y recibe en todos los esclavos en el agregador activo.
+
+Balance-tlb (modo 5): balancea la carga de transmisión entre los esclavos dependiendo de la velocidad de estos y de la carga total. El tráfico es recibido por un esclavo, en caso de fallar otro esclavo toma su MAC y continúa recibiendo tráfico.  No requiere de ninguna configuración en el switch.
+
+Balance-alb (mode=balance o mode=6): realiza el balanceo anterior además de un balanceo también en la recepción. Este método debe modificar las MAC de los esclavos estando las tarjetas activas.
+
+Los tipos más frecuentes son los primeros 4, aunque nuestra sugerencia es la siguiente.  Si el switch del que usted dispone no es gestionable, entonces use el modo 0 (Balance-rr), y en caso de que si que lo sea, aprovéchese de la suma de velocidades con el modo 4 (IEEE 802.3ad)
+
+Tenga en cuenta que el balanceo de carga NO le proporciona suma de velocidad, asi que si lo que quiere es suma velocidades, use el modo 4 y gestione su Switch
+
+Configuraciones en el switch
+
+Los modos active-backup, balance-tlb y balance-alb no requiere ninguna configuración especial en el switch, ideales si no tenemos acceso a la configuración del equipamiento de red Eye-wink.
+
+El modo 802.3ad requiere que el switch tenga los puertos donde conectamos los esclavos en modo 802.3ad aggregation. Esto depende de cada switch, por ejemplo, en los switch’s de Cisco esta capacidad se llama EtherChannel y debe estar en modo lacp.
+
+Por último, los modos balance-rr, balance-xor y broadcast generalmente requieren poder agrupar puertos. Las nomenclaturas de estos grupos dependen del fabricante del switch, como hemos dicho antes, Cisco llama a estas agrupaciones EtherChannel, también se usa trunk group, etc.
+
+Direcciones MAC
+
+Las direcciones MAC de nuestros grupos (bonds) serán cogidas siempre del primer esclavo.  Para restaurar las direcciones MAC, entonces necesitaremos desmontar los grupos, y los MAC de cada interfaz volverán a ser los mismos que originalmente tenían.
+
+Por último, aqui os paso un par de links para que podáis seguir leyendo sobre este maravilloso mundo del port bonding / trunking
