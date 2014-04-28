@@ -1,0 +1,10 @@
+ffmpeg -codecs - would list everything
+ffmpeg -codecs:a:e - would list only audio encoders
+ffmpeg -codecs:a:d - would listonly audio decoders
+ffmpeg -codecs:v:e - would list only video encoders
+ffmpeg -codecs:v:d - would listonly video decoders
+ffmpeg -formats - would list everything
+ffmpeg -formats:a:d - mould list only audio demuxers
+ffmpeg -formats:a:m - mould list only audio muxers
+ffmpeg -formats:v:d - mould list only video demuxers
+ffmpeg -formats:v:m - mould list only video muxers

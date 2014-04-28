@@ -1,0 +1,5 @@
+http://www.imagegroup.cl/cpanel
+
+ftp://ftp.imagegroup.cl
+Usuario: imagegro
+Pass: kfycye

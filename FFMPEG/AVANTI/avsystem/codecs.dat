@@ -1,0 +1,375 @@
+[CODECSTATS]
+CodecsTotal=370
+CodecsVer=0.7.0
+
+[#EVENT/#THIS/IDCODECS]
+---	---	---	D V D 	4xm	unregistered	Y	4X Movie
+---	---	---	D V D 	8bps	unregistered	Y	QuickTime 8BPS video
+svx	---	---	D A D 	8svx_exp	unregistered	Y	8SVX exponential
+svx	---	---	D A D 	8svx_fib	unregistered	Y	8SVX fibonacci
+---	---	---	D A   	8svx_raw	unregistered	Y	8SVX rawaudio
+---	---	---	 EV   	a64multi	unregistered	Y	Multicolor charset for Commodore 64
+---	---	---	 EV   	a64multi5	unregistered	Y	Multicolor charset for Commodore 64, extended with 5th color (colram)
+aac	---	---	DEA D 	aac	aac (libav)	Y	Advanced Audio Coding
+---	---	---	D A D 	aac_latm	unregistered	Y	AAC LATM (Advanced Audio Codec LATM syntax)
+aac	---	---	D V D 	aasc	unregistered	Y	Autodesk RLE
+ac3	---	---	DEA D 	ac3	AC3 - Float	Y	ATSC A/52 / AC-3
+ac3	---	---	 EA   	ac3_fixed	AC3 - Fixed	Y	ATSC A/52A (AC-3)
+wav	---	---	D A D 	adpcm_4xm	unregistered	Y	ADPCM 4X Movie
+wav	---	---	DEA D 	adpcm_adx	unregistered	Y	SEGA CRI ADX ADPCM
+wav	---	---	D A D 	adpcm_ct	unregistered	Y	ADPCM Creative Technology
+wav	---	---	D A D 	adpcm_ea	unregistered	Y	ADPCM Electronic Arts
+wav	---	---	D A D 	adpcm_ea_maxis_xa	unregistered	Y	ADPCM Electronic Arts Maxis CDROM XA
+wav	---	---	D A D 	adpcm_ea_r1	unregistered	Y	ADPCM Electronic Arts R1
+wav	---	---	D A D 	adpcm_ea_r2	unregistered	Y	ADPCM Electronic Arts R2
+wav	---	---	D A D 	adpcm_ea_r3	unregistered	Y	ADPCM Electronic Arts R3
+wav	---	---	D A D 	adpcm_ea_xas	unregistered	Y	ADPCM Electronic Arts XAS
+wav	---	---	D A D 	adpcm_ima_amv	unregistered	Y	ADPCM IMA AMV
+---	---	---	D A D 	adpcm_ima_apc	unregistered	Y	ADPCM IMA CRYO APC
+wav	---	---	D A D 	adpcm_ima_dk3	unregistered	Y	ADPCM IMA Duck DK3
+wav	---	---	D A D 	adpcm_ima_dk4	unregistered	Y	ADPCM IMA Duck DK4
+wav	---	---	D A D 	adpcm_ima_ea_eacs	unregistered	Y	ADPCM IMA Electronic Arts EACS
+wav	---	---	D A D 	adpcm_ima_ea_sead	unregistered	Y	ADPCM IMA Electronic Arts SEAD
+---	---	---	D A D 	adpcm_ima_iss	unregistered	Y	ADPCM IMA Funcom ISS
+wav	---	---	DEA D 	adpcm_ima_qt	unregistered	Y	ADPCM IMA QuickTime
+wav	---	---	D A D 	adpcm_ima_smjpeg	unregistered	Y	ADPCM IMA Loki SDL MJPEG
+wav	---	---	DEA D 	adpcm_ima_wav	unregistered	Y	ADPCM IMA WAV
+wav	---	---	D A D 	adpcm_ima_ws	unregistered	Y	ADPCM IMA Westwood
+wav	---	---	DEA D 	adpcm_ms	unregistered	Y	ADPCM Microsoft
+wav	---	---	D A D 	adpcm_sbpro_2	unregistered	Y	ADPCM Sound Blaster Pro 2-bit
+wav	---	---	D A D 	adpcm_sbpro_3	unregistered	Y	ADPCM Sound Blaster Pro 2.6-bit
+wav	---	---	D A D 	adpcm_sbpro_4	unregistered	Y	ADPCM Sound Blaster Pro 4-bit
+swf	---	---	DEA D 	adpcm_swf	unregistered	Y	ADPCM Shockwave Flash
+wav	---	---	D A D 	adpcm_thp	unregistered	Y	ADPCM Nintendo Gamecube THP
+wav	---	---	D A D 	adpcm_xa	unregistered	Y	ADPCM CDROM XA
+wav	---	---	DEA D 	adpcm_yamaha	unregistered	Y	ADPCM Yamaha
+alac	---	---	DEA D 	alac	unregistered	Y	ALAC (Apple Lossless Audio Codec)
+---	---	---	D A D 	als	unregistered	Y	MPEG-4 Audio Lossless Coding (ALS)
+amr	---	---	DEA   	amr_nb	unregistered	Y	Older FFmpeg versions
+amr	---	---	DEA   	amr_wb	unregistered	Y	Older FFmpeg versions
+amr	---	---	D A D 	amrnb	unregistered	Y	Adaptive Multi-Rate NarrowBand
+amr	---	---	D A D 	amrwb	unregistered	Y	Adaptive Multi-Rate WideBand
+---	---	---	DEV   	amv	unregistered	Y	AMV Video
+anm	---	---	D V D 	anm	unregistered	Y	Deluxe Paint Animation
+---	---	---	D V D 	ansi	unregistered	Y	ASCII/ANSI art
+ape	---	---	D A D 	ape	unregistered	Y	Monkey's Audio
+ass	---	---	DES   	ass	unregistered	Y	Advanced SubStation Alpha subtitle
+avi	---	---	DEV D 	asv1	unregistered	Y	ASUS V1
+avi	---	---	DEV D 	asv2	unregistered	Y	ASUS V2
+---	---	---	D A D 	atrac1	unregistered	Y	Atrac 1 (Adaptive TRansform Acoustic Coding)
+---	---	---	D A D 	atrac3	unregistered	Y	Atrac 3 (Adaptive TRansform Acoustic Coding 3)
+---	---	---	D V D 	aura	unregistered	Y	Auravision AURA
+---	---	---	D V D 	aura2	unregistered	Y	Auravision Aura 2
+aac	---	---	 EA   	auto_assign	AAC	Y	Avanti - AAC codec suggestion
+---	---	---	D V   	avrn	unregistered	Y	Avid AVI Codec
+---	---	---	DEV D 	avrp	unregistered	Y	Avid 1:1 10-bit RGB Packer
+avs	---	---	D V D 	avs	unregistered	Y	AVS (Audio Video Standard) video
+---	---	---	DEV D 	avui	unregistered	Y	Avid Meridien Uncompressed
+---	---	---	DEV D 	ayuv	unregistered	Y	Uncompressed packed MS 4:4:4:4
+---	---	---	D V D 	bethsoftvid	unregistered	Y	Bethesda VID video
+---	---	---	D V D 	bfi	unregistered	Y	Brute Force & Ignorance
+---	---	---	D A D 	binkaudio_dct	unregistered	Y	Bink Audio (DCT)
+---	---	---	D A D 	binkaudio_rdft	unregistered	Y	Bink Audio (RDFT)
+---	---	---	D V   	binkvideo	unregistered	Y	Bink video
+---	---	---	D V D 	bintext	unregistered	Y	Binary text
+bmp	---	---	DEV D 	bmp	unregistered	Y	BMP image
+---	---	---	D A D 	bmv_audio	unregistered	Y	Discworld II BMV audio
+---	---	---	D V   	bmv_video	unregistered	Y	Discworld II BMV video
+---	---	---	D V D 	c93	unregistered	Y	Interplay C93
+---	---	---	D V D 	camstudio	unregistered	Y	CamStudio
+---	---	---	D V D 	camtasia	unregistered	Y	TechSmith Screen Capture Codec
+---	---	---	D V D 	cavs	unregistered	Y	Chinese AVS video (AVS1-P2, JiZhun profile)
+---	---	---	D V D 	cdgraphics	unregistered	Y	CD Graphics video
+---	---	---	D V D 	cdxl	unregistered	Y	Commodore CDXL video
+---	---	---	D V D 	cinepak	unregistered	Y	Cinepak
+---	---	---	DEV D 	cljr	unregistered	Y	Cirrus Logic AccuPak
+---	---	---	D V D 	cllc	unregistered	Y	Canopus Lossless Codec
+---	---	---	D A D 	cook	unregistered	Y	COOK
+ad	---	---	D A   	copy	Mux audio	N	Avanti System (do not remove)
+vd	---	---	D V   	copy	Mux video	N	Avanti System (do not remove)
+ad	---	---	D A   	copy	copy audio	N	Avanti System (do not remove)
+ad	ade	---	D A   	copy	Demux audio	N	Avanti System (do not remove)
+vd	---	---	D A   	copy	copy video	N	Avanti System (do not remove)
+vd	vde	---	D V   	copy	Demux video	N	Avanti System (do not remove)
+---	---	---	D V   	cpia	unregistered	Y	CPiA video format
+---	---	---	D V D 	cyuv	unregistered	Y	Creative YUV (CYUV)
+dts	---	---	DEA D 	dca	unregistered	Y	DCA (DTS Coherent Acoustics)
+dfa	---	---	D V D 	dfa	unregistered	Y	Chronomaster DFA
+---	---	---	D V   	dirac	unregistered	Y	BBC Dirac VC-2
+mov	---	---	DEV D 	dnxhd	DNxHD	N	VC3/DNxHD
+---	---	---	DEV   	dpx	unregistered	Y	DPX image
+---	---	---	D A D 	dsicinaudio	unregistered	Y	Delphine Software International CIN audio
+---	---	---	D V D 	dsicinvideo	unregistered	Y	Delphine Software International CIN video
+dts	---	---	D A   	dts	unregistered	Y	Older FFmpeg versions
+---	---	---	DES   	dvbsub	unregistered	Y	DVB subtitles
+---	---	---	DES   	dvdsub	unregistered	Y	DVD subtitles
+avi	---	---	DEV D 	dvvideo	DV (SD)	N	DV (Digital Video)
+---	---	---	D V D 	dxa	unregistered	Y	Feeble Files/ScummVM DXA
+---	---	---	D V D 	dxtory	unregistered	Y	Dxtory
+ac3	---	---	DEA D 	eac3	unregistered	Y	ATSC A/52B (AC-3, E-AC-3)
+---	---	---	D V D 	eacmv	unregistered	Y	Electronic Arts CMV Video
+---	---	---	D V D 	eamad	unregistered	Y	Electronic Arts Madcow Video
+---	---	---	D V D 	eatgq	unregistered	Y	Electronic Arts TGQ Video
+---	---	---	D V   	eatgv	unregistered	Y	Electronic Arts TGV Video
+---	---	---	D V D 	eatqi	unregistered	Y	Electronic Arts TQI Video
+---	---	---	D V D 	escape124	unregistered	Y	Escape 124
+---	---	---	D V D 	escape130	unregistered	Y	Escape 130
+---	---	---	D V   	exr	unregistered	Y	OpenEXR image
+---	---	---	DEV D 	ffv1	unregistered	Y	FFmpeg video codec #1
+avi	---	---	DEVSD 	ffvhuff	unregistered	Y	Huffyuv FFmpeg variant
+flac	---	---	DEA D 	flac	FLAC	Y	FLAC (Free Lossless Audio Codec)
+---	---	---	DEV D 	flashsv	unregistered	Y	Flash Screen Video
+---	---	---	DEV D 	flashsv2	unregistered	Y	Flash Screen Video Version 2
+flc	---	---	D V D 	flic	unregistered	Y	Autodesk Animator Flic video
+flv	---	---	DEVSD 	flv	FLASH	N	Flash Video (FLV)
+---	---	---	D V D 	fraps	unregistered	Y	Fraps
+---	---	---	D V D 	FRWU	unregistered	Y	Forward Uncompressed
+---	---	---	DEA D 	g722	unregistered	Y	G.722 ADPCM
+---	---	---	DEA   	g723_1	unregistered	Y	G.723.1
+wav	---	---	DEA D 	g726	G.726	Y	G.726 ADPCM
+---	---	---	D A D 	g729	unregistered	Y	G.729
+gif	---	---	DEV D 	gif	unregistered	Y	GIF (Graphics Interchange Format)
+---	---	---	D A D 	gsm	GSM (libav)	Y	GSM
+---	---	---	D A D 	gsm_ms	unregistered	Y	GSM Microsoft variant
+---	---	---	DEV D 	h261	unregistered	Y	H.261
+3gp	---	---	DEVSDT	h263	3GP	N	H.263 / H.263-1996
+---	---	---	D VSD 	h263i	unregistered	Y	Intel H.263
+---	---	---	DEV   	h263p	unregistered	Y	H.263+ / H.263-1998 / H.263 version 2
+h264	h264	mp4	D V D 	h264	h264 (libav)	Y	H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+avi	---	---	DEVSD 	huffyuv	HUFFYUV	Y	Huffyuv / HuffYUV
+---	---	---	D A D 	iac	unregistered	Y	IAC (Indeo Audio Coder)
+---	---	---	D V D 	idcinvideo	unregistered	Y	id Quake II CIN video
+---	---	---	D V D 	idf	unregistered	Y	iCEDraw text
+---	---	---	D V D 	iff_byterun1	unregistered	Y	IFF ByteRun1
+---	---	---	D V D 	iff_ilbm	unregistered	Y	IFF ILBM
+---	---	---	D A D 	imc	unregistered	Y	IMC (Intel Music Coder)
+ivf	---	---	D V D 	indeo2	unregistered	Y	Intel Indeo 2
+ivf	---	---	D V   	indeo3	unregistered	Y	Intel Indeo 3
+---	---	---	D V   	indeo4	unregistered	Y	Intel Indeo Video Interactive 4
+---	---	---	D V   	indeo5	unregistered	Y	Intel Indeo Video Interactive 5
+---	---	---	D A D 	interplay_dpcm	unregistered	Y	DPCM Interplay
+---	---	---	D V D 	interplayvideo	unregistered	Y	Interplay MVE Video
+---	---	---	DEV   	j2k	unregistered	Y	---
+---	---	---	D S   	jacosub	unregistered	Y	JACOsub subtitle
+---	---	---	DEV D 	jpegls	unregistered	Y	JPEG-LS
+---	---	---	D V D 	jv	unregistered	Y	Bitmap Brothers JV video
+---	---	---	D V   	kgv1	unregistered	Y	Kega Game Video
+---	---	---	D V D 	kmvc	unregistered	Y	Karl Morton's video codec
+avi	---	---	D V D 	lagarith	unregistered	Y	Lagarith lossless
+ac3	---	---	DEA   	liba52	unregistered	Y	Older FFmpeg versions
+aac	---	---	 EA   	libaacplus	unregistered	Y	AAC (Advanced Audio Codec)
+amr	---	---	DEA   	libamr_nb	unregistered	Y	Older FFmpeg versions
+amr	---	---	DEA   	libamr_wb	unregistered	Y	Older FFmpeg versions
+drc	---	---	 EV   	libdirac	unregistered	Y	libdirac Dirac 2.2
+aac	---	---	 EA   	libfaac	unregistered	Y	libfaac AAC (Advanced Audio Codec)
+aac	---	---	D A   	libfaad	unregistered	Y	libfaad AAC (Advanced Audio Codec)
+aac	---	---	 EA   	libfdk_aac	unregistered	Y	AAC (Advanced Audio Codec)
+gsm	---	---	DEA D 	libgsm	unregistered	Y	libgsm GSM
+wav	---	---	DEA D 	libgsm_ms	GSM	Y	libgsm GSM Microsoft variant
+mp3	---	---	 EA   	libmp3lame	MP3	Y	libmp3lame MP3 (MPEG audio layer 3)
+amr	---	---	DEA D 	libopencore_amrnb	unregistered	Y	OpenCORE Adaptive Multi-Rate (AMR) Narrow-Band
+---	---	---	D A D 	libopencore_amrwb	unregistered	Y	OpenCORE Adaptive Multi-Rate (AMR) Wide-Band
+---	---	---	D V D 	libopenjpeg	unregistered	Y	OpenJPEG based JPEG 2000 decoder
+drc	---	---	DEV   	libschroedinger	unregistered	Y	libschroedinger Dirac 2.2
+---	---	---	DEA D 	libspeex	unregistered	Y	libspeex Speex
+ogm	---	---	 EV   	libtheora	THEORA	N	libtheora Theora
+aac	---	---	 EA   	libvo_aacenc	unregistered	Y	AAC (Advanced Audio Codec)
+amr	---	---	 EA   	libvo_amrwbenc	unregistered	Y	---
+ogg	---	---	DEA   	libvorbis	VORBIS	Y	libvorbis Vorbis
+webm	---	---	 EV   	libvpx	WEBM	Y	webm vp8
+avi	h264	mp4	 EV   	libx264	H.264	Y	libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
+---	---	---	 EV   	libx264rgb	unregistered	Y	libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 RGB
+---	---	---	 EV   	libxavs	unregistered	Y	libxavs - the Chinese Audio Video Standard Encoder
+avi	---	mp4	 EV   	libxvid	XVID	Y	libxvidcore MPEG-4 part 2
+---	---	---	 EV   	ljpeg	unregistered	Y	Lossless JPEG
+---	---	---	D V D 	loco	unregistered	Y	LOCO
+aff	---	---	D A D 	mace3	unregistered	Y	MACE (Macintosh Audio Compression/Expansion) 3:1
+aff	---	---	D A D 	mace6	unregistered	Y	MACE (Macintosh Audio Compression/Expansion) 6:1
+mdc	---	---	D V D 	mdec	unregistered	Y	Sony PlayStation MDEC (Motion DECoder)
+---	---	---	D S   	microdvd	unregistered	Y	MicroDVD subtitle
+---	---	---	D V D 	mimic	unregistered	Y	Mimic
+avi	---	---	DEV D 	mjpeg	MJPEG	Y	MJPEG (Motion JPEG)
+avi	---	---	D V D 	mjpegb	unregistered	Y	Apple MJPEG-B
+---	---	---	D A D 	mlp	unregistered	Y	MLP (Meridian Lossless Packing)
+mm	---	---	D V D 	mmvideo	unregistered	Y	American Laser Games MM Video
+---	---	---	D V D 	motionpixels	unregistered	Y	Motion Pixels Video
+---	---	---	DES   	mov_text	unregistered	Y	3GPP Timed Text subtitle
+---	---	---	D A D 	mp1	unregistered	Y	MP1 (MPEG audio layer 1)
+mpa	---	---	D A D 	mp1float	unregistered	Y	MP1 (MPEG audio layer 1)
+mp2	---	---	DEA D 	mp2	MP2	Y	MP2 (MPEG audio layer 2)
+mp2	---	---	D A D 	mp2float	unregistered	Y	MP2 (MPEG audio layer 2)
+mp3	---	---	D A D 	mp3	MP3 (libav)	Y	MP3 (MPEG audio layer 3)
+mp3	---	---	D A D 	mp3adu	unregistered	Y	ADU (Application Data Unit) MP3 (MPEG audio layer 3)
+mp3	---	---	D A D 	mp3adufloat	unregistered	Y	ADU (Application Data Unit) MP3 (MPEG audio layer 3)
+mp3	---	---	D A D 	mp3float	unregistered	Y	MP3 (MPEG audio layer 3)
+m4a	---	---	D A D 	mp3on4	unregistered	Y	MP3onMP4
+mp3	---	---	D A D 	mp3on4float	unregistered	Y	MP3onMP4
+mpc	---	---	D A D 	mpc7	unregistered	Y	Musepack SV7
+mpc	---	---	D A D 	mpc8	unregistered	Y	Musepack SV8
+mpg	m1v	mpg	DEVSDT	mpeg1video	MPEG-1	Y	MPEG-1 video
+mpg	m2v	mpg	DEVSDT	mpeg2video	MPEG-2	Y	MPEG-2 video
+avi	m4v	mp4	DEVSDT	mpeg4	MPEG-4	Y	MPEG-4 part 2
+m4a	---	---	D A   	mpeg4aac	unregistered	Y	libfaad AAC (Advanced Audio Codec)
+---	---	---	D VSDT	mpegvideo	unregistered	Y	MPEG-1 video
+---	---	---	D V D 	msa1	unregistered	Y	MS ATC Screen
+avi	m4v	mp4	DEVSD 	msmpeg4	unregistered	Y	MPEG-4 part 2 Microsoft variant version 3
+avi	m4v	mp4	D VSD 	msmpeg4v1	unregistered	Y	MPEG-4 part 2 Microsoft variant version 1
+avi	m4v	mp4	DEVSD 	msmpeg4v2	unregistered	Y	MPEG-4 part 2 Microsoft variant version 2
+---	---	---	D V D 	msrle	unregistered	Y	Microsoft RLE
+---	---	---	D V D 	mss1	unregistered	Y	MS Screen 1
+---	---	---	D V   	mss2	unregistered	Y	MS Windows Media Video V9 Screen
+---	---	---	DEV D 	msvideo1	unregistered	Y	Microsoft Video 1
+---	---	---	D V D 	mszh	unregistered	Y	LCL (LossLess Codec Library) MSZH
+---	---	---	D V D 	mts2	unregistered	Y	MS Expression Encoder Screen
+---	---	---	D V D 	mxpeg	unregistered	Y	Mobotix MxPEG video
+---	---	---	DEA D 	nellymoser	unregistered	Y	Nellymoser Asao
+---	---	---	D V D 	nuv	unregistered	Y	NuppelVideo/RTJPEG
+---	---	---	D A D 	paf_audio	unregistered	Y	Amazing Studio Packed Animation File Audio
+---	---	---	D V D 	paf_video	unregistered	Y	Amazing Studio Packed Animation File Video
+---	---	---	DEV D 	pam	unregistered	Y	PAM (Portable AnyMap) image
+---	---	---	DEV D 	pbm	unregistered	Y	PBM (Portable BitMap) image
+wav	---	---	DEA D 	pcm_alaw	unregistered	Y	PCM A-law
+wav	---	---	D A D 	pcm_bluray	unregistered	Y	PCM signed 16|20|24-bit big-endian for Blu-ray media
+wav	---	---	D A D 	pcm_dvd	unregistered	Y	PCM signed 20|24-bit big-endian
+wav	---	---	DEA D 	pcm_f32be	unregistered	Y	PCM 32-bit floating point big-endian
+wav	---	---	DEA D 	pcm_f32le	unregistered	Y	PCM 32-bit floating point little-endian
+wav	---	---	DEA D 	pcm_f64be	unregistered	Y	PCM 64-bit floating point big-endian
+wav	---	---	DEA D 	pcm_f64le	unregistered	Y	PCM 64-bit floating point little-endian
+---	---	---	D A D 	pcm_lxf	unregistered	Y	PCM signed 20-bit little-endian planar
+wav	---	---	DEA D 	pcm_mulaw	unregistered	Y	mu-law PCM
+wav	---	---	DEA D 	pcm_s16be	unregistered	Y	PCM signed 16-bit big-endian
+wav	---	---	DEA D 	pcm_s16le	PCM / WAV	Y	PCM signed 16-bit little-endian
+wav	---	---	D A D 	pcm_s16le_planar	unregistered	Y	PCM 16-bit little-endian planar
+wav	---	---	DEA D 	pcm_s24be	unregistered	Y	PCM signed 24-bit big-endian
+wav	---	---	DEA D 	pcm_s24daud	unregistered	Y	PCM D-Cinema audio signed 24-bit
+wav	---	---	DEA D 	pcm_s24le	unregistered	Y	PCM signed 24-bit little-endian
+wav	---	---	DEA D 	pcm_s32be	unregistered	Y	PCM signed 32-bit big-endian
+wav	---	---	DEA D 	pcm_s32le	unregistered	Y	PCM signed 32-bit little-endian
+wav	---	---	DEA D 	pcm_s8	unregistered	Y	PCM signed 8-bit
+---	---	---	D A D 	pcm_s8_planar	unregistered	Y	PCM signed 8-bit planar
+wav	---	---	DEA D 	pcm_u16be	unregistered	Y	PCM unsigned 16-bit big-endian
+wav	---	---	DEA D 	pcm_u16le	unregistered	Y	PCM unsigned 16-bit little-endian
+wav	---	---	DEA D 	pcm_u24be	unregistered	Y	PCM unsigned 24-bit big-endian
+wav	---	---	DEA D 	pcm_u24le	unregistered	Y	PCM unsigned 24-bit little-endian
+wav	---	---	DEA D 	pcm_u32be	unregistered	Y	PCM unsigned 32-bit big-endian
+wav	---	---	DEA D 	pcm_u32le	unregistered	Y	PCM unsigned 32-bit little-endian
+wav	---	---	DEA D 	pcm_u8	unregistered	Y	PCM unsigned 8-bit
+wav	---	---	D A D 	pcm_zork	unregistered	Y	Zork PCM
+pcx	---	---	DEV D 	pcx	unregistered	Y	PC Paintbrush PCX image
+---	---	---	DEV D 	pgm	unregistered	Y	PGM (Portable GrayMap) image
+---	---	---	DEV D 	pgmyuv	unregistered	Y	PGMYUV (Portable GrayMap YUV) image
+---	---	---	D S   	pgssub	unregistered	Y	HDMV Presentation Graphic Stream subtitles
+---	---	---	D V D 	pictor	unregistered	Y	Pictor/PC Paint
+png	---	---	DEV D 	png	unregistered	Y	PNG image
+ppm	---	---	DEV D 	ppm	unregistered	Y	PPM (Portable PixelMap) image
+---	---	---	DEV D 	prores	unregistered	Y	Apple ProRes
+---	---	---	 EV   	prores_anatoliy	unregistered	Y	Apple ProRes
+---	---	---	 EV   	prores_kostya	unregistered	Y	Apple ProRes (iCodec Pro)
+---	---	---	D V D 	ProRes_lgpl	unregistered	Y	Apple ProRes (iCodec Pro)
+ptx	---	---	D V D 	ptx	unregistered	Y	V.Flash PTX image
+---	---	---	D A D 	qcelp	unregistered	Y	QCELP / PureVoice
+---	---	---	D A D 	qdm2	unregistered	Y	QDesign Music Codec 2
+---	---	---	D V D 	qdraw	unregistered	Y	Apple QuickDraw
+---	---	---	D V D 	qpeg	unregistered	Y	Q-team QPEG
+---	---	---	DEV D 	qtrle	unregistered	Y	QuickTime Animation (RLE) video
+---	---	---	DEV D 	r10k	unregistered	Y	AJA Kona 10-bit RGB Codec
+---	---	---	DEV D 	r210	unregistered	Y	Uncompressed RGB 10-bit
+---	---	---	D A D 	ralf	unregistered	Y	RealAudio Lossless
+avi	raw	avi	DEV   	rawvideo	unregistered	Y	raw video
+ra	---	---	DEA D 	real_144	unregistered	Y	RealAudio 1.0 (14.4K)
+ra	---	---	D A D 	real_288	unregistered	Y	RealAudio 2.0 (28.8K)
+---	---	---	D S   	realtext	unregistered	Y	RealText subtitle
+---	---	---	D V D 	rl2	unregistered	Y	RL2 video
+roq	---	---	DEA D 	roq_dpcm	unregistered	Y	id RoQ DPCM
+roq	---	---	DEV D 	roqvideo	unregistered	Y	id RoQ video
+mov	---	---	D V D 	rpza	unregistered	Y	QuickTime video (RPZA)
+rm	---	---	DEV D 	rv10	unregistered	Y	RealVideo 1.0
+rm	---	---	DEV D 	rv20	unregistered	Y	RealVideo 2.0
+rm	---	---	D V D 	rv30	unregistered	Y	RealVideo 3.0
+rm	---	---	D V D 	rv40	unregistered	Y	RealVideo 4.0
+---	---	---	D A D 	s302m	unregistered	Y	SMPTE 302M
+---	---	---	D S   	sami	unregistered	Y	SAMI subtitle
+---	---	---	D V D 	sanm	unregistered	Y	LucasArts SMUSH video
+---	---	---	DEV   	sgi	unregistered	Y	SGI image
+shn	---	---	D A D 	shorten	unregistered	Y	Shorten
+---	---	---	D A D 	sipr	unregistered	Y	RealAudio SIPR / ACELP.NET
+smk	---	---	D A D 	smackaud	unregistered	Y	Smacker audio
+smk	---	---	D V D 	smackvid	unregistered	Y	Smacker video
+---	---	---	D V D 	smc	unregistered	Y	QuickTime Graphics (SMC)
+---	---	---	DEV D 	snow	unregistered	Y	Snow
+---	---	---	D A D 	sol_dpcm	unregistered	Y	DPCM Sol
+---	---	---	DEA D 	sonic	unregistered	Y	Sonic
+---	---	---	 EA   	sonicls	unregistered	Y	Sonic lossless
+---	---	---	D V D 	sp5x	unregistered	Y	Sunplus JPEG (SP5X)
+srt	---	---	DES   	srt	unregistered	Y	SubRip subtitle
+---	---	---	DES   	subrip	unregistered	Y	SubRip subtitle
+---	---	---	D S   	subviewer	unregistered	Y	SubViewer subtitle
+sun	---	---	DEV D 	sunrast	unregistered	Y	Sun Rasterfile image
+---	---	---	DEV D 	svq1	unregistered	Y	Sorenson Vector Quantizer 1
+---	---	---	D VSD 	svq3	unregistered	Y	Sorenson Vector Quantizer 3
+tga	---	---	DEV D 	targa	unregistered	Y	Truevision Targa image
+ogv	---	ogm	D VSD 	theora	unregistered	N	Theora
+---	---	---	D V D 	thp	unregistered	Y	Nintendo Gamecube THP video
+---	---	---	D V D 	tiertexseqvideo	unregistered	Y	Tiertex Limited SEQ video
+tif	---	---	DEV D 	tiff	unregistered	Y	TIFF image
+---	---	---	D V D 	tmv	unregistered	Y	8088flex TMV
+---	---	---	D A D 	truehd	unregistered	Y	TrueHD
+---	---	---	D V D 	truemotion1	unregistered	Y	Duck TrueMotion 1.0
+---	---	---	D V D 	truemotion2	unregistered	Y	Duck TrueMotion 2.0
+---	---	---	D A D 	truespeech	unregistered	Y	DSP Group TrueSpeech
+---	---	---	D V D 	tscc2	unregistered	Y	TechSmith Screen Codec 2
+tta	---	---	D A D 	tta	unregistered	Y	True Audio (TTA)
+---	---	---	D A D 	twinvq	unregistered	Y	VQF TwinVQ
+---	---	---	D V D 	txd	unregistered	Y	Renderware TXD (TeXture Dictionary) image
+---	---	---	D V D 	ultimotion	unregistered	Y	IBM UltiMotion
+---	---	---	DEV D 	utvideo	unregistered	Y	Ut Video
+---	---	---	DEV D 	v210	unregistered	Y	Uncompressed 4:2:2 10-bit
+---	---	---	D V D 	v210x	unregistered	Y	---
+---	---	---	DEV D 	v308	unregistered	Y	Uncompressed packed 4:4:4
+---	---	---	DEV D 	v408	unregistered	Y	Uncompressed packed QT 4:4:4:4
+---	---	---	DEV D 	v410	unregistered	Y	Uncompressed 4:4:4 10-bit
+---	---	---	D V   	vb	unregistered	Y	Beam Software VB
+---	---	---	D V D 	vble	unregistered	Y	VBLE Lossless Codec
+---	---	---	D V D 	vc1	unregistered	Y	SMPTE VC-1
+---	---	---	D V D 	vc1image	unregistered	Y	Windows Media Video 9 Image v2
+---	---	---	D V D 	vcr1	unregistered	Y	ATI VCR1
+---	---	---	D A D 	vima	unregistered	Y	LucasArts VIMA audio
+---	---	---	D A D 	vmdaudio	unregistered	Y	Sierra VMD audio
+---	---	---	D V D 	vmdvideo	unregistered	Y	Sierra VMD video
+---	---	---	D V D 	vmnc	unregistered	Y	VMware Screen Codec / VMware Video
+ogg	---	---	DEA D 	vorbis	vorbis (libav)	Y	Vorbis
+---	---	---	D VSD 	vp3	unregistered	Y	On2 VP3
+---	---	---	D V D 	vp5	unregistered	Y	On2 VP5
+flv	---	---	D V D 	vp6	unregistered	Y	On2 VP6
+flv	---	---	D V D 	vp6a	unregistered	Y	On2 VP6 (Flash version, with alpha channel)
+flv	---	---	D V D 	vp6f	unregistered	Y	On2 VP6 (Flash version)
+---	---	---	D V D 	vp8	unregistered	Y	On2 VP8
+---	---	---	D V D 	vqavideo	unregistered	Y	Westwood Studios VQA (Vector Quantized Animation) video
+---	---	---	D A D 	wavesynth	unregistered	Y	Wave synthesis pseudo-codec
+wav	---	---	D A D 	wavpack	unregistered	Y	WavPack
+---	---	---	D A D 	wmalossless	unregistered	Y	Windows Media Audio 9 Lossless
+wma	---	---	D A D 	wmapro	unregistered	Y	Windows Media Audio 9 Professional
+wma	---	---	DEA D 	wmav1	unregistered	Y	Windows Media Audio 1
+wma	---	---	DEA D 	wmav2	WMA-2	Y	Windows Media Audio 2
+---	---	---	D A D 	wmavoice	unregistered	Y	Windows Media Audio Voice
+wmv	---	---	DEVSD 	wmv1	unregistered	Y	Windows Media Video 7
+wmv	---	---	DEVSD 	wmv2	WMV-8	Y	Windows Media Video 8
+wmv	---	---	D V D 	wmv3	unregistered	Y	Windows Media Video 9
+---	---	---	D V D 	wmv3image	unregistered	Y	Windows Media Video 9 Image
+---	---	---	D V D 	wnv1	unregistered	Y	Winnov WNV1
+---	---	---	D A D 	ws_snd1	unregistered	Y	Westwood Audio (SND1)
+wav	---	---	D A D 	xan_dpcm	unregistered	Y	DPCM Xan
+---	---	---	D V D 	xan_wc3	unregistered	Y	Wing Commander III / Xan
+---	---	---	D V D 	xan_wc4	unregistered	Y	Wing Commander IV / Xxan
+---	---	---	D V D 	xbin	unregistered	Y	eXtended BINary text
+---	---	---	DEV D 	xbm	unregistered	Y	XBM (X BitMap) image
+---	---	---	D V D 	xl	unregistered	Y	Miro VideoXL
+---	---	---	DES   	xsub	unregistered	Y	DivX subtitles (XSUB)
+avi	---	mp4	 EV   	xvid	xvid (libav)	Y	Older FFmpeg versions
+---	---	---	DEV D 	xwd	unregistered	Y	XWD (X Window Dump) image
+---	---	---	DEV D 	y41p	unregistered	Y	Uncompressed YUV 4:1:1 12-bit
+---	---	---	D V   	yop	unregistered	Y	Psygnosis YOP Video
+---	---	---	DEV D 	yuv4	unregistered	Y	Uncompressed packed 4:2:0
+---	---	---	D V D 	zerocodec	unregistered	Y	ZeroCodec Lossless Video
+---	---	---	DEV D 	zlib	unregistered	Y	LCL (LossLess Codec Library) ZLIB
+---	---	---	DEV D 	zmbv	unregistered	Y	Zip Motion Blocks Video

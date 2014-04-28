@@ -1,0 +1,71 @@
+LINK: http://tzkmx.wordpress.com/2011/12/23/operaciones-basicas-con-videos-en-para-windows-con-ffmpeg/
+
+ACELERAR VIDEO
+
+ffmpeg -i config-2.mkv -s 500x400 -vf "setpts=0.00555*PTS" -ss 4 -vcodec msmpeg4v2 -b:v 1000k -r 5 -an -f avi VIDQuick.avi
+
+setpts=0.00555*PTS = ACELERA EL VIDEO SEGUN SE CALCULE, EJEMPLO: PARA UN VIDEO DE 9 HORAS DEJARLO EN 3 MINUTOS SE CALCULA
+			3 / (9*60). SIENDO 0.00005 EL VALOR A INTRUDUCIR.
+
+PARA CORTAR EL VIDEO SE UTILIZA CROP
+
+
+*********** Realizar una prueba con unos pocos segundos, de cambio de formato.
+Si buscaste por “ffmpeg howto”, tal vez llegaste a esta página (en inglés), muy buena pero algo desactualizada (sobre todo en la parte del cropping y el escalado). En la cual me basé para probar esto:
+
+ffmpeg -i EJEMPLO.avi -ss 10 -t 30 -b 600k -an -vcodec mpeg4 -f avi prueba1.avi
+
+Explico las opciones:
+
+-i EJEMPLO.avi
+- input: video de entrada, EJEMPLO.avi
+-ss
+- start second, segundo de inicio, 10
+-t
+- duración en segundos, 30
+-b
+- tasa de bits del video por segundo, 600k<- admite sufijos
+-an
+- audio no, puesto que después agregaremos sonido al vídeo original
+-vcodec
+- códec de video, mpeg4 <- hasta aquí todavía estaba copipegando del howto arriba referido
+-f avi
+- formato (mejor dicho contenedor) de salida, avi<- nativo de Windows
+prueba1.avi
+- el archivo de salida, no requiere prefijo de opción alguna
+Y resultó, salvo que todavía no puede reproducirse en el Windows Media Player, además de que nos hace falta mejorar la calidad sin aumentar mucho el tamaño del archivo, recortar el tamaño y aumentar la velocidad de reproducción, que abordaremos a continuación.
+
+
+*********** Acelerar la velocidad de reproducción.
+Al tratarse de un vídeo para capacitación, necesitamos que sea breve y el vídeo original requiere que dure máximo 8 minutos. Algunos tutoriales por ahí se complican mucho (tal vez por versiones anteriores de FFMPEG), requiriendo el uso de otras herramientas, pero no hace falta en absoluto, pues también la biblioteca avfilter incluye otra opción para cambiar el timestamp de cada cuadro (es decir, que si un frame aparecía en el segundo 15, por ejemplo, ahora se reproduzca en el segundo 5, haciendo así la reproducción más rápida).
+
+ffmpeg -i EJEMPLO.avi -vf "crop=1200:960, scale=920:736, setpts=0.3*PTS" -r 8 -ss 10 -t 30 -b 600k -an -vcodec mpeg4 -f avi prueba4.avi
+
+-vf "crop=1200:960, scale=920:736, setpts=0.3*PTS" setpts es lo que nos permite cambiar (set) el timestamp, en este caso lo reducimos, para disminuir el tiempo total de reproducción, si quisiéramos aumentar el tiempo (reproducir a velocidad lenta), lo multiplicas por un número mayor a 1 el PTS (timestamp de los cuadros originales).
+
+-r 8 cambiamos con -r la tasa (rate) de cuadros por segundo, en este caso lo reduje a 8 cuadros por segundo, lo que me permitirá después subir la calidad sin aumentar demasiado el tamaño, al dejar de lado cuadros que no afectan la sensación del vídeo, de modo similar a como se comprime el audio de un CD a un MP3, reduciendo las muestras por segundo.
+
+
+********* Utilizar un códec que el reproductor de Windows Media entienda sin plugins.
+¿Recuerdan que dije que no se reproducía el vídeo en el Media Player? Pues encontré en la FAQ de FFMPEG el códec adecuado para Windows: -vcodec msmpeg4v2, y corregí la opción del bitrate, para recuperar lo más posible de la calidad del vídeo original: -b:v 2000k
+
+Para finalizar (en siguiente post mezclaremos con sonido), les dejo la línea final que utilicé:
+
+ffmpeg -i V:\EJEMPLO.avi -vf "crop=1200:960, setpts=0.3*PTS, scale=920:736" -ss 4 -vcodec msmpeg4v2 -b:v 2000k -r 8 -an -f avi v:\VideoCapacitacion.avi
+
+
+********* Recortar y escalar el vídeo para ajustarlo a pantallas más pequeñas.
+Desde aquí ya no pude basarme en las “howto pages”, pues la versión de ffmpeg utiliza una nueva biblioteca, libavfilter, en particular me interesaban sólo las de escalado y recorte.
+
+Siguiendo con las pruebas, transcodificamos el vídeo recortado a 1024×820 (el vídeo original era de 1280×1024), agregando la opción de avfilter correspondiente:
+
+ffmpeg -i EJEMPLO.avi -vf "crop=1024x820" -ss 10 -t 30 -b 600k -an -vcodec mpeg4 -f avi prueba2.avi
+
+-vf "crop=1024:820" Permite aún más ajustes que las opciones anteriores crop{top, bottom, left, right}, pero para esta prueba fue suficiente, todavía no hemos escalado el vídeo.
+
+Ahora vamos a escalarlo con las opciones de avfilter, ya que la opción nativa de -s WIDTHxHEIGHT, se conflictúa con el recorte;
+
+ffmpeg -i EJEMPLO.avi -vf "crop=1200:960, scale=920:736" -ss 10 -t 30 -b 600k -an -vcodec mpeg4 -f avi prueba3.avi
+
+-vf "crop=1200:960, scale=920:736" Cambié el tamaño después de ver en la prueba de recorte, que estaba dejando fuera demasiado de la pantalla, y el escalado lo ajusté para que no cambiase el aspecto del vídeo original. No olvides incluir las comillas en las opciones de avfilter.
+

@@ -1,0 +1,5 @@
+http://newton/eTeleScript/
+http://newton/eTeleAdmin/
+
+Old: clsid:2C61C4F6-1A3D-49DC-9F81-E3D7E1963523
+new: clsid:916F893F-3CEA-472B-A332-17F48C7CA199

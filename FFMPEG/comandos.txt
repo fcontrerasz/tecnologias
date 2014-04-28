@@ -1,0 +1,1 @@
+psexec -s -u mets\neutron -p Yt10p* \\XXXX -f -c ejecutar_remoto.bat

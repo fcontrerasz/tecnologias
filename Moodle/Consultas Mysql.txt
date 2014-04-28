@@ -1,0 +1,98 @@
+De mi paso por Moodle
+Publicado en 14 marzo, 2012 1
+
+Es conocido que Moodle es un Learning Management System (LMS) y es utilizado por los docentes como soporte para lo que se ha llamado Educación a distancia.
+La comunidad de Moodle es de la más numerosa de todos los LMS que existen, e instituciones muy relevantes a nivel mundial utilizan este LMS
+Un LMS tiene como funciones más importantes:
+Gestionar y administrar los  usuarios o alumnos de los cursos que se implementan en Moodle.
+Gestionar y administrar recursos así como materiales y actividades de formación.
+Control de la trazabilidad de los alumnos por todo los recursos a los que acceda, por lo que se puede realizar un proceso de seguimiento y control del proceso de aprendizaje.
+Gestionar y administrar los servicios de comunicación como foros de discusión, chat, correos electrónicos, entre otros.
+Sin embargo a los de formación técnica (y porque no a los docentes también) nos interesa conocer Moodle por dentro. Es decir, realizar consultas directas al motor de base de datos (MySQL) y poder personalizar la gestión de la información que se almacena en esta plataforma.
+A continuación publico un grupo de consultas SQL que podrían ayudar a quienes nos hemos visto ante el reto de automatizar proceso en Moodle.
+Las consultas están probadas en Moodle 1.9 y algunos aspectos podrían cambiar en algo con respecto a la instalación en particular. En mi caso:
+Roles:
+Rol Administrador = 1
+Rol Profesor = 3
+Rol Alumno = 5
+ContextLevel: Indica hasta que nivel puede actuar un objeto
+ContextLever 50: Cursos
+ContextLevel 10: General de Moodle
+Estas son algunas de las consultas que iré publicando en esta categoría de mi blog, ya Moodle es tan grande y bueno que lo merece!!!
+Curos con Matrículas
+SELECT c.id,c.fullname, COUNT(c.id) as 'matricula'
+FROM mdl_course c
+INNER JOIN mdl_context e ON c.id = e.instanceid
+INNER JOIN mdl_role_assignments rs ON rs.contextid=e.id
+INNER JOIN mdl_user u ON u.id=rs.userid
+WHERE e.contextlevel=50
+AND rs.roleid=5
+GROUP BY c.id,c.fullname ORDER BY matricula DESC;
+Alumnos de un curso
+SELECT u.id, u.firstname,u.lastname FROM mdl_role_assignments rs
+INNER JOIN mdl_user u ON u.id=rs.userid
+INNER JOIN mdl_context e ON rs.contextid=e.id
+WHERE e.contextlevel=50
+   AND rs.roleid=5 AND e.instanceid=31
+
+Alumnos de un curso que nunca han accedido al curso
+SELECT u.id, u.firstname,u.lastname FROM mdl_role_assignments rs 
+INNER JOIN mdl_user u ON u.id=rs.userid 
+INNER JOIN mdl_context e ON rs.contextid=e.id 
+WHERE e.contextlevel=50 AND rs.roleid=5 AND e.instanceid=31 
+AND u.id NOT IN (SELECT u.id FROM mdl_role_assignments rs 
+INNER JOIN mdl_user u ON u.id=rs.userid 
+INNER JOIN mdl_context e ON rs.contextid=e.id  
+INNER JOIN mdl_log l ON rs.userid=l.userid 
+WHERE e.contextlevel=50 AND rs.roleid=5 AND e.instanceid=31 AND l.course=31 GROUP BY u.id)
+
+Alumnos desmatriculados de un curso en particular
+SELECT COUNT(*) FROM mdl_log l WHERE l.action = 'unenrol' AND l.module = 'course' AND l.course = 31
+Administradores de Moodle:
+SELECT u.id,u.firstname,u.lastname, MAX(l.time) as ‘ultimo_acceso’ FROM mdl_role_assignments rs INNER JOIN mdl_user u ON u.id=rs.userid INNER JOIN mdl_context e ON rs.contextid=e.id  INNER JOIN mdl_log l ON rs.userid=l.userid WHERE e.contextlevel=10 AND rs.roleid=1 GROUP BY u.id,u.firstname,u.lastname
+Tutores o profesores de moodle
+SELECT u.id,u.firstname,u.lastname, MAX(l.time) as ‘ultimo_acceso’ FROM mdl_role_assignments rs INNER JOIN mdl_user u ON u.id=rs.userid INNER JOIN mdl_context e ON rs.contextid=e.id  INNER JOIN mdl_log l ON rs.userid=l.userid WHERE e.contextlevel=10 AND rs.roleid=3 GROUP BY u.id,u.firstname,u.lastname
+POST de alumnos que no tienen respuesta
+SELECT c.shortname,COUNT(p.message)
+ FROM mdl_forum_posts p
+INNER JOIN mdl_forum_discussions d ON p.discussion = d.id
+INNER JOIN mdl_course c ON c.id = d.course
+WHERE p.userid IN
+(SELECT u.id FROM mdl_role_assignments rs
+   INNER JOIN mdl_user u ON u.id=rs.userid
+  INNER JOIN mdl_context e ON rs.contextid=e.id
+  WHERE e.contextlevel=50 AND rs.roleid=5)
+  AND p.parent NOT IN (SELECT parent FROM mdl_forum_posts)
+GROUP BY  c.shortname
+Cantidad de visitas por fecha a un curso
+SELECT  SUM(tbl.C) as 'cantidad de visitas',tbl.fecha
+FROM (SELECT COUNT(u.id) as 'C', DATE( FROM_UNIXTIME(l.time)) as 'fecha'
+FROM mdl_role_assignments rs
+INNER JOIN mdl_user u ON u.id=rs.userid
+INNER JOIN mdl_context e ON rs.contextid=e.id
+INNER JOIN mdl_log l ON rs.userid=l.userid
+WHERE e.contextlevel=50 AND rs.roleid=5
+AND e.instanceid=31 AND l.course=31
+GROUP BY u.id ORDER BY l.time) AS tbl
+GROUP BY tbl.fecha
+Evaluaciones recibidas por cada usuario en todas las tares realizadas dentro de un curso en particular...
+SELECT u.id as 'usuario',a.id,a.course,cr.fullname,
+cr.shortname,a.name,u.firstname,u.lastname,s.grade
+FROM mdl_assignment a
+ INNER JOIN mdl_course cr
+ON a.course = cr.id
+INNER JOIN mdl_assignment_submissions s
+ ON a.id = s.assignment
+INNER JOIN mdl_user u ON s.userid = u.id
+WHERE course= 11 ORDER BY a.id
+Media de las evaluaciones recibida por cada usuario en todas las tareas realizadas dentro de un curso en particular…
+SELECT u.id as 'usuario',a.course,cr.fullname,cr.shortname,a.name,
+u.firstname,u.lastname,AVG(s.grade) as 'Promedio de sus tareas'
+ FROM mdl_assignment a
+INNER JOIN mdl_course cr ON a.course = cr.id I
+NNER JOIN mdl_assignment_submissions s ON a.id = s.assignment
+INNER JOIN mdl_user u ON s.userid = u.id
+WHERE course= 11
+GROUP BY
+u.id,a.course,cr.fullname,cr.shortname,
+a.name,u.firstname,u.lastname

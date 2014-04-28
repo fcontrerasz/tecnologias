@@ -1,0 +1,26 @@
+fdisk -l = listar discos y particiones.
+df -h = listar discos montados.
+df -m = listar tamaño en los discos
+du -h "\mnt\disco1" = muestra tamaño de archivos de un directorio
+du -s /mnt/disco1/Qdownload/ = muestra tamaño del directorio.
+du -u fichero = indica tamaño del archivo.
+
+cat /proc/mdstat = listar estado de los raids.
+mdadm --detail /dev/md9 = informacion particular de un raid.
+mdadm --examine /dev/sdd3= informacion del raid.
+dmesg = lista errores o advertencias de la pantalla principal.
+cat /etc/mdadm.conf = inicio de la configuración del raid.
+[/etc] # more mdadm.conf = configuracion de inicio
+mount /dev/md0 /mnt/disco1/ = montar RAID.
+[/etc] # mdadm --assemble --scan = recuperar problemas en RAID. Bueno para buscar problemas de montar.
+
+Por consola: basta con utilizar 5 comandos básicos, en el siguiente orden: 
+
+0. uname -a : nos dice la version de kernel, procesador, y nombre de sistema
+1. df : nos muestra la ocupación del disco duro.
+2. free : nos muestra el uso de la memoria
+3. ps -aux. : nos muestra los procesos en curso
+4. netstat -a : nos muestra las conexiones de red actuales
+
+ls -a = listar archivos ocultos
+ll = lista todos los archivos.

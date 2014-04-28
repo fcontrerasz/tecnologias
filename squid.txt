@@ -1,0 +1,14 @@
+En un squid sobre un FreeBSD "normal" (pfSense es un FreeBSD "tuneado") el archivo está en:
+
+/usr/local/squid/logs/cache.log
+
+Si es squidGuard quien se detiene, los errores se ven en:
+
+/var/log/squidGuard.log
+
+Y en /var/log/messages también pueden aparecer mensajes del usuario squid, normalmente la puesta en marcha y paro del servicio. En pfSense este archivo es /var/log/system.log.
+
+En la consola podeis buscar la ubicación de los archivos de squid usando:
+
+find / -name cache.log
+find / -name squidGuard.log

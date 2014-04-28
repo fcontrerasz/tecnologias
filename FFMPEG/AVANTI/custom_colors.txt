@@ -1,0 +1,49 @@
+
+# ==============================================================================
+# AVANTI automatically adapts a number of GUI colors to the OS it runs on.
+# For XP also to the basic predefined color themes; Standard, Silver and Olive.
+# This is actually a disabled ini file from which you can overwrite one or more
+# of the default colors. To activate this file, rename it to "custom_colors.ini".
+#
+# The items below expect a color string in RGB order with numbers from 0 to 255,
+# separated by slashes, e.g.; cursor_fill=0/0/255 gives a bright blue tone.
+#
+# Default settings for both log and report windows are;
+#
+#   normal=0/0/0       (black)
+#   dimmed=100/100/100 (gray)
+#   system=0/0/255     (blue)
+#   message=200/0/0    (red)
+#
+# ==============================================================================
+
+[CUSTOM_COLORS]
+
+# Next section handles menu colors.
+
+unselected_text=
+selected_text=
+cursor_border=
+cursor_fill=
+background=
+icon_bar_background=
+	
+# Log and Report window text and background colors.
+
+log_win_normal=
+log_win_dimmed=
+log_win_system=
+log_win_message=
+log_win_background=
+
+report_win_normal=
+report_win_dimmed=
+report_win_system=
+report_win_message=
+report_win_background=
+
+# Status line text, background and button color.
+
+status_line_text=
+status_line_background=
+

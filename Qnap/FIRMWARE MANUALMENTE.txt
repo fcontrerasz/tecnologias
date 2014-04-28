@@ -1,0 +1,47 @@
+Here is an exmaple of this:
+
+[Two important examines]
+
+(1) Please make sure there is /mnt/HDA_ROOT/update folder.
+
+If it does not exist, create it using
+
+# mkdir /mnt/HDA_ROOT/update
+
+(2) Confirm no /mnt/update file or folder.
+
+If it exists, you need to delete it using:
+
+# rm -rf /mnt/update
+
+After the two examinations, please execute the commands below to perform the update:
+
+mv /share/Public/TS-209_2.1.2_build1031.img /mnt/HDA_ROOT/update/
+
+ln -sf /mnt/HDA_ROOT/update /mnt/update
+
+/etc/init.d/update.sh /mnt/HDA_ROOT/update/TS-209_2.1.2_build1031.img
+
+And you will have to reboot the system after manually updating the firmware.
+
+# reboot
+
+
+######################################################################################################
+######################################################################################################
+######################################################################################################
+
+the instructions did not work for me on the new 3.5.1 update, but adding a few lines does work
+
+using the manual for manually updating didn't work, after a long forum discussion i tried the following - its the same as the manual but with a couple of extra lines. Whoever is in charge of this page perhaps it can be modified if this is approved
+
+
+rm /mnt/HDA_ROOT/update
+rm /mnt/update/newer
+mkdir /mnt/HDA_ROOT/update
+mv /share/Public/TS-659_3.5.1_Build1002.img /mnt/HDA_ROOT/update
+ln -sf /mnt/HDA_ROOT/update /mnt/update
+echo NIL > /mnt/update/newver
+/etc/init.d/update.sh /mnt/HDA_ROOT/update/TS-659_3.5.1_Build1002.img
+
+reboot  

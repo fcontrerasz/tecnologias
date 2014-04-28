@@ -1,0 +1,6 @@
+www.cotedivoire.cl/cpanel
+
+ftp.cotedivoire.cl
+
+user: divocl 
+pass: 6df5784cdsdcg4g4

@@ -1,0 +1,16 @@
+GCDB
+#%Name "TITLE/S  Metadata Key (or TS command)/WIDTH/255"
+#%content "TITLE/Metadata Value (or TS argument)/WIDTH/255"
+#%stream TITLE/Stream/WIDTH/65
+#%chapter TITLE/Chapter/WIDTH/65
+#%chap1 WIDTH/1/
+#%chap2 WIDTH/1/
+#%check WIDTH/1/
+Title	AVANTI			1		1
+Artist	Chris K			1		1
+Album	Not that I know			1		1
+Genre	FFmpeg/Avisynth GUI			1		1
+Date	$$time.year-$$time.month-$$time.day $$time.time			1		1
+Publisher	Chris Kevany			1		1
+Copyright	2007-2011			1		1
+Comment	Double-click on fields to edit.			1		1

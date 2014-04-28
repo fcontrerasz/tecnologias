@@ -1,0 +1,37 @@
+
+
+	AVANTI - Version 0.7.0
+
+
+	LICENSE AGREEMENT AND DISCLAIMER
+
+	This is a legal agreement ("License Agreement") between you
+	(either personal or corporate) and Chris Kevany ("Author")
+	for the software product "AVANTI" ("Software").
+	BY COPYING OR USING THE SOFTWARE IN ANY KIND, YOU AGREE
+	TO BE BOUND BY ALL OF THE TERMS AND CONDITIONS OF THIS
+	LICENSE AND DISCLAIMER AGREEMENT.
+
+	AVANTI is FREEWARE. You can freely use this software
+	and distribute copies of the ORIGINAL DISTRIBUTION FILE as
+	long as NO ALTERATIONS are made to the file and its contents
+	and no charge is raised except a reasonable fee for
+	distributing costs. Any other way of distributing this
+	software is prohibited.
+
+	The application and any related documentation is provided
+	"as is" WITHOUT ANY WARRANTIES, either express or implied,
+	including, but not limited to, implied warranties of fitness
+	for a particular purpose. The entire risk arising out of use
+	or performance of the software remains with you.
+
+	In no event shall the author be liable for any damages
+	whatsoever (including, without limitation, damages for loss
+	of business profits, business interruption, loss of business
+	information, or any other pecuniary loss) arising out of the
+	use of or inability to use this software or documentation,
+	even if the author has been advised of the possibility of
+	such damages.
+
+
+	September 2012 - Chris Kevany

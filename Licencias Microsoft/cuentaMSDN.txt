@@ -1,0 +1,23 @@
+http://msdn34.e-academy.com/elms/Storefront/Home.aspx?campus=inacap_info 
+
+
+nombre usuario: leonardo.molinas@inacapmail.cl 
+clave: nolohagas 
+
+
+ Nombre Cantidad Precio unitario Importe   
+1. Microsoft Windows Web Server 2008 32-bit (English) - Descargar  Opciones de descarga 
+Clave de producto: 77RT8-CFVBR-MQR7Q-B4HXC-PKC4X
+Mensajes: 
+MSDNAA EULA  
+
+Número de acuerdo: 700647216 
+
+ 1 $0.00 $0.00    
+2. Microsoft Windows Web Server 2008 64-bit (English) - Descargar  Opciones de descarga 
+Clave de producto: 8346P-MCGKT-FFKBT-32MXP-MMW76
+Mensajes: 
+MSDNAA EULA  
+
+Número de acuerdo: 700647216 
+ 

@@ -1,0 +1,40 @@
+@echo off
+
+
+Set _Height=40
+Set _Width=40
+Set _BHeight=500
+Set _BWidth=%_Width%
+Set _xPos=30
+Set _yPos=20
+Set _Color=1E
+Set /A _BufferSize=_BHeight*0x10000+_BWidth
+Set /A _WindowPos=_yPos*0x10000+_xPos
+Set /A _WindowSize=_Height*0x10000+_Width
+Set _Cmd=Title TERMINAL
+
+Set _Title=ESTACION 70
+Reg Add "HKCU\Console\%_Title%~5" /V ScreenBufferSize /T REG_DWORD /D %_BufferSize% /F
+Reg Add "HKCU\Console\%_Title%~5" /V ScreenColors /T REG_DWORD /D 0x%_Color% /F
+Reg Add "HKCU\Console\%_Title%~5" /V WindowPosition /T REG_DWORD /D %_WindowPos% /F
+Reg Add "HKCU\Console\%_Title%~5" /V WindowSize /T REG_DWORD /D %_WindowSize% /F
+
+start "%_Title%~5" %COMSPEC% /K cmd /c "psexec.exe -s -u mets\neutron -p Yt10p* \\172.16.11.170 -f -c ejecutar_remoto.bat"
+
+Set /A _yPos=_yPos+_Height*12+40
+Set /A _WindowPos=_yPos*0x10000+_xPos
+
+Reg Add "HKCU\Console\%_Title%~5" /V ScreenBufferSize /T REG_DWORD /D %_BufferSize% /F
+Reg Add "HKCU\Console\%_Title%~5" /V ScreenColors /T REG_DWORD /D 0x%_Color% /F
+Reg Add "HKCU\Console\%_Title%~5" /V WindowPosition /T REG_DWORD /D %_WindowPos% /F
+Reg Add "HKCU\Console\%_Title%~5" /V WindowSize /T REG_DWORD /D %_WindowSize% /F
+
+
+
+:_OPEN
+Reg Add "HKCU\Console\%~5" /V ScreenBufferSize /T REG_DWORD /D %1 /F
+Reg Add "HKCU\Console\%~5" /V ScreenColors /T REG_DWORD /D 0x%2 /F
+Reg Add "HKCU\Console\%~5" /V WindowPosition /T REG_DWORD /D %3 /F
+Reg Add "HKCU\Console\%~5" /V WindowSize /T REG_DWORD /D %4 /F
+start "%_Title%~5" %COMSPEC% /K cmd /c "psexec.exe -s -u mets\neutron -p Yt10p* \\172.16.11.168 -f -c ejecutar_remoto.bat"
+

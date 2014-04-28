@@ -1,0 +1,20 @@
+	
+			
+
+	NOTES ON HOW TO UPGRADE A PREVIOUS AVANTI VERSION.
+	--------------------------------------------------
+
+	If you upgrade to Avanti 0.7.0 from a earlier version, it is possible to overwrite
+	your current version (all files and folders), if not older than version 0.4.3.
+	
+	Avanti will preserve your environment settings, additions to the basic options and
+	codecs/formats database modifications as much as possible.
+	
+	Avanti will overwrite the default templates which were included in a previous version
+	but preserves saved user templates, Avisynth scripts and SuperEQ presets.
+	
+	If you modified default templates, please first make a template backup and restore
+	them after you have overwritten the older version.
+
+	
+	September 2012 - Chris Kevany

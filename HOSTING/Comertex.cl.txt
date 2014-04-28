@@ -1,0 +1,9 @@
+http://comertex.cl/cpanel
+
+USUARIO : comert
+CONTRASEÑA : [misma compu home]
+
+FTP Correo:
+Host: ftp.comertex.cl ó  200.63.96.42
+USUARIO : comert
+CONTRASEÑA : gudr4176

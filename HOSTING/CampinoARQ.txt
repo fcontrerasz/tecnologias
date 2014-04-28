@@ -1,0 +1,3 @@
+acceso: http://mailadmin.tie.cl
+user: 78961380-k
+ps: 380k

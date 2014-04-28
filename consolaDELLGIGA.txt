@@ -1,0 +1,53 @@
+vlan database
+vlan 2
+exit
+interface range ethernet g(1-24)
+switchport access vlan 2
+exit
+interface vlan 2
+name Internet
+exit
+voice vlan oui-table add 0001e3 Siemens_AG_phone________
+voice vlan oui-table add 00036b Cisco_phone_____________
+voice vlan oui-table add 00096e Avaya___________________
+voice vlan oui-table add 000fe2 H3C_Aolynk______________
+voice vlan oui-table add 0060b9 Philips_and_NEC_AG_phone
+voice vlan oui-table add 00d01e Pingtel_phone___________
+voice vlan oui-table add 00e075 Polycom/Veritel_phone___
+voice vlan oui-table add 00e0bb 3Com_phone______________
+iscsi target port 860 address 0.0.0.0
+iscsi target port 3260 address 0.0.0.0
+interface vlan 1
+ip address 172.16.11.99 255.255.255.0
+exit
+ip default-gateway 172.16.11.2
+username admin password d41d8cd98f00b204e9800998ecf8427e level 15 encrypted
+snmp-server community 1 rw view DefaultSuper
+
+
+
+
+
+
+Default settings:
+Service tag: FW6L7F1
+
+SW version 1.0.0.31 (date  31-Oct-2007 time  10:32:13)
+
+Gigabit Ethernet Ports
+=============================
+no shutdown
+speed 1000
+duplex full
+negotiation
+flow-control off
+mdix auto
+no back-pressure
+
+interface vlan 1
+interface port-channel 1 - 8
+
+spanning-tree
+spanning-tree mode STP
+
+qos basic

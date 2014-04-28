@@ -1,0 +1,50 @@
+
+
+- BAJAR CODEC "Screen Capture DirectShow source filter."
+http://www.umediaserver.net/umediaserver/download.html
+
+- COMO TRABAJAR
+http://nerdlogger.com/2011/11/03/stream-your-windows-desktop-using-ffmpeg/
+
+- BAJAR FFMPEG INTERNET
+
+- INSTALAR EN EQUIPO DRIVER CAPTURA DE VIDEO
+
+> UScreenCapture.msi /quiet 
+
+- LISTAR FORMATOS DE CODECS SOPORTADOS
+
+> ffmpeg -formats
+
+- LISTAR DIPOSITIVOS WINDOWS
+
+> ffmpeg -list_devices true -f dshow -i dummy
+
+- EJECUTAR LOCALMENTE
+
+> ffmpeg -f dshow -i video="UScreenCapture" output.mkv
+> ffmpeg -f dshow -i video="UScreenCapture" -r 5 output.mkv
+> ffmpeg -f dshow -i video="UScreenCapture" -s 400x300 -r 30 http://172.16.11.85:6090/feed1.ffm
+
+- REMOTO
+	
+	primero: psexec -s \\172.16.11.80 -u mets\neutron -p XXXX cmd
+	luego: ffmpeg -f dshow -i video="UScreenCapture" -r 5 output.mkv
+	
+
+
+- CONECTARSE A UN SERVIDOR REMOTO
+
+> ffmpeg -f dshow  -i video="UScreenCapture"  -r 30 -vcodec mpeg4 -q 12 -f mpegts http://172.16.11.85:6090/feed1.ffm
+> ffmpeg -f dshow  -i video="UScreenCapture" -s 400x300 -r 30 -vcodec mpeg4 -q 12 -f http://172.16.11.85:6090/feed1.ffm
+> ffmpeg -f dshow  -i video="UScreenCapture"  -r 30 -vcodec mpeg4 -q 12 -f mpegts http://172.16.11.85:6090/feed1.ffm
+
+- CAPTURAR VIDEO DE SERVIDOR STREAMING
+
+>ffmpeg -i "udp://172.16.11.62:6666" -b 1024k c:\output.mkv
+
+- SACA SCREENSHOT
+
+> ffmpeg -ss 00:00:01.01 -i /my_video_file_dir/video.flv -y -f image2 -vcodec mjpeg -vframes 1 /image_dir/screenshot.jpg
+
+

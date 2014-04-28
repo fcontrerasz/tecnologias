@@ -1,0 +1,784 @@
+
+
+	AVANTI 0.7.0 -- FFmpeg/Avisynth GUI -- Changelog 24-09-2012.
+	==============================================================
+	 1. Added support for libass (FFmpeg subtitle burn-in).
+	 2. Added many new features to the Avanti subtitle option.
+	 3  Added FFmpeg documentation viewer to help menu.
+	 4. Adapted "Advanced database Manager" to new FFmpeg versions.
+	 5. Improved Avisynth error message display and formatting.
+	 6. Fixed a memory issue (should improve Win7 compatibility).
+	 7. Fixed broken option to save command lines in batch files.  
+	 8. Fixed broken support for vgtmpeg (dvd,bd title extractor).
+	 9. Updated FFmpeg database with latest codec/format additions.	
+	10. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.9 -- FFmpeg/Avisynth GUI -- Changelog 20-08-2012.
+	==============================================================
+	 1. Added auto-assign of preferable AAC codec (if available).
+	 2. Fixed some buffer size issues with latest FFmpeg builds.
+	 3. Fixed broken input device option (dshow, vfwcap).
+	 4. Fixed option to display libavfilter info at log window. 
+	 5. Updated FFmpeg database with latest codec/format additions.	
+	 6. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.8 -- FFmpeg/Avisynth GUI -- Changelog 21-06-2012.
+	==============================================================
+	 1. Fixed failing log remove option for changed x264 logs.
+	 2. Fixed display issues with latest x264 codec.
+	 3. Fixed bug in source properties (missing file path slashes).
+	 4. Fixed unwanted terminate message at log display.
+	 5. Fixed fatal error at flac encoding with new FFmpeg builds.
+	 6. Fixed grouping of libavfilter commands after FFmpeg change.
+	 7. Updated FFmpeg database with latest codec/format additions.	
+	 8. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.7 -- FFmpeg/Avisynth GUI -- Changelog 21-02-2012.
+	==============================================================
+	 1. Improved portability of the Avanti setup (at path changes). 	
+	 2. Improved Avisynth script editing/debugging (less switching).
+	 3. Improved Avisynth error reporting (now local at gui window).
+	 4. Fixed bug in Avisynth error preview (lost back slashes).
+	 5. Fixed bug in "Job Control Manager" (at folder change).
+	 6. Updated FFmpeg database with latest codec/format additions.	
+	 7. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.6 -- FFmpeg/Avisynth GUI -- Changelog 04-02-2012.
+	==============================================================
+	 1. Added option to auto-obtain a unique destination path.
+	 2. Fixed video preview full-screen option in Windows 7.
+	 3. Fixed video preview for non-standard taskbar positions.
+	 4. Fixed bug in detection of some valid shared builds.
+	 5. Adapted some templates for latest x264 library (core 120).
+	 6. Adapted vgtmpeg support for new blu-ray option.
+	 7. Updated FFmpeg database with latest codec/format additions.	
+	 8. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.5 -- FFmpeg/Avisynth GUI -- Changelog 14-01-2012.
+	==============================================================
+	 1. Maintenance to keep up with the latest FFmpeg builds.
+	 2. Fixed compatibility issues in Windows 7 (cancel, preview).
+	 3. Updated FFmpeg database with latest codec/format additions.	
+	 4. Updated some sections in the chm context help.
+
+
+	AVANTI 0.6.4 -- FFmpeg/Avisynth GUI -- Changelog 03-01-2012.
+	==============================================================
+	 1. Fixed initialization failure with recent FFmpeg versions.
+	 2. Added support for vgtmpeg (adds DVD title extraction).
+	 3. Adapted log reporting for some new FFmpeg messages. 
+	 4. Updated FFmpeg database with latest codec/format additions.	
+	 5. Updated chm context help for changes and additions. 
+
+
+	AVANTI 0.6.3 -- FFmpeg/Avisynth GUI -- Changelog 03-11-2011.
+	==============================================================
+	 1. Added also command redirection for user "audio" options.
+	 2. Adapted threads to latest FFmpeg changes (user preferences).
+	 3. Adapted metadata log formatting for "libmodplug" decoder.
+	 4. Adapted "Metadata Manager" for mod, s3m, xm, etc. metadata.
+	 5. Improved metadata editor (now handles line breaks).
+	 6. Fixed metadata skip at "audio only" batch processing. 
+	 7. Fixed minor bug in "Advanced Database Manager" module.
+	 8. Fixed some reset issues at switch to other FFmpeg version.
+	 9. Fixed FFmpeg timeout (broken user preferences setting).
+	10. Updated FFmpeg database with latest codec/format additions.	
+	11. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.2 -- FFmpeg/Avisynth GUI -- Changelog 06-10-2011.
+	==============================================================
+	 1. Added option at main menu to save/load project files.
+	 2. Added option to auto-load templates on codec selection.
+	 3. Added "Source properties" and more for dshow input devices.
+	 4. Added support for "libcdio" input device (CD extraction).
+	 5. Expanded audio/video codec lists and renamed labels.
+	 6. Adapted "Input stream mapping" to recent FFmpeg changes.
+	 7. Simplified "Input stream mapping" (auto positioning).
+	 8. Fixed command order issues with latest FFmpeg builds.
+	 9. Fixed issue in demux option with latest FFmpeg builds.
+	10. Fixed codec command issue with FFmbc 0.7-rc1 up.
+	11. Updated FFmpeg database with latest codec/format additions.	
+	12. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.1 -- FFmpeg/Avisynth GUI -- Changelog 14-09-2011.
+	==============================================================
+	1. Added option to use capture devices as source (vfwcap, dshow).
+	2. Adaptions to recent FFmpeg (avconv) command syntax changes.
+	-- (fixes issues when using FFmpeg N-32287-ge6ea4c7 or higher).
+	3. Fixed bug in -vfin and -vfout parser (failed on space chars).
+	4. Fixed bug in "User Tools" option (failed on paths to ES).
+	5. Fixed bug in pipe buffer (kept old data on initializing).
+	6. Updated FFmpeg database with latest codec/format additions.	
+	7. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.6.0 -- FFmpeg/Avisynth GUI -- Changelog 25-07-2011.
+	==============================================================
+	1. Added option to launch Avanti with command-line arguments.
+	2. Added support for escape characters on user command line.
+	3. Fixed some frame- and gop size bugs in NTSC templates.
+	4. Fixed log display issues with large amounts of metadata.
+	5. Fixed some issues with partly broken FFmpeg builds.
+	6. Dropped overwrite support for Avanti versions < 0.4.3.
+	7. Dropped UPX packing for the "Avanti-GUI" executable.
+	8. Updated FFmpeg database with latest codec/format additions.	
+	9. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.5.9 -- FFmpeg/Avisynth GUI -- Changelog 10-06-2011.
+	==============================================================
+
+	1. Fixed bug in media browser with Explorer custom settings.
+	2. Fixed install path issues in Windows 7 (x64).
+	3. Fixed FFmbc compatibility issues up to 0.6-rc7 (user builds).
+	4. Fixed some new issues with 2-pass log remove option.
+	5. Updated FFmpeg database with latest codec/format additions.
+
+
+	AVANTI 0.5.8 -- FFmpeg/Avisynth GUI -- Changelog 24-05-2011.
+	==============================================================
+
+	1. Fixed compatibility issues for FFmpeg ~git-N-29941-g5a15360 up.
+	2. Adapted "Remove 2-pass logs" option to x264 changes.
+	3. Updated FFmpeg database with latest codec/format additions.
+
+
+	AVANTI 0.5.7 -- FFmpeg/Avisynth GUI -- Changelog 12-05-2011.
+	==============================================================
+
+	1. Added "Insert extra user source" menu option (report window).
+	-. (to add extra audio/subtitle streams for complex muxing).
+	2. Added new option to thin out FFmpeg logging (Preferences).
+	3. Improved separation of FFmpeg input data (log window).
+	4. Improved formatting of long file paths (log window).
+	5. Fixed bug in file paths for internal Avisynth scripts.
+	6. Fixed bug in media browser dialogs (no desktop folders). 
+	7. Fixed bug in Metadata Manager "re-read from source" option.
+	8. Updated FFmpeg database with latest codec/format additions.
+	9. Added section about complex (re)muxing to chm context help.
+
+
+	AVANTI 0.5.6 -- FFmpeg/Avisynth GUI -- Changelog 27-04-2011.
+	==============================================================
+
+	1. Adaptions to improve compatibility with Windows 7 (x64).
+	2. Adaption for some FFmpeg builds, reported as unsupported.
+
+
+	AVANTI 0.5.5 -- FFmpeg/Avisynth GUI -- Changelog 12-04-2011.
+	==============================================================
+
+	 1. Adaptions for latest FFmpeg changes (several issues).
+	 2. Added "Rewrite PTS" and "Audio Sync" (Removed "TS offset").
+	 3. Added new menus with icons and color adaption to OS.
+	 4. Added custom colors option (low level ini file stuff).
+	 5. Added option to generate chapters at "Metadata Manager".
+	 6. Added support for commands at "Metadata Manager".
+	 7. Improved editor at "Metadata Manager" (edit all at once).
+	 8. Fixed some bugs in "Metadata Manager" dump option.
+	 9. Fixed save/load bug when directory paths contained dots.
+	10. Fixed bug in media load dialog (unexpected close).
+	11. Updated FFmpeg database with latest codec/format additions.
+	12. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.5.4 -- FFmpeg/Avisynth GUI -- Changelog 03-03-2011.
+	==============================================================
+	1. Added initialization check for "semi-shared" FFmpeg builds.
+	2. Added "FFmpeg Presets" path to the user "Preferences".
+	3. Improved handling of FFmpeg -vpre preset commands.
+	4. Improved log window formatting for new FFmpeg messages.
+	5. Adaption for change in FFmpeg input properties of h264.
+	6. Adaption for changed FFmpeg command syntax (-map_metadata).
+	7. Adaption for compatibility with some new Git builds.
+	8. Adaption to read image sequence source paths.
+	9. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.5.3 -- FFmpeg/Avisynth GUI -- Changelog 03-02-2011.
+	==============================================================
+
+	1. Replaced/Improved internal audio/video players (MCI to DS).
+	2. Added selectable parity (field order) to Yadif deinterlace.  
+	3. Added D10/IMX and XDCAM templates (adaption info included).
+	4. Adapted FFmpeg initialization for new Win32 GIT builds.
+	5. Fixed bug in FFmpeg initialization of shared builds.
+	6. Fixed some bugs in the "Metadata Manager".
+	7. Updated FFmpeg database with latest codec/format additions.
+	8. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.5.2 -- FFmpeg/Avisynth GUI -- Changelog 14-01-2011.
+	==============================================================
+
+	 1. Added command redirection feature (user command line).
+	 2. Added edit window to "metadata manager".
+	 3. Added "extract chapter" option to "metadata manager".
+	 4. Added "export" and "dump" options to "metadata manager".
+	 5. Improved Avisynth Preview (auto colorspc adaption).
+	 6. Improved support for external players (WMP,MPC,VLC etc.).
+	 7. Improved general file manager (folder-up/view-mode icons).
+	 8. Improved stream mapping feature at source properties.
+	 9. Improved progress reporting (adapts to user -t command).
+	10. Fixed bug in "Job Control manager" log (wrong metadata).
+	11. Updated FFmpeg database with latest codec/format additions.
+	12. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.5.1 -- FFmpeg/Avisynth GUI -- Changelog 18-12-2010.
+	==============================================================
+
+	 1. Added libavfilter denoise and blur/sharpen options.
+	 2. Added Metadata manager (new sub-page option).
+	 3. Added option to disable libavfilter logging (preferences).
+	 4. Improved Avisynth script preview (for external scripts).
+	 5. Improved libavfilter log window formatting.
+	 6. Improved checking for supported FFmpeg builds.
+	 7. Moved "Expand Luminance" to Avisynth color correction page.
+	 8. Suppress x264 unstable startup behaviour on status line.
+	 9. Fixed some x264 display issues at process log window.
+	10. Fixed bug in file load dialogs.
+	11. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.5.0 -- FFmpeg/Avisynth GUI -- Changelog 01-12-2010.
+	==============================================================
+
+	1. Added support for FFmbc 0.5 (FFMedia Broadcast) win32 build.
+	!!! rename "ffmbc.exe" to "ffmpeg_ffmbc.exe" to use it. !!!
+	2. Fixed bug in crop/scale/pad option (green bars with Yadif).
+	3. Updated FFmpeg database with latest codec/format additions.
+	4. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.4.9 -- FFmpeg/Avisynth GUI -- Changelog 08-11-2010.
+	==============================================================
+
+	1. Fixed bug in "Crop/Scale/Pad" option (libavfilter change).
+	2. Fixed bug in x264 error reporting (libx264 change).
+	3. Fixed bug in "user video options" parsing (inserted blank).
+	4. Replaced old deinterlace option with Yadif (use SVN-r25203 up).
+	5. Added "-vfuser" label for command line use of libavfilter. 
+	6. Added Huffyuv and FFmpeg Huffyuv variant templates.
+	7. Improved video preview (initialization delays).
+	8. Updated FFmpeg database with latest codec/format additions.
+	9. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.4.8 -- FFmpeg/Avisynth GUI -- Changelog 21-06-2010.
+	==============================================================
+
+	1. Adapted "crop/scale/pad" option for major FFmpeg change.
+	2. Added -vfin and -vfout labels for "crop/scale/pad" option.
+	3. Upgraded Gui4Cli script interpreter to version 19.35	
+	4. Fixed USB crash bug (actually Dimitris Keletsekis did).	
+	5. Fixed bug in "Job Control Manager" (occ. crash with x264).
+	6. Fixed bug in evironment restore (after Job processing).
+	7. Fixed bug in template message (showed up at second pass).
+	8. Updated FFmpeg database with latest codec additions.
+	9. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.4.7 -- FFmpeg/Avisynth GUI -- Changelog 08-05-2010.
+	==============================================================
+
+	1. Added "auto" option to FFmpeg threads (user preferences).	
+	2. Added option to omit FFmpeg copying (saves space/startup time).
+	3. Added warning to prevent confusion about codec vs. template.
+	4. Added option to disable pitch correction (AV frame rate conv). 
+	5. New attempt to format libx264 'options' (failed after update).  
+	6. Fixed bug that could cause missing codecs list (help docs).
+	7. Fixed bug in "Audio channel mapper" pop-up menu.
+	8. Updated FFmpeg database with latest codec additions.
+	9. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.4.6 -- FFmpeg/Avisynth GUI -- Changelog 05-04-2010.
+	==============================================================
+
+	 1. Added option to save Avisynth scripts with absolute paths.
+	 2. Added formatting for new libx264 'options' reporting. 
+	 3. Fixed error in FFmpeg log caused by recent libx264 changes.
+	 4. Replaced Gui4Cli icon with dedicated Avanti icon.
+	 5. Updated FFmpeg database with latest codec additions.
+	 6. Updated context help for version and changes.
+
+
+	AVANTI 0.4.5 -- FFmpeg/Avisynth GUI -- Changelog 02-02-2010.
+	==============================================================
+
+	 1. Improved validity check for non-generic FFmpeg builds.
+	 2. Improved job Control Manager (now checks for changes).
+	 3. Improved template load dialog (stability issues).
+	 4. Moved command line menu from left button to command line.
+	 5. Fixed delay and icon issues in media browser dialogs.
+	 6. Fixed bug in Job Control Manager (template test).
+	 7. Fixed Avisynth duration bug in source properties.
+	 8. Fixed bug in "@mpeg2fcnt" label (Avisynth editor).
+	 9. Fixed bug in "@subtitle_path" label (no global access).
+	10. Upgraded Gui4Cli script interpreter to version 19.33
+	11. Updated FFmpeg database with latest codec additions.
+	12. Updated chm context help for changes and improved index.
+
+
+	AVANTI 0.4.4 -- FFmpeg/Avisynth GUI -- Changelog 26-12-2009.
+	==============================================================
+
+	 1. Adaptions for new FFmpeg dup/drop frame console output.
+	 2. Adaptions to improve Windows 7 (64-bit) compatibility.
+	 3. Improved error log writing for application errors.
+	 4. Improved metadata extraction (for multiple sections).
+	 5. Fixed message box bug on systems with a floppy drive.
+	 6. Fixed bugs and improved clipboard windows (now resizeable).
+	 7. Updated codecs/formats database to latest FFmpeg changes.
+	 8. Updated context help for version and changes.
+
+
+	AVANTI 0.4.3 -- FFmpeg/Avisynth GUI -- Changelog 08-12-2009.
+	=============================================================
+
+	 1. Added automatic adaption for aac codec (libfaac vs. aac).	
+	 2. Added new destination path options to user tools.
+	 3. Added custom media file load/save dialog (better filtering).
+	 4. Improved template load/save dialogs (are now resizeable).
+	 5. Improved source properties for FFmpeg N/A duration.
+	 6. Improved Avisynth error reporting (for *.vdr and SuperEQ).
+	 7. Adaptions for new FFmpeg -codecs, -formats docs split-up.
+	 8. Fixed startup failure with certain install paths/locations.
+	 9. Fixed a bug in Job Control Manager (lock-up on fatal error). 
+	10. Added and updated items in chm context help.
+
+
+	AVANTI 0.4.2 -- FFmpeg/Avisynth GUI -- Changelog 06-11-2009.
+	=============================================================
+
+	 1. Added automatic codecs/formats database update.
+	 2. Demuxing of mpg, vob, etc. now can be done in one go.
+	 3. Improved x264 message formatting (marks error lines).
+	 4. Improved template properties (display, longer names).
+	 5. Improved "auto post-processing" option (menu/execution).
+	 6. Updated 2-pass log remove option (new x264 "mbtree" log).
+	 7. Updated FFmpeg preset option (command syntax change). 
+	 8. Fixed bug in audio tools (failed on initial settings).
+	 9. Fixed bug in user tools (path error with hide option).
+	10. Fixed bug in x264 warning status (Job control manager).
+	11. Updated items and pictures in chm context help.
+
+
+	AVANTI 0.4.1 -- FFmpeg/Avisynth GUI -- Changelog 05-10-2009.
+	=============================================================
+	
+	 1. Added "auto" post-processing option to destination path.
+	 ... (runs linked user tools after single or batch process).
+	 2. Added convenient editor to "User tools menu manager".
+	 3. Added confirmation and hide options to user tools.
+	 4. Added predefined user tools (MP4Box, DGPulldown, more).
+	 ... (related tools are not included in the zip package).
+	 5. Added "user-tools" folder to put them in (optional).
+	 6. Added two new x264 non-error messages to exceptions list.
+	 7. System file backup now also saves "avtools.ini" file.
+	 8. Fixed bug in SegmentedSource option (Avisynth USER mode).
+	 9. Fixed bug in "Insert AUTO script" (Avisynth USER mode).
+	10. Updated codecs/formats database to latest FFmpeg changes.
+	11. Added and updated items and pictures in chm context help.
+
+
+	AVANTI 0.4.0 -- FFmpeg/Avisynth GUI -- Changelog 14-09-2009.
+	==============================================================
+
+	 1. Added audio "Sync" shift/stretch option (Avisynth AUTO mode).
+	 2. Added audio 6-channel re-map options (Avisynth AUTO mode).
+	 3. Added frame size to video preview (to check C/S/P results).
+	 4. Added source to YUY2 option (Avisynth crop/scale/pad).
+	 5. Added plugin type choice to "Insert Plugin" (Avisynth editor).
+	 6. Added option to display short paths (log & report windows).
+	 7. Added formatting for new FFmpeg metadata display (log window).
+	 8. Made display of non-error messages optional (log window).
+	 9. Improved Avisynth crop/scale/pad (to check/skip 1:1 resize).
+	10. Improved and fixed bug in "Advanced Database Manager".
+	11. Changed FFmpeg time-out checking (replaces fixed delays).
+	12. Changed layout of "MPEG/AVI tools" window (separate paths).
+	13. Changed "Copy Audio" to allow direct Avisynth PCM streaming. 
+	14. Fixed bug in Avisynth script preview (after process error).
+	15. Added and updated items and pictures in chm context help.
+
+
+	AVANTI 0.3.9 -- FFmpeg/Avisynth GUI -- Changelog 06-08-2009.
+	==============================================================
+
+	 1. Added local log/template display to "Job Control Manager".
+	 2. Added option to insert FFmpeg presets (report window menu).
+	 3. FFmpeg presets are now allowed on all command line types.
+	 4. Added a few new x264 non-error messages to exceptions list.
+	 5. Added deint and 2-pass to "Compose -new command line".
+	 6. Improved "Options Editor" (now can sync with database).
+	 7. Improved stream mapping (to handle odd stream orders). 
+	 8. Improved Avisynth Editor (long lines, complex scripts).
+	 9. Avisynth USER scripts now can mix virtual/absolute paths.
+	10. Fixed bug that restored minimized main gui (Job Control).
+	11. Fixed bug in dual source reporting (no reset after error).  
+	12. Improved and updated many items in chm context help.  
+
+
+	AVANTI 0.3.8 -- FFmpeg/Avisynth GUI -- Changelog 10-07-2009.
+	==============================================================
+	
+	1. Added "goto error line" feature (Avisynth script preview).
+	2. Added option to insert selected Avisynth plugins at once.
+	3. Changes to improve startup initialization procedure.
+	4. Changed -new option to accept any stream type as source.
+	5. Fixed bug where some commands were seen as -new command.
+	6. Fixed bug where -map_meta_data was seen as -map command. 
+	7. Fixed bug in status info collection (with audio only).
+	8. Updated codecs/formats database (latest FFmpeg additions).
+	9. Improved and updated some items in the chm context help. 
+
+
+	AVANTI 0.3.7 -- FFmpeg/Avisynth GUI -- Changelog 03-06-2009.
+	=============================================================
+
+	1. Improved accuracy of bitrate/qscale calculation.
+	2. Made path to "ffmpeg.exe" user selectable (static only).
+	3. Improved VirtualDub edits to Avisynth trim conversion.
+   	.  (now converts full vdub cut/copy/paste edit list).
+	4. Added "else" option to @preview switch (Avisynth editor).
+	5. Added progress info to minimized Job Manager (taskbar).
+	6. Fixed bug at FFmpeg version change (could cause crash).
+	7. Changed FFmpeg -b vs. -vb detection (to catch exceptions).
+	8. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.3.6 -- FFmpeg/Avisynth GUI -- Changelog 02-05-2009.
+	=============================================================
+
+	 1. Added check/adaption for FFmpeg -b to -vb syntax change.
+	 2. Added support for user additions to aspect ratio field.
+	 3. Added drop ability to paths at the user preferences.
+	 4. Made audio skip at first pass optional (2-pass encoding).
+	 5. Suppress warning for x264 non-error info (job control).
+	 6. Adapted FFmpeg message display to latest release changes.
+	 7. Improved user tools support and "User tools manager".
+	 8. Added examples to "User tools" section (context help).
+	 9. Fixed bug in FFmpeg console mode (canceled after pass 1).
+	10. Fixed bug in 2-pass log cleanup (no remove on errors).
+	11. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.3.5 -- FFmpeg/Avisynth GUI -- Changelog 10-04-2009.
+	=============================================================
+
+	 1. Added user stream mapping assistance (source properties). 
+	 2. Added bitrate/qscale info to log window (min/max/avg).
+	 3. Added command line related menu (user video opts button).
+	 4. Added support for "VobSub" to subtitle burn-in option. 
+	 5. Improved formatting of FFmpeg input/output/message data.
+	 6. Improved Job process logging and cancel handling.
+	 7. Took off "Source 2" limitations for Avisynth routing.
+	 8. Adapted source properties to recent FFmpeg changes.
+	 9. Fixed bug in -new option (no reset after error message).
+	10. Fixed bug in FFmpeg console mode (caused Avanti to hang).
+	11. Fixed bug in command line parsing (get/set user options).
+	12. Fixed bug in framesize calculator (user destination par).
+	13. Re-ordered/improved "basic overview" in chm context help.
+	14. Updated chm context help for changes and additions.
+
+
+	AVANTI 0.3.4 -- FFmpeg/Avisynth GUI -- Changelog 10-03-2009.
+	=============================================================
+
+	 1. Added simple integrated bitrate/filesize calculator.
+	 2. Added position tracking to video preview (title bar).
+	 3. Added option to set FFmpeg process priority (preferences).
+ 	 4. Added dedicated multi-clipboard to report window editor.
+	 5. Added "@subtitle_path" label (Avisynth script editor).
+	 6. Improved support for uncommon source file extensions.
+	 7. Improved management of elementary source streams (mpeg1/2).
+	 8. Improved audio preview (now accepts new input when open). 
+	 9. Changed some gui messages (update for changes in v 0.3.3).
+	10. Fixed bug in template load dialog (unstable when opened).
+	11. Fixed bug in video preview (pause/play seek delay).
+	12. Fixed bug in FFmpeg user audio options (stream mapping).
+	13. Fixed bug in a few message boxes (didn't stay on top).
+	14. Updated chm context help for additions and changes.
+
+
+	AVANTI 0.3.3 -- FFmpeg/Avisynth GUI -- Changelog 09-02-2009.
+	=============================================================
+
+	1. Adapted mux option to FFmpeg command change (-genpts). 
+	2. Changed startup procedure (gui occasionally didn't show up).
+	3. Changed command line order for FFmpeg -deinterlace.
+	4. Moved report window pop-up menu to "More..." button. 
+	5. Fixed bug in FFmpeg message reporting (at FFmpeg cancel).
+	6. Fixed bug in progress display (when using avs normalize).
+	7. Fixed bug in frame size calculator (locked calc button).
+	8. Updated deinterlace section of the chm context help.
+
+
+	AVANTI 0.3.2 -- FFmpeg/Avisynth GUI -- Changelog 22-01-2009.
+	=============================================================
+
+	1. Improved progress display (smooths shorttime speed changes).
+	2. Connected "Demux/Mux/Copy" to database "Default/ES/PS" entries.
+	3. Reverted to RGB for Avisynth preview (reduces choppy playback).
+	4. Fixed bug in preview of "AV conversion" (29.97 options).
+	5. Fixed bug in template load (didn't update .user extensions).
+	6. Fixed bug in user cancel (reporting of destination validity).
+	7. Updated codecs/formats database (latest FFmpeg additions).
+	8. Updated chm context help and added sorted index.
+
+
+	AVANTI 0.3.1 -- FFmpeg/Avisynth GUI -- Changelog 17-12-2008.
+	=============================================================
+
+	 1. Dropped the use of mplayer2.exe (is not available in Vista).
+	 2. Added internal Audio Preview (replaces mplayer2.exe).
+	 3. Added dedicated Avisynth error display window.
+	 4. Added option to reset windows to default size and position.
+	 5. Added user definable "emergency" hotkey (if FFmpeg hangs).  
+	 6. Revised Avisynth script creation, preview and error reporting. 
+	 7. Fixed bugs in Video Preview (window min/max, hidden taskbar).
+	 8. Fixed bug in subtitler (opaque border style didn't work).
+	 9. Fixed bug in SuperEQ editor (trackbar triggered twice).
+	10. Fixed bug in template load (auto-register of ES/PS entries).
+	11. Fixed bug in FFmpeg SHOW mode (cancel button didn't work). 
+	12. Updated codecs/formats database (latest FFmpeg, new codecs).
+	13. Updated context help for additions and changes.
+
+
+	AVANTI 0.3.0 -- FFmpeg/Avisynth GUI -- Changelog 18-11-2008.
+	=============================================================
+
+	 1. Added support for FFmpeg presets (requires SVN-r15625 up).
+	 2. Added dual command line option for 2-pass encoding.
+	 3. Added second option to remove 2-pass logs (preferences).
+	 4. Added codec wizard (simplifies registration at database).
+	 5. Changed container field (new entries need no registration).
+	 6. Improved management of long command lines. 
+	 7. Improved progress estimation for low encoding speeds.
+	 8. Improved reporting of FFmpeg messages/warnings.
+	 9. Improved Job process logging for messages/warnings.
+	10. Improved console mode window (now stays open at finish).
+	11. Improved video preview (dar/resize/auto opts refresh). 
+	12. Fixed bug with mp2 encoding (file not closed at check).
+	13. Updated and rewrote parts of the context help.
+
+
+	AVANTI 0.2.9 -- FFmpeg/Avisynth GUI -- Changelog 03-10-2008.
+	=============================================================
+	
+	1. Added "subtitler/Style editor" with preview (AUTO mode).
+	2. Added "@path" presets menu to "user tools menu manager".
+	3. Improved "Insert AUTO script" option (USER mode)
+	4. fixed bug with segemented & normalize when using variables. 
+	5. fixed multiple cancel messages with normalize scan.
+	6. fixed bug in m2v time calc. (for very small file sizes).
+	7. Updated templates for syntax changes in new FFmpeg versions.
+	8. Updated codecs/formats database (latest FFmpeg, file ext).
+	9. Updated context help for new options and changes.
+
+
+	AVANTI 0.2.8 -- FFmpeg/Avisynth GUI -- Changelog 14-09-2008.
+	=============================================================
+
+	 1. Added support for Avisynth m2v duration corr. (USER mode).
+	 2. Added "variable" choice for Avisynth SuperEQ (USER mode).
+	 3. Added @preview option for Avisynth scripts (USER mode).
+	 4. Added "Favorites" option to Avisynth editor. 
+	 5. Added right-click to all preview buttons (closes window).
+	 6. Added ntsc/pal to film (24 fps) conversion. (AUTO mode).
+	 7  Improved progress display for frame rate conversions. 
+	 8. Improved calculation of m2v duration and framecount.
+	 9. Disabled escape hotkey option (on user request).
+	10. Fixed bug in Avisynth route reporting (USER mode).
+	11. Fixed bug in pitch corr. for film to ntsc/pal conversion.
+	12. Fixed bug that corrupted Avisynth docs path (help menu).
+	13. Fixed bug in CSP calc. (user par didn't accept decimals).
+	14. Fixed bug in Job process log (when using avs options).
+	15. Updated chm help for additions and changes.
+
+
+	AVANTI 0.2.7 -- FFmpeg/Avisynth GUI -- Changelog 11-08-2008.
+	=============================================================
+
+	 1. Added copy audio/video (flexible alternative for mux/demux).
+	 2. Added options manager (to re-organize user additions).
+	 3. Added dedicated template load/save dialogs.
+	 4. Added TAGS to template files (long names/sorting/comment).
+	 5. Added/improved template examples (ipod, psp, etc.).
+	 6. Improved template comment management (dedicated editor).
+	 7. Added check to prevent accidental exit during process.
+	 8. Made FFmpeg crop/scale/pad available in Avisynth user mode. 
+	 9. Improved accuracy of frame size calculator.
+	10. Fixed path bug with startup from desktop shortcut (WXP).  
+	11. Fixed bug in user mapping when using 2-pass encoding.
+	12. Fixed bug in ".user" extension (still had restrictions). 
+	13. Fixed bug in Avisynth segmented source support.
+	14. Fixed bug in Avisynth path labels (@plugins/@superEQ). 
+	15. Fixed bug in "Advanced database manager".
+	16. Updated codecs/formats database (new codecs/descriptions).
+	17. Updated chm help for additions and changes.
+
+
+	AVANTI 0.2.6 -- FFmpeg/Avisynth GUI -- Changelog 02-06-2008.
+	=============================================================
+	
+	 1. Improved user tools for complex command line arguments.
+	 2. Improved and enhanced the "advanced database manager".
+	 3. Updated codecs/formats database for latest FFmpeg version.
+	 4. Adapted database to decode ogg theora (ogg, ogm extensions).
+	 5. Added ogg theora templates for encoding. 
+	 6. Fixed bug in version overwrite option (database not preserved).
+	 7. Fixed bug in "Preferences" (some not updated immediately).
+	 8. Adapted chm help for new database manager.   
+
+
+	AVANTI 0.2.5 -- FFmpeg/Avisynth GUI -- Changelog 17-05-2008.
+	=============================================================
+	
+	 1. Added tools menu with option to add user tools.
+	 2. Added advanced frame size calculator (crop/scale/pad page).	
+	 3. Added conversion of VirtualDub trim/cut data to avs script.
+	 4. Added support for segmented sources (Avisynth user mode).
+	 5. Added line numbers to easier trace script errors (avs preview).
+	 6. Improved insertion of Avisynth AUTO scripts (avs editor).
+	 7. Improved process logging (now shows warnings immediately).
+	 8. Improved file path storage (separate save for all options).
+	 9. Changed template save/load protocol (please re-read help).
+	10. Fixed bug in Avisynth editor (handling files with tabs).
+	11. Fixed Avisynth normalize warning (broken after big changes).
+	12. Fixed bug in MPEG/AVI tools that could cause a Avanti crash.
+	13. Several minor bug fixes and changes.
+	14. Updated chm help for new features and changes.
+
+
+	AVANTI 0.2.4 -- FFmpeg/Avisynth GUI -- Changelog 06-04-2008.
+	=============================================================
+
+	 1. Added text window expansion (Avisynth editor, report/log etc.)
+	 2. Added framecount to avs scripts to fix m2v source duration problem.
+	 3. Added process order option to "Crop/scale/pad" (Avisynth mode)	
+	 4. Added FFmpeg warnings log for job processing.
+	 5. Added load/convert option of cqm and xcm matrix files.
+	 6. Improved single process logging (now shows FFmpeg warnings list).
+	 7. Improved reporting of invalid process settings.
+	 8. Improved mpeg/avi tools on file and process reporting.
+	 9. Fixed bug in mpeg/avi tools (broken sequence end code).
+	10. Fixed bug in "Crop/scale/pad" which changed source frame size.
+	11. Made a number of "cosmetic" gui changes.
+	12. Updated chm help for new features and added more context links.
+
+
+	AVANTI 0.2.3 -- FFmpeg/Avisynth GUI -- Changelog 17-02-2008.
+	=============================================================
+
+	 1. Added Crop/Scale/Pad page with preview (FFmpeg/Avisynth modes)
+	 2. Added MPEG/AVI tools option (2:3 pulldown and more).
+	 3. Added Video TS offset (to correct async audio)
+	 4. Added AVI and ES muxing (avi can also use TS offset).
+	 5. Added FFmpeg threads to the "Preferences"
+	 6. Improved startup check for FFmpeg version options.
+	 7. Improved reporting on gui of FFmpeg encode errors.
+	 8. Fixed bugs in "Demux video" (kept audio and unused commands).
+	 9. Fixed (frame size) bugs in some example templates.
+	10. Fixed several minor bugs.
+	11. Updated chm Help for new options.
+
+
+	AVANTI 0.2.2 -- FFmpeg/Avisynth GUI -- Changelog 01-11-2007.
+	=============================================================
+
+	1. Added Job Control Manager (advanced batch job support).
+	2. Added Avisynth plugin manager.
+	3. Added "Preferences" (replaces change ini file settings).
+	4. Improved Avisynth support (can use most plugins now).
+	5. Improved and enhanced -new option (command line).
+	6. Fixed bugs in command line and template comment transfer.	
+	7. several minor bug fixes and changes.
+	8. Updated Help for new options.
+
+
+	AVANTI 0.2.1 -- FFmpeg/Avisynth GUI -- Changelog 09-10-2007.
+	=============================================================
+
+	1. Templates now can fully auto-register "unregistered" codecs.
+	   Essential for easy template sharing. You have to load and save
+	   your personal templates once only to have them up-to-date.
+	2. Improved video "Preview" option. Fixed time display and
+	   seeking problems with some file types. 
+	3. fixed bug where Avanti occasionally failed to check if the
+	   used FFmpeg version supports the (valid) cancel option.
+	4. Fixed bug in "Set user Video options" that wasn't able to
+	   handle quoted strings properly.
+	5. added path redirection for rambling x264 2-pass logs.
+	6. Fixed bug in loading of SuperEQ presets.
+	7. Fixed bugs in the ".user" file extension option. 
+	8. Did a lot of re-writing on the Avanti-Help.chm especially
+	   on the database and register procedure. More pictures.
+	9. Added (limited) context sensitive help. Click on dropdown
+	   lists and select pages, then press <F1>.
+
+
+	AVANTI 0.2.0 -- FFmpeg/Avisynth GUI -- Changelog 27-09-2007.
+	=============================================================
+
+	1. Templates now store their associated codec database entry.
+	   This makes it very easy to exchange templates that contain
+	   other then the by default registered FFmpeg codecs.
+	   Avanti will automatically update the database if it finds
+	   a unregistered codec in the template.
+	2. Added template for Flash Video (user contribution).
+	3. Fixed several minor bugs.
+	4. Found the main cause of the Avanti/FFmpeg/Avisynth problem
+	   with a lot of help from 45tripp (forums VideoHelp.com).
+	   Read the included "readme.txt" file for more details. 
+	5. New approach for Vista toolbar. Test GUI did fine, so...?
+	6. Rewritten the chm help somewhat but it will be revised as
+	   soon as I find the time for it. Also working on context
+	   sensitive help.
+
+
+	AVANTI 0.1.9 -- FFmpeg/Avisynth GUI -- Changelog 19-09-2007.
+	=============================================================
+	
+	1. Added option to call up the FFmpeg command line. Use <Ctrl><F9>.
+	   This will show the command line of the last encode process.
+	2. Added option to cleanup the Windows "temp" directory from
+	   XviD 2-pass log files (xvidff.x). Set "xvid_log=KEEP" to
+	   "xvid_log=REMOVE" in the Avanti.ini file to switch it on.
+	3. Improved 2-pass encoding (command line, reporting).  
+	4. Fixed bug in destination "Preview" option for elemetary streams.
+	5. Fixed a bug that corrupted user given paths on command lines.
+	   Note that Avanti always converts to Linux paths (slashes).
+	6. Changed some code to trace the Avisynth problem which shows up
+	   on some machines.
+	7. New attempt to fix the Vista toolbar bug on remote.
+	   Waiting for a Vista machine to be able to trace/fix the bug.
+	
+	
+	AVANTI 0.1.8 -- FFmpeg/Avisynth GUI -- Changelog 13-09-2007.
+	=============================================================
+	
+	1. Added system controlled support for 2-pass encoding.
+	2. Changes the purpose of the "Codecs" database priority field.
+	   (Read help appendix on 2-pass encoding.)
+	3. Improved and simplified user registration of codecs.
+	4. Added "Load Avisynth plug-in" to Avisynth editor.
+	5. Fixed bugs in codecs database search.
+	6. Fixed bug in load template option (removed user options).
+	7. Fixed bug in delete of user additions to basic options.
+
+	
+	AVANTI 0.1.7 -- FFmpeg/Avisynth GUI -- Changelog 05-09-2007.
+	=============================================================
+	
+	First public release at VideoHelp.com.
+
+

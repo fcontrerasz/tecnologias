@@ -1,0 +1,16 @@
+GCDB
+#%Name "TITLE/S  Metadata Key (or TS command)/WIDTH/255"
+#%content "TITLE/Metadata Value (or TS argument)/WIDTH/255"
+#%stream TITLE/Stream/WIDTH/65
+#%chapter TITLE/Chapter/WIDTH/65
+#%chap1 WIDTH/1/
+#%chap2 WIDTH/1/
+#%check WIDTH/1/
+-mpegts_original_network_id	0x1122					1
+-mpegts_transport_stream_id	0x3344					1
+-mpegts_service_id	0x5566					1
+-mpegts_pmt_start_pid	0x1500					1
+-mpegts_start_pid	0x150					1
+service_provider	Avanti Public Network					1
+service_name	Daily News					1
+Comment	Items 1-5 are preserved mpegts muxer options (commands). Items 6-7 are preserved mpegts muxer metadata keys. When a item at the first column starts with a '-' character, Avanti will treat (insert) it as a command, otherwise as a metadata key.					1
