@@ -1,0 +1,5 @@
+1.- Horarios en los que operará el proyecto.
+2.- Cantidad de Agentes, nombre y apellido.
+3.- Tipo proyecto (inb, out, Cont, Otros).
+4.- Asociado un 600 o 800 o Interno.
+5.- Disponibilidad numérica.

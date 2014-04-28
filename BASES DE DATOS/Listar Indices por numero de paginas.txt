@@ -1,0 +1,10 @@
+use i3_ic
+SELECT  convert(char(8),object_name(i.object_id)) AS table_name, i.name AS index_name, 
+    i.index_id, i.type_desc as index_type,
+    partition_id, partition_number AS pnum,  rows, 
+    allocation_unit_id AS au_id, a.type_desc as page_type_desc, total_pages AS pages
+FROM sys.indexes i JOIN sys.partitions p  
+      ON i.object_id = p.object_id AND i.index_id = p.index_id
+    JOIN sys.allocation_units a
+      ON p.partition_id = a.container_id
+      order by pages desc

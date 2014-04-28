@@ -1,0 +1,1242 @@
+USE [NetPerfMon]
+GO
+/****** Object:  Table [dbo].[Accounts]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Accounts](
+	[AccountID] [varchar](100) NOT NULL,
+	[Password] [varchar](200) NULL,
+	[Expires] [datetime] NULL,
+	[AccountEnabled] [char](1) NULL,
+	[MenuName] [varchar](200) NULL,
+	[HomePageViewID] [int] NULL,
+	[DefaultNetObjectID] [varchar](50) NULL,
+	[DefaultNetObject] [varchar](255) NULL,
+	[SummaryViewID] [int] NULL,
+	[NodeDetailsViewID] [int] NULL,
+	[InterfaceDetailsViewID] [int] NULL,
+	[VolumeDetailsViewID] [varchar](50) NULL,
+	[BBSummaryViewID] [int] NULL,
+	[ModemDetailsViewID] [int] NULL,
+	[WirelessClientViewID] [int] NULL,
+	[WirelessSessionViewID] [int] NULL,
+	[ApplicationViewID] [int] NULL,
+	[NetworkServiceViewID] [int] NULL,
+	[AllowAdmin] [char](1) NULL,
+	[AllowCustomize] [char](1) NULL,
+	[AllowEventClear] [char](1) NULL,
+	[LastLogin] [datetime] NULL,
+	[ReportFolder] [varchar](255) NULL,
+	[LimitationID1] [int] NULL,
+	[LimitationID2] [int] NULL,
+	[LimitationID3] [int] NULL,
+	[ToolsetIntegration] [char](1) NULL,
+ CONSTRAINT [PK_Accounts] PRIMARY KEY CLUSTERED 
+(
+	[AccountID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ActiveAlerts]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ActiveAlerts](
+	[AlertID] [int] NOT NULL,
+	[AlertTime] [datetime] NULL,
+	[ObjectType] [char](1) NULL,
+	[ObjectID] [int] NOT NULL,
+	[ObjectName] [varchar](50) NULL,
+	[NodeID] [int] NOT NULL,
+	[NodeName] [varchar](50) NULL,
+	[EventMessage] [text] NULL,
+	[PropertyID] [int] NOT NULL,
+	[MonitoredProperty] [varchar](50) NULL,
+	[CurrentValue] [varchar](20) NULL,
+	[TriggerValue] [varchar](20) NULL,
+	[ResetValue] [varchar](20) NULL,
+	[EngineID] [int] NULL,
+	[AlertNotes] [text] NULL,
+	[ExpireTime] [datetime] NULL,
+ CONSTRAINT [PK_ActiveAlerts] PRIMARY KEY NONCLUSTERED 
+(
+	[AlertID] ASC,
+	[ObjectID] ASC,
+	[PropertyID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[AlertActions]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AlertActions](
+	[ActionID] [int] IDENTITY(1,1) NOT NULL,
+	[AlertID] [int] NULL,
+	[SortOrder] [int] NULL,
+	[ActionType] [varchar](50) NULL,
+	[Title] [text] NULL,
+	[Target] [text] NULL,
+	[FromAddress] [text] NULL,
+	[TriggerMessage] [text] NULL,
+	[ResetMessage] [text] NULL,
+	[Extra1] [text] NULL,
+	[Extra2] [text] NULL,
+	[Extra3] [text] NULL,
+	[Extra4] [text] NULL,
+ CONSTRAINT [PK_AlertActions] PRIMARY KEY CLUSTERED 
+(
+	[ActionID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Alerts]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Alerts](
+	[EngineID] [int] NOT NULL,
+	[AlertID] [int] IDENTITY(1,1) NOT NULL,
+	[AlertName] [varchar](255) NULL,
+	[Enabled] [bit] NOT NULL,
+	[AlertDescription] [text] NULL,
+	[StartTime] [datetime] NULL,
+	[EndTime] [datetime] NULL,
+	[DOW] [text] NULL,
+	[NetObjects] [text] NULL,
+	[PropertyID] [int] NULL,
+	[Trigger] [varchar](100) NULL,
+	[Reset] [varchar](100) NULL,
+	[Sustained] [int] NULL,
+	[TriggerSubjectTemplate] [ntext] NULL,
+	[TriggerMessageTemplate] [ntext] NULL,
+	[ResetSubjectTemplate] [ntext] NULL,
+	[ResetMessageTemplate] [ntext] NULL,
+	[Frequency] [int] NULL,
+	[EMailAddresses] [text] NULL,
+	[ReplyName] [text] NULL,
+	[ReplyAddress] [text] NULL,
+	[LogFile] [text] NULL,
+	[LogMessage] [ntext] NULL,
+	[ShellTrigger] [text] NULL,
+	[ShellReset] [text] NULL,
+	[SuppressionType] [char](3) NULL,
+	[Suppression] [text] NULL,
+ CONSTRAINT [PK_Alerts] PRIMARY KEY NONCLUSTERED 
+(
+	[EngineID] ASC,
+	[AlertID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[AlertSuppression]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[AlertSuppression](
+	[EngineID] [int] NOT NULL,
+	[SupID] [int] IDENTITY(1,1) NOT NULL,
+	[SupNetObject] [char](7) NULL,
+	[SupPropertyID] [int] NULL,
+	[SupCondition] [varchar](100) NULL,
+	[SupDescription] [text] NULL,
+ CONSTRAINT [PK_AlertSuppression] PRIMARY KEY CLUSTERED 
+(
+	[EngineID] ASC,
+	[SupID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[CiscoBuffers]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CiscoBuffers](
+	[NodeID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[BufferNoMem] [int] NULL,
+	[BufferSmMiss] [int] NULL,
+	[BufferMdMiss] [int] NULL,
+	[BufferBgMiss] [int] NULL,
+	[BufferLgMiss] [int] NULL,
+	[BufferHgMiss] [int] NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_CiscoBuffers] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[CPULoad]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CPULoad](
+	[NodeID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[MinLoad] [smallint] NULL,
+	[MaxLoad] [smallint] NULL,
+	[AvgLoad] [smallint] NULL,
+	[TotalMemory] [real] NULL,
+	[MinMemoryUsed] [real] NULL,
+	[MaxMemoryUsed] [real] NULL,
+	[AvgMemoryUsed] [real] NULL,
+	[AvgPercentMemoryUsed] [real] NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_CPULoad] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Engines]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Engines](
+	[EngineID] [int] IDENTITY(1,1) NOT NULL,
+	[ServerName] [varchar](50) NULL,
+	[IP] [varchar](50) NULL,
+	[ServerType] [varchar](50) NULL,
+	[PrimaryServers] [varchar](50) NULL,
+	[KeepAlive] [datetime] NULL,
+	[FailOverActive] [datetime] NULL,
+	[SysLogKeepAlive] [datetime] NULL,
+	[Restart] [datetime] NULL,
+	[Elements] [int] NULL,
+	[Nodes] [int] NULL,
+	[Interfaces] [int] NULL,
+	[Volumes] [int] NULL,
+	[Pollers] [int] NULL,
+	[MaxPollsPerSecond] [smallint] NULL,
+	[MaxStatPollsPerSecond] [smallint] NULL,
+	[NodePollInterval] [smallint] NULL,
+	[InterfacePollInterval] [smallint] NULL,
+	[VolumePollInterval] [smallint] NULL,
+	[NodeStatPollInterval] [smallint] NULL,
+	[InterfaceStatPollInterval] [smallint] NULL,
+	[VolumeStatPollInterval] [smallint] NULL,
+	[LicensedElements] [int] NULL,
+	[SerialNumber] [varchar](50) NULL,
+	[LicenseKey] [varchar](50) NULL,
+	[StartTime] [datetime] NULL,
+	[CompanyName] [varchar](255) NULL,
+	[CustomerID] [varchar](50) NULL,
+	[Evaluation] [varchar](50) NULL,
+	[EvalDaysLeft] [smallint] NULL,
+	[PackageName] [varchar](255) NULL,
+	[EngineVersion] [varchar](255) NULL,
+	[WindowsVersion] [varchar](255) NULL,
+	[ServicePack] [varchar](255) NULL,
+	[AvgCPUUtil] [real] NULL,
+	[MemoryUtil] [real] NULL,
+	[PollingCompletion] [real] NULL,
+	[StatPollInterval] [int] NULL,
+ CONSTRAINT [Engines_PK] PRIMARY KEY CLUSTERED 
+(
+	[EngineID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Events]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Events](
+	[EventID] [int] IDENTITY(1,1) NOT NULL,
+	[EventTime] [datetime] NULL,
+	[NetworkNode] [int] NULL,
+	[NetObjectID] [int] NULL,
+	[EventType] [smallint] NULL,
+	[Message] [text] NULL,
+	[Acknowledged] [bit] NOT NULL,
+	[EngineID] [int] NULL,
+	[NetObjectType] [char](1) NULL,
+ CONSTRAINT [PK_Events] PRIMARY KEY NONCLUSTERED 
+(
+	[EventID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[EventTypes]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[EventTypes](
+	[EventType] [int] NOT NULL,
+	[Name] [nvarchar](255) NULL,
+	[Bold] [bit] NOT NULL,
+	[BackColor] [int] NULL,
+	[Icon] [text] NULL,
+	[Sort] [tinyint] NULL,
+	[Notify] [bit] NOT NULL,
+	[Record] [bit] NOT NULL,
+	[Sound] [text] NULL,
+	[Mute] [bit] NOT NULL,
+	[NotifyMessage] [text] NULL,
+	[NotifySubject] [text] NULL,
+ CONSTRAINT [PK_EventTypes] PRIMARY KEY CLUSTERED 
+(
+	[EventType] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[InterfaceErrors]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[InterfaceErrors](
+	[NodeID] [int] NOT NULL,
+	[InterfaceID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[In_Discards] [real] NULL,
+	[In_Errors] [real] NULL,
+	[Out_Discards] [real] NULL,
+	[Out_Errors] [real] NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_InterfaceErrors] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[InterfaceID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Interfaces]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Interfaces](
+	[NodeID] [int] NOT NULL,
+	[InterfaceID] [int] IDENTITY(1,1) NOT NULL,
+	[ObjectSubType] [varchar](50) NULL,
+	[InterfaceName] [varchar](255) NULL,
+	[InterfaceIndex] [int] NULL,
+	[InterfaceType] [int] NULL,
+	[InterfaceTypeName] [varchar](255) NULL,
+	[InterfaceTypeDescription] [varchar](255) NULL,
+	[InterfaceSpeed] [float] NULL,
+	[InterfaceMTU] [int] NULL,
+	[InterfaceLastChange] [smalldatetime] NULL,
+	[PhysicalAddress] [varchar](50) NULL,
+	[AdminStatus] [smallint] NULL,
+	[OperStatus] [smallint] NULL,
+	[InBandwidth] [float] NULL,
+	[OutBandwidth] [float] NULL,
+	[Caption] [varchar](255) NULL,
+	[PollInterval] [int] NULL,
+	[RediscoveryInterval] [int] NULL,
+	[FullName] [varchar](255) NULL,
+	[Status] [char](20) NULL,
+	[StatusLED] [char](20) NULL,
+	[AdminStatusLED] [char](20) NULL,
+	[OperStatusLED] [char](20) NULL,
+	[InterfaceIcon] [char](20) NULL,
+	[Outbps] [real] NULL,
+	[Inbps] [real] NULL,
+	[OutPercentUtil] [real] NULL,
+	[InPercentUtil] [real] NULL,
+	[OutPps] [real] NULL,
+	[InPps] [real] NULL,
+	[InPktSize] [smallint] NULL,
+	[OutPktSize] [smallint] NULL,
+	[OutUcastPps] [real] NULL,
+	[OutMcastPps] [real] NULL,
+	[InUcastPps] [real] NULL,
+	[InMcastPps] [real] NULL,
+	[InDiscardsThisHour] [real] NULL,
+	[InDiscardsToday] [real] NULL,
+	[InErrorsThisHour] [real] NULL,
+	[InErrorsToday] [real] NULL,
+	[OutDiscardsThisHour] [real] NULL,
+	[OutDiscardsToday] [real] NULL,
+	[OutErrorsThisHour] [real] NULL,
+	[OutErrorsToday] [real] NULL,
+	[MaxInBpsToday] [real] NULL,
+	[MaxInBpsTime] [datetime] NULL,
+	[MaxOutBpsToday] [real] NULL,
+	[MaxOutBpsTime] [datetime] NULL,
+	[NextRediscovery] [datetime] NULL,
+	[NextPoll] [datetime] NULL,
+	[Counter64] [char](1) NULL,
+	[StatCollection] [smallint] NULL,
+	[SignalNoise] [real] NULL,
+	[MinSignalNoise] [real] NULL,
+	[MaxSignalNoise] [real] NULL,
+	[AvgSignalNoise] [real] NULL,
+	[TotalCodewords] [real] NULL,
+	[PercentCodewordsUnerrored] [real] NULL,
+	[PercentCodewordsCorrected] [real] NULL,
+	[PercentCodewordsUncorrectable] [real] NULL,
+	[LastSync] [datetime] NULL,
+	[InterfaceAlias] [varchar](100) NULL,
+	[IfName] [varchar](100) NULL,
+	[Severity] [int] NULL,
+	[CodewordsUnerrored] [real] NULL,
+	[CodewordsCorrected] [real] NULL,
+	[CodewordsUnCorrectable] [real] NULL,
+ CONSTRAINT [PK_Interfaces] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[InterfaceID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[InterfaceSignalNoise]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[InterfaceSignalNoise](
+	[NodeID] [int] NOT NULL,
+	[InterfaceID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[Unerrored] [smallint] NULL,
+	[Corrected] [smallint] NULL,
+	[Uncorrectable] [smallint] NULL,
+	[AvgSignalNoise] [real] NULL,
+	[MinSignalNoise] [real] NULL,
+	[MaxSignalNoise] [real] NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_InterfaceSignalNoise] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[InterfaceID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[InterfaceTraffic]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[InterfaceTraffic](
+	[NodeID] [int] NOT NULL,
+	[InterfaceID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[In_Averagebps] [real] NULL,
+	[In_Minbps] [real] NULL,
+	[In_Maxbps] [real] NULL,
+	[In_TotalBytes] [real] NULL,
+	[In_TotalPkts] [real] NULL,
+	[In_AvgUniCastPkts] [real] NULL,
+	[In_MinUniCastPkts] [real] NULL,
+	[In_MaxUniCastPkts] [real] NULL,
+	[In_AvgMultiCastPkts] [real] NULL,
+	[In_MinMultiCastPkts] [real] NULL,
+	[In_MaxMultiCastPkts] [real] NULL,
+	[Out_Averagebps] [real] NULL,
+	[Out_Minbps] [real] NULL,
+	[Out_Maxbps] [real] NULL,
+	[Out_TotalBytes] [real] NULL,
+	[Out_TotalPkts] [real] NULL,
+	[Out_AvgUniCastPkts] [real] NULL,
+	[Out_MaxUniCastPkts] [real] NULL,
+	[Out_MinUniCastPkts] [real] NULL,
+	[Out_AvgMultiCastPkts] [real] NULL,
+	[Out_MinMultiCastPkts] [real] NULL,
+	[Out_MaxMultiCastPkts] [real] NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_InterfaceTraffic] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[InterfaceID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Limitations]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Limitations](
+	[LimitationID] [int] IDENTITY(1,1) NOT NULL,
+	[LimitationTypeID] [int] NULL,
+	[Definition] [text] NULL,
+	[WhereClause] [text] NULL,
+ CONSTRAINT [PK_AccountLimitations] PRIMARY KEY CLUSTERED 
+(
+	[LimitationID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[LimitationTypes]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[LimitationTypes](
+	[LimitationTypeID] [int] IDENTITY(1,1) NOT NULL,
+	[LimitationTypeName] [varchar](255) NULL,
+	[LimitationTypeTable] [varchar](50) NULL,
+	[LimitationTypeField] [varchar](200) NULL,
+	[Method] [varchar](50) NULL,
+	[System] [char](1) NULL,
+	[Advanced] [char](1) NULL,
+	[Description] [varchar](255) NULL,
+ CONSTRAINT [PK_Limitations] PRIMARY KEY CLUSTERED 
+(
+	[LimitationTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[MenuBars]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MenuBars](
+	[MenuName] [varchar](200) NOT NULL,
+	[MenuItemID] [int] NOT NULL,
+	[Position] [smallint] NULL,
+ CONSTRAINT [PK_MenuBars] PRIMARY KEY CLUSTERED 
+(
+	[MenuName] ASC,
+	[MenuItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[MenuItems]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[MenuItems](
+	[MenuItemID] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [varchar](200) NULL,
+	[Link] [varchar](255) NULL,
+	[System] [char](1) NULL,
+	[NewWindow] [char](1) NULL,
+	[Description] [varchar](255) NULL,
+ CONSTRAINT [PK_MenuItems] PRIMARY KEY CLUSTERED 
+(
+	[MenuItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Nodes]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Nodes](
+	[NodeID] [int] IDENTITY(1,1) NOT NULL,
+	[ObjectSubType] [varchar](50) NULL,
+	[IP_Address] [varchar](50) NULL,
+	[DynamicIP] [bit] NULL,
+	[UnManaged] [bit] NULL,
+	[UnManageUntil] [datetime] NULL,
+	[Caption] [varchar](255) NULL,
+	[DNS] [varchar](255) NULL,
+	[Community] [varchar](255) NULL,
+	[SysName] [varchar](255) NULL,
+	[Vendor] [varchar](255) NULL,
+	[LastBoot] [smalldatetime] NULL,
+	[SystemUpTime] [real] NULL,
+	[SysObjectID] [varchar](255) NULL,
+	[Description] [ntext] NULL,
+	[Location] [varchar](255) NULL,
+	[Contact] [varchar](255) NULL,
+	[RediscoveryInterval] [int] NULL,
+	[PollInterval] [smallint] NULL,
+	[VendorIcon] [char](20) NULL,
+	[IOSImage] [varchar](255) NULL,
+	[IOSVersion] [varchar](255) NULL,
+	[GroupStatus] [char](20) NULL,
+	[StatusDescription] [varchar](255) NULL,
+	[Status] [char](20) NULL,
+	[StatusLED] [char](20) NULL,
+	[ResponseTime] [smallint] NULL,
+	[PercentLoss] [real] NULL,
+	[AvgResponseTime] [smallint] NULL,
+	[MinResponseTime] [smallint] NULL,
+	[MaxResponseTime] [smallint] NULL,
+	[Username] [varchar](250) NULL,
+	[Password] [varchar](250) NULL,
+	[EnableLevel] [tinyint] NULL,
+	[EnablePassword] [varchar](250) NULL,
+	[NextPoll] [datetime] NULL,
+	[EngineID] [int] NULL,
+	[LastSync] [datetime] NULL,
+	[MachineType] [varchar](255) NULL,
+	[Severity] [int] NULL,
+	[NextRediscovery] [datetime] NULL,
+	[StatCollection] [smallint] NULL,
+	[Allow64BitCounters] [bit] NULL,
+	[SNMPV2Only] [bit] NULL,
+	[CPULoad] [smallint] NULL,
+	[TotalMemory] [real] NULL,
+	[MemoryUsed] [real] NULL,
+	[PercentMemoryUsed] [int] NULL,
+	[BufferNoMemThisHour] [real] NULL,
+	[BufferNoMemToday] [real] NULL,
+	[BufferSmMissThisHour] [real] NULL,
+	[BufferSmMissToday] [real] NULL,
+	[BufferMdMissThisHour] [real] NULL,
+	[BufferMdMissToday] [real] NULL,
+	[BufferBgMissThisHour] [real] NULL,
+	[BufferBgMissToday] [real] NULL,
+	[BufferLgMissThisHour] [real] NULL,
+	[BufferLgMissToday] [real] NULL,
+	[BufferHgMissThisHour] [real] NULL,
+	[BufferHgMissToday] [real] NULL,
+ CONSTRAINT [PK_Nodes] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Pollers]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Pollers](
+	[PollerID] [int] IDENTITY(1,1) NOT NULL,
+	[PollerType] [varchar](50) NULL,
+	[NetObject] [varchar](50) NULL,
+ CONSTRAINT [PK_Pollers] PRIMARY KEY CLUSTERED 
+(
+	[PollerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ResourceProperties]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ResourceProperties](
+	[ResourceID] [int] NOT NULL,
+	[PropertyName] [varchar](200) NOT NULL,
+	[PropertyValue] [ntext] NULL,
+ CONSTRAINT [PK_ResourceProperties] PRIMARY KEY CLUSTERED 
+(
+	[ResourceID] ASC,
+	[PropertyName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Resources]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Resources](
+	[ResourceID] [int] IDENTITY(1,1) NOT NULL,
+	[ViewID] [int] NULL,
+	[ViewColumn] [smallint] NULL,
+	[Position] [smallint] NULL,
+	[ResourceName] [varchar](250) NULL,
+	[ResourceFile] [varchar](255) NULL,
+	[ResourceTitle] [varchar](255) NULL,
+	[ResourceSubTitle] [varchar](255) NULL,
+ CONSTRAINT [PK_Resources] PRIMARY KEY CLUSTERED 
+(
+	[ResourceID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ResponseTime]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ResponseTime](
+	[NodeID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[AvgResponseTime] [smallint] NULL,
+	[MinResponseTime] [smallint] NULL,
+	[MaxResponseTime] [smallint] NULL,
+	[PercentLoss] [smallint] NULL,
+	[Availability] [real] NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_ResponseTime] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[Settings]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Settings](
+	[SettingID] [char](50) NOT NULL,
+	[Name] [char](100) NULL,
+	[Description] [varchar](1000) NULL,
+	[Units] [char](20) NULL,
+	[Minimum] [real] NULL,
+	[Maximum] [real] NULL,
+	[CurrentValue] [real] NULL,
+	[DefaultValue] [real] NULL,
+ CONSTRAINT [PK_Settings] PRIMARY KEY CLUSTERED 
+(
+	[SettingID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SysLog]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SysLog](
+	[MsgID] [bigint] IDENTITY(1,1) NOT NULL,
+	[EngineID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[IP] [char](15) NOT NULL,
+	[Acknowledged] [tinyint] NOT NULL,
+	[SysLogFacility] [tinyint] NOT NULL,
+	[SysLogSeverity] [tinyint] NOT NULL,
+	[Hostname] [varchar](255) NOT NULL,
+	[MessageType] [varchar](100) NOT NULL,
+	[Message] [varchar](1024) NOT NULL,
+	[SysLogTag] [varchar](100) NOT NULL,
+	[FirstIPInMessage] [varchar](15) NOT NULL,
+	[SecIPInMessage] [varchar](15) NOT NULL,
+	[MacInMessage] [varchar](12) NOT NULL,
+ CONSTRAINT [PK_SysLog] PRIMARY KEY CLUSTERED 
+(
+	[MsgID] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SysLogActions]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SysLogActions](
+	[SysLogRuleID] [uniqueidentifier] NOT NULL,
+	[SysLogActionID] [uniqueidentifier] NOT NULL,
+	[SortOrder] [int] NOT NULL,
+	[SysLogActionType] [varchar](50) NOT NULL,
+	[Title] [varchar](250) NULL,
+	[Target] [text] NULL,
+	[Parameter1] [text] NULL,
+	[Parameter2] [text] NULL,
+	[Parameter3] [text] NULL,
+	[Parameter4] [text] NULL,
+ CONSTRAINT [PK_SysLogActions] PRIMARY KEY CLUSTERED 
+(
+	[SysLogRuleID] ASC,
+	[SysLogActionID] ASC,
+	[SortOrder] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SysLogFacilities]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SysLogFacilities](
+	[FacilityCode] [tinyint] NOT NULL,
+	[FacilityName] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Facilities] PRIMARY KEY CLUSTERED 
+(
+	[FacilityCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SysLogRules]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SysLogRules](
+	[SysLogRuleID] [uniqueidentifier] NOT NULL,
+	[RuleName] [varchar](200) NULL,
+	[RuleEnabled] [bit] NOT NULL,
+	[EngineID] [int] NOT NULL,
+	[RulePriority] [int] NULL,
+	[LastChange] [datetime] NULL,
+	[DaysOfWeek] [varchar](20) NULL,
+	[StartTime] [datetime] NULL,
+	[EndTime] [datetime] NULL,
+	[SourceAddresses] [text] NULL,
+	[Facilities] [varchar](80) NULL,
+	[Severities] [varchar](20) NULL,
+	[MessageTypes] [text] NULL,
+	[MessageTemplates] [text] NULL,
+	[DNSHostName] [text] NULL,
+	[TriggerThreshold] [int] NULL,
+	[TriggerWindow] [real] NULL,
+	[SuppressDuration] [real] NULL,
+ CONSTRAINT [PK_SyslogRules] PRIMARY KEY CLUSTERED 
+(
+	[SysLogRuleID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SysLogSeverities]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SysLogSeverities](
+	[SeverityCode] [tinyint] NOT NULL,
+	[SeverityName] [varchar](15) NOT NULL,
+ CONSTRAINT [PK_Priorities] PRIMARY KEY CLUSTERED 
+(
+	[SeverityCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Views]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Views](
+	[ViewID] [int] IDENTITY(1,1) NOT NULL,
+	[ViewTitle] [varchar](200) NULL,
+	[ViewType] [varchar](50) NULL,
+	[Columns] [smallint] NULL,
+	[Column1Width] [int] NULL,
+	[Column2Width] [int] NULL,
+	[Column3Width] [int] NULL,
+	[System] [varchar](50) NULL,
+	[Customizable] [varchar](50) NULL,
+	[LimitationID] [int] NULL,
+ CONSTRAINT [PK_Views] PRIMARY KEY CLUSTERED 
+(
+	[ViewID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[ViewsByDeviceType]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[ViewsByDeviceType](
+	[DeviceType] [varchar](100) NOT NULL,
+	[ObjectType] [char](1) NOT NULL,
+	[ViewID] [int] NOT NULL,
+ CONSTRAINT [PK_DeviceTypeViews] PRIMARY KEY CLUSTERED 
+(
+	[DeviceType] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[Volumes]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Volumes](
+	[NodeID] [int] NOT NULL,
+	[VolumeID] [int] IDENTITY(1,1) NOT NULL,
+	[LastSync] [datetime] NULL,
+	[VolumeIndex] [int] NULL,
+	[Caption] [nvarchar](50) NULL,
+	[PollInterval] [int] NULL,
+	[StatCollection] [int] NULL,
+	[RediscoveryInterval] [int] NULL,
+	[VolumeDescription] [varchar](100) NULL,
+	[VolumeType] [varchar](20) NULL,
+	[VolumeTypeIcon] [varchar](20) NULL,
+	[VolumePercentUsed] [real] NULL,
+	[VolumeSpaceUsed] [float] NULL,
+	[VolumeSpaceAvailable] [float] NULL,
+	[VolumeSize] [float] NULL,
+	[Status] [int] NULL,
+	[StatusLED] [varchar](20) NULL,
+	[VolumeResponding] [char](1) NOT NULL,
+	[VolumeAllocationFailuresThisHour] [int] NULL,
+	[VolumeAllocationFailuresToday] [int] NULL,
+	[NextPoll] [datetime] NULL,
+	[NextRediscovery] [datetime] NULL,
+	[FullName] [varchar](255) NULL,
+ CONSTRAINT [Volumes_PK] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[VolumeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[VolumeUsage]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[VolumeUsage](
+	[NodeID] [int] NOT NULL,
+	[VolumeID] [int] NOT NULL,
+	[DateTime] [datetime] NOT NULL,
+	[DiskSize] [float] NOT NULL,
+	[AvgDiskUsed] [float] NOT NULL,
+	[MinDiskUsed] [float] NOT NULL,
+	[MaxDiskUsed] [float] NOT NULL,
+	[PercentDiskUsed] [real] NOT NULL,
+	[AllocationFailures] [real] NOT NULL,
+	[Archive] [tinyint] NOT NULL,
+ CONSTRAINT [PK_VolumeUsage] PRIMARY KEY CLUSTERED 
+(
+	[NodeID] ASC,
+	[VolumeID] ASC,
+	[DateTime] ASC,
+	[Archive] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+/****** Object:  Table [dbo].[WebCommunityStrings]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[WebCommunityStrings](
+	[GUID] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[CommunityString] [varchar](255) NULL,
+ CONSTRAINT [PK_WebCommunityStrings] PRIMARY KEY CLUSTERED 
+(
+	[GUID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[WebSettings]    Script Date: 26/03/2014 15:49:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[WebSettings](
+	[SettingName] [varchar](50) NOT NULL,
+	[SettingValue] [varchar](255) NULL,
+ CONSTRAINT [PK_WebSettings] PRIMARY KEY CLUSTERED 
+(
+	[SettingName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+ALTER TABLE [dbo].[Accounts] ADD  CONSTRAINT [DF_Accounts_ToolsetIntegration]  DEFAULT ('Y') FOR [ToolsetIntegration]
+GO
+ALTER TABLE [dbo].[Alerts] ADD  CONSTRAINT [DF_Alerts_EngineID_1__51]  DEFAULT (0) FOR [EngineID]
+GO
+ALTER TABLE [dbo].[Alerts] ADD  CONSTRAINT [DF_Alerts_Enabled_2__51]  DEFAULT (0) FOR [Enabled]
+GO
+ALTER TABLE [dbo].[AlertSuppression] ADD  CONSTRAINT [DF_AlertSuppression_EngineID]  DEFAULT (0) FOR [EngineID]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__NodeI__7F2BE32F]  DEFAULT (0) FOR [NodeID]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Buffe__00200768]  DEFAULT (0) FOR [BufferNoMem]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Buffe__01142BA1]  DEFAULT (0) FOR [BufferSmMiss]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Buffe__02084FDA]  DEFAULT (0) FOR [BufferMdMiss]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Buffe__02FC7413]  DEFAULT (0) FOR [BufferBgMiss]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Buffe__03F0984C]  DEFAULT (0) FOR [BufferLgMiss]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Buffe__04E4BC85]  DEFAULT (0) FOR [BufferHgMiss]
+GO
+ALTER TABLE [dbo].[CiscoBuffers] ADD  CONSTRAINT [DF__CiscoBuff__Archi__05D8E0BE]  DEFAULT (0) FOR [Archive]
+GO
+ALTER TABLE [dbo].[CPULoad] ADD  CONSTRAINT [DF_CPULoad_Archive]  DEFAULT (0) FOR [Archive]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF_Engines_ServerType]  DEFAULT ('Primary') FOR [ServerType]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__Element__36470DEF]  DEFAULT (0) FOR [Elements]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF_Engines_Pollers_1__93]  DEFAULT (0) FOR [Pollers]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__MaxPoll__382F5661]  DEFAULT (0) FOR [MaxPollsPerSecond]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__MaxStat__39237A9A]  DEFAULT (0) FOR [MaxStatPollsPerSecond]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__StatPol__3A179ED3]  DEFAULT (0) FOR [InterfaceStatPollInterval]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__License__3B0BC30C]  DEFAULT (0) FOR [LicensedElements]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__EvalDay__3BFFE745]  DEFAULT (0) FOR [EvalDaysLeft]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__AvgCPUU__3CF40B7E]  DEFAULT (0) FOR [AvgCPUUtil]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__MemoryU__3DE82FB7]  DEFAULT (0) FOR [MemoryUtil]
+GO
+ALTER TABLE [dbo].[Engines] ADD  CONSTRAINT [DF__Engines__Polling__3EDC53F0]  DEFAULT (0) FOR [PollingCompletion]
+GO
+ALTER TABLE [dbo].[InterfaceSignalNoise] ADD  CONSTRAINT [DF_InterfaceS_Archive_1__51]  DEFAULT (0) FOR [Archive]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_EngineID]  DEFAULT (0) FOR [EngineID]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_DateTime]  DEFAULT (getdate()) FOR [DateTime]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_IP]  DEFAULT ('0.0.0.0') FOR [IP]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_Acknowledged]  DEFAULT (0) FOR [Acknowledged]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_SysLogFacility]  DEFAULT (0) FOR [SysLogFacility]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_SysLogSeverity]  DEFAULT (0) FOR [SysLogSeverity]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_Hostname]  DEFAULT ('') FOR [Hostname]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_MessageType]  DEFAULT ('') FOR [MessageType]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_Message]  DEFAULT ('') FOR [Message]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_SysLogTag]  DEFAULT ('') FOR [SysLogTag]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_FirstIPInMessage]  DEFAULT ('') FOR [FirstIPInMessage]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_SecIPInMessage]  DEFAULT ('') FOR [SecIPInMessage]
+GO
+ALTER TABLE [dbo].[SysLog] ADD  CONSTRAINT [DF_SysLog_MacInMessage]  DEFAULT ('') FOR [MacInMessage]
+GO
+ALTER TABLE [dbo].[SysLogActions] ADD  CONSTRAINT [DF_SysLogActions_SysLogActionID]  DEFAULT (newid()) FOR [SysLogActionID]
+GO
+ALTER TABLE [dbo].[SysLogActions] ADD  CONSTRAINT [DF_SysLogActions_SortOrder]  DEFAULT (9999) FOR [SortOrder]
+GO
+ALTER TABLE [dbo].[SysLogActions] ADD  CONSTRAINT [DF_SysLogActions_SysLogActionType]  DEFAULT ('') FOR [SysLogActionType]
+GO
+ALTER TABLE [dbo].[SysLogFacilities] ADD  CONSTRAINT [DF_SysLogFacilities_FacilityName]  DEFAULT ('') FOR [FacilityName]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_SysLogRuleID]  DEFAULT (newid()) FOR [SysLogRuleID]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_RuleName]  DEFAULT ('') FOR [RuleName]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_RuleEnabled]  DEFAULT (0) FOR [RuleEnabled]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_EngineID]  DEFAULT (0) FOR [EngineID]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_RulePriority]  DEFAULT (9999) FOR [RulePriority]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_LastChange]  DEFAULT (getdate()) FOR [LastChange]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_DaysOfWeek]  DEFAULT ('1,2,3,4,5,6,7') FOR [DaysOfWeek]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_StartTime]  DEFAULT ((-2)) FOR [StartTime]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_EndTime]  DEFAULT ((-2)) FOR [EndTime]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_SourceAddresses]  DEFAULT ('*') FOR [SourceAddresses]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_Facilities]  DEFAULT ('*') FOR [Facilities]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_Severities]  DEFAULT ('*') FOR [Severities]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_MessageTypes]  DEFAULT ('*') FOR [MessageTypes]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_MessageTemplates]  DEFAULT ('*') FOR [MessageTemplates]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_DNSHostName]  DEFAULT ('*') FOR [DNSHostName]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_TriggerThreshold]  DEFAULT (0) FOR [TriggerThreshold]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_TriggerWindow]  DEFAULT (0) FOR [TriggerWindow]
+GO
+ALTER TABLE [dbo].[SysLogRules] ADD  CONSTRAINT [DF_SyslogRules_SuppressDuration]  DEFAULT (0) FOR [SuppressDuration]
+GO
+ALTER TABLE [dbo].[SysLogSeverities] ADD  CONSTRAINT [DF_SysLogSeverities_SeverityCode]  DEFAULT ('') FOR [SeverityCode]
+GO
+ALTER TABLE [dbo].[ViewsByDeviceType] ADD  CONSTRAINT [DF_ViewsByDeviceType_ObjectType]  DEFAULT ('') FOR [ObjectType]
+GO
+ALTER TABLE [dbo].[ViewsByDeviceType] ADD  CONSTRAINT [DF_ViewsByDeviceType_ViewID]  DEFAULT (0) FOR [ViewID]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__NodeID__70DDC3D8]  DEFAULT (0) FOR [NodeID]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeI__71D1E811]  DEFAULT (0) FOR [VolumeIndex]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__PollInt__72C60C4A]  DEFAULT (0) FOR [PollInterval]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__StatsCo__73BA3083]  DEFAULT (0) FOR [StatCollection]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeP__74AE54BC]  DEFAULT (0) FOR [VolumePercentUsed]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeS__75A278F5]  DEFAULT (0) FOR [VolumeSpaceUsed]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeS__76969D2E]  DEFAULT (0) FOR [VolumeSize]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeR__778AC167]  DEFAULT (0) FOR [VolumeResponding]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeA__787EE5A0]  DEFAULT (0) FOR [VolumeAllocationFailuresThisHour]
+GO
+ALTER TABLE [dbo].[Volumes] ADD  CONSTRAINT [DF__Volumes__VolumeA__797309D9]  DEFAULT (0) FOR [VolumeAllocationFailuresToday]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__NodeI__66603565]  DEFAULT (0) FOR [NodeID]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__Volum__6754599E]  DEFAULT (0) FOR [VolumeID]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__DiskS__68487DD7]  DEFAULT (0) FOR [DiskSize]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__AvgDi__693CA210]  DEFAULT (0) FOR [AvgDiskUsed]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__MinDi__6A30C649]  DEFAULT (0) FOR [MinDiskUsed]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__MaxDi__6B24EA82]  DEFAULT (0) FOR [MaxDiskUsed]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__Perce__6C190EBB]  DEFAULT (0) FOR [PercentDiskUsed]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__Alloc__6D0D32F4]  DEFAULT (0) FOR [AllocationFailures]
+GO
+ALTER TABLE [dbo].[VolumeUsage] ADD  CONSTRAINT [DF__VolumeUsa__Archi__6E01572D]  DEFAULT (0) FOR [Archive]
+GO
+ALTER TABLE [dbo].[WebCommunityStrings] ADD  CONSTRAINT [DF_WebCommunityStrings_GUID]  DEFAULT (newid()) FOR [GUID]
+GO

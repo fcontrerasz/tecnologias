@@ -1,0 +1,5 @@
+EJECUTAR CUSTOM NOTIFICATION
+I:\I3\IC\Server>SendCustomNotification /U=cicadmin /P=Yt10p* "TEST2009" "1"
+
+logs de errores quedan en: 
+IPDBServer.VwrLog

@@ -1,0 +1,88 @@
+NOTE: Before doing the following work around first take (DATA) .mdf, (LOG) .log files in the DATA folder of MSSQL into some other drive.... 
+Once upon a time I too got same issue... I found that my master database is corrupted...
+The following is the work around which is worked for me.....
+
+1) First of all, start MSSQL as console (-c) in single user mode(-m)
+C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn>sqlservr.exe -c -m -sMSSQLSERVER -T3608
+
+NOTE:
+3608 --> Starts SQL and recovers only the master database. 
+
+Now master database is recovered..
+
+2) Secondly i got this error: Unable to open the physical file 
+"e:\sql10_main_t.obj.x86fre\sql\mkmastr\databases\objfre\i386\model.mdf". Operating system e
+rror 3: "3(The system cannot find the path specified.)".
+Error: 17204, FCB::Open failed: Could not open file e:\sql10_main_t.obj.x86fre\sql\mkmastr\databases\objfre\i386\model.mdf for file number 1. OS error: 3(The system cannot find the path specified.).
+
+i figured out that e:\ is not at all available in my system.
+
+Fix for above error is as follows:
+************************
+
+C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn>NET START MSSQLSERVER /f /T3608
+The SQL Server (MSSQLSERVER) service is starting.
+The SQL Server (MSSQLSERVER) service was started successfully.
+
+C:\Program Files\Microsoft SQL Server\MSSQL10_50.MSSQLSERVER\MSSQL\Binn>SQLCMD -sMSSQLSERVER
+1> SELECT name, physical_name, state_desc FROM sys.master_files ORDER BY database_id;
+2> go
+
+Now notice those wrong file names; and run following commands ...
+
+Note: you need to change the file name location (where the original .mdf, .ldf files are available in ur system. In my point of view 'c:\model.mdf' and soon) ..
+
+1>ALTER DATABASE model MODIFY FILE ( NAME = modeldev, FILENAME = 'c:\model.mdf');
+2>ALTER DATABASE model MODIFY FILE ( NAME = modellog, FILENAME = 'c:\modellog.ldf');
+3> go
+
+1>ALTER DATABASE msdb MODIFY FILE ( NAME = MSDBData, FILENAME = 'c:\MSDBData.mdf');
+2>ALTER DATABASE msdb MODIFY FILE ( NAME = MSDBLog, FILENAME = 'c:\MSDBLog.ldf');
+3>go
+
+1>ALTER DATABASE tempdb MODIFY FILE ( NAME = tempdev, FILENAME = 'c:\temp.mdf');
+2>ALTER DATABASE tempdb MODIFY FILE ( NAME = templog, FILENAME = 'c:\temp.ldf');
+3>go
+
+1> SELECT name, physical_name, state_desc FROM sys.master_files ORDER BY database_id;
+2> go
+
+Now you will get modified file paths where you have respective file paths. Changing the paths as described above worked, but still I was not able to log in.
+--To list the users
+1> select loginname from master..syslogins; 
+2>go
+My windows account was mising, so I have added it:> 
+
+1> CREATE LOGIN [COMPUTERNAME\USERNAME] FROM WINDOWS;
+Then I was able to login with Management Studio with Windows Authentication.
+
+--Give sysadmin rights to ur login acccount
+1> EXEC sp_addsrvrolemember 'domainName\WindowsUserName', 'sysadmin';
+2> go
+1> SELECT loginname, sysadmin FROM master..syslogins;
+2> go
+You can see the login users list
+1> exit
+
+C:\Program Files\Microsoft SQLServer\MSSQL10_50.MSSQLSERVER\MSSQL\Binn>NET STOP MSSQLSERVER
+The SQL Server (MSSQLSERVER) service is stopping.
+The SQL Server (MSSQLSERVER) service was stopped successfully.
+
+Then i enabled service broker for msdb database.
+
+Finally i attached all user databases to my instance... 
+
+The supportive URLs are:
+http://blogs.msdn.com/b/sqlserverfaq/archive/2011/05/11/inf-hey-my-sql-server-service-is-not-starting-what-do-i-do.aspx
+
+http://social.msdn.microsoft.com/forums/en-US/sqlexpress/thread/54bbcac3-41c5-4a5d-a4f6-2669e538dc82/
+
+--How to create Sql Server login for a domain account? 
+http://dba.stackexchange.com/questions/15737/how-to-create-sql-server-login-for-a-domain-account
+
+-- Error 18456 causes and solution
+http://www.mssqltips.com/sqlservertip/2581/sql-server-error-18456-finding-the-missing-databases/
+
+
+--
+Chandu

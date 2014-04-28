@@ -1,0 +1,31 @@
+SELECT Name, filename FROM master.dbo.sysdatabases where Name not like '%DB' and Name not like '%_log'
+
+SELECT * FROM dbo.sysfiles
+
+SELECT Name, filename FROM master.dbo.sysaltfiles where Name not like '%DB' and Name not like '%_log'
+
+SELECT * FROM :: fn_virtualfilestats(1, 1)
+
+SELECT DATABASEPROPERTYEX('master', 'Status')
+
+
+SELECT * FROM information_schema.tables
+
+SELECT * FROM master.dbo.sysdatabases
+
+SELECT TOP 10 * FROM master.dbo.sysmessages
+
+SELECT top 10 * FROM INFORMATION_SCHEMA.TABLES
+
+SELECT top 10 TABLE_NAME, TABLE_SCHEMA FROM INFORMATION_SCHEMA.VIEWS
+
+SELECT 'TotalErrors', @@TOTAL_ERRORS
+
+ SELECT GETDATE(), USER_NAME(), SUSER_SNAME(), USER_NAME(), USER_NAME()
+
+sp_help(dbo.Manantial)
+
+USE Manantial;
+GO
+EXEC sp_help;
+GO

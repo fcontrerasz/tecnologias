@@ -1,0 +1,12 @@
+SELECT OBJECT_NAME(OBJECT_ID) AS TableName, NAME AS IndexName, 
+       TYPE_DESC AS IndexType, FILL_FACTOR
+FROM SYS.INDEXES
+
+---- o con mas detalles --
+
+SELECT     TOP (100) PERCENT OBJECT_NAME(i.object_id) AS TableName, i.name AS IndexName, i.index_id AS IndexID, 8 * SUM(a.used_pages) AS 'Indexsize(KB)', i.fill_factor, i.type_desc
+FROM         sys.indexes AS i INNER JOIN
+                      sys.partitions AS p ON p.object_id = i.object_id AND p.index_id = i.index_id INNER JOIN
+                      sys.allocation_units AS a ON a.container_id = p.partition_id
+GROUP BY i.object_id, i.index_id, i.name, i.fill_factor, i.type_desc
+ORDER BY 'Indexsize(KB)' DESC, TableName, IndexID

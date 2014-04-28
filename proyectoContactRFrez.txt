@@ -1,0 +1,34 @@
+
+Una empresa  UNIVERSO dirigida al mercado inmobiliario, desea capturar llamadas desde un número XXX.XX.XX, solo podrán ingresar 4 llamados.
+2 agentes fijos y 10 de rebalse, atenderán las llamadas de este número. Deberán estar en un grupo de trabajo para segmentar las llamadas.
+Dar prioridades para atender los llamados donde al menos 1 agente conteste un 30% de las llamadas totales ingresadas dentro de 1 hora, puesto que el debe atender a otro proyecto.
+
+Las llamadas seran ingresadas en un IVR que deberá:
+
+
+CREAR AUDIO DE BIENVENIDA
+1.- OPCION 1: Digitar el código de anexo directo para dar con un puesto telefónico X.
+2.- OPCION 2: Digitar rut del usuario para validar su existencia dentro de una BD en MEts (WebService).
+2.1.- OPCION 2.0: Al ingresar construir un menu donde se pueda capturar una palabra clave para ingresar por el user.... directamente.
+2.2.- OPCION 2.1: Nombrar Agentes disponibles para que le sea atendido (validad estado - disponible - ).
+2.3.- OPCION 2.2: Capturar el ingreso de dígitos para poder validad el estado del caso y retornárselo.
+2.4.- OPCION 2.4: Capturar Digitos de anexos y agregar al objeto de la llamada un tipo de dato para ser capturado al interior del call.
+2.5.- OPCION 2.5: Entregar vía voz al usuario su dirección y teléfono asociado.
+3.- OPCION 3: Si ud es no es cliente, trasladar a un ejecutivo de ventas.
+
+Al momento de ingresar un llamada, poder capturar las variables anteriormente ingresadas para poder ser abiertas en un sitio web para desplegar la información asociada en base al rut digitado.
+
+Al momento de atender la llamada que ingresó directamente (no-rut) un agente podrá durante parte la conversación ejecutar un validador del rut que ejecutará una nueva consulta para revisar.
+
+Si se sobrepasa el límite de 4 llamadas, el IVR ejecutará automáticamente un llamada al supervisor indicando el telefono que está encolado.
+
+Desarrollar una DLL dentro del Designer para poder validar algún tipo de dato que el cliente requiera.
+
+--------------------------------------------
+
+
+
+
+
+
+

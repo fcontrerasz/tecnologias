@@ -1,0 +1,1 @@
+ALTER INDEX IndexName ON YourTable REBUILD

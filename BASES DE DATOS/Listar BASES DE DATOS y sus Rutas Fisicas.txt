@@ -1,0 +1,6 @@
+use master
+
+SELECT
+   DB_NAME(database_id), physical_name
+FROM
+   sys.master_files

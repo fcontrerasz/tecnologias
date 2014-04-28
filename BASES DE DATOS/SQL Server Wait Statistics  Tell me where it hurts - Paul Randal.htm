@@ -1,0 +1,1920 @@
+<!DOCTYPE HTML><html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<head>
+
+<!-- Title -->
+<title>SQL Server Wait Statistics: Tell me where it hurts - Paul Randal</title>
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.4.24 - http://yoast.com/wordpress/seo/ -->
+<meta name="description" content="Learn how to use SQL Server Wait Statistics to help diagnose performance problems."/>
+<link rel="canonical" href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="SQL Server Wait Statistics: Tell me where it hurts - Paul Randal" />
+<meta property="og:description" content="Learn how to use SQL Server Wait Statistics to help diagnose performance problems." />
+<meta property="og:url" content="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/" />
+<meta property="og:site_name" content="Paul S. Randal" />
+<meta property="article:section" content="Performance Tuning" />
+<meta property="article:section" content="Surveys" />
+<meta property="article:section" content="Wait Stats" />
+<meta property="article:published_time" content="2010-12-09T15:18:00+00:00" />
+<meta property="article:modified_time" content="2013-11-14T16:17:06+00:00" />
+<meta property="og:image" content="http://www.sqlskills.com/blogs/paul/wp-content/uploads/2010/12/waitstatssurvey.jpg" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.4 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-5975860-1']);
+				            _gaq.push(['_setCustomVar',1,'post_type','post',3],['_setCustomVar',2,'author','paul-randal',3],['_setCustomVar',4,'categories','performance-tuning surveys wait-stats',3],['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			
+
+<!-- Stylesheets -->
+<link rel='stylesheet' id='headway-utility-block-css'  href='http://www.sqlskills.com/blogs/paul/wp-content/plugins/headway-utility-block/css/utility-styles.css' type='text/css' media='all' />
+<link rel='stylesheet' id='headway-utility-block-menu-css'  href='http://www.sqlskills.com/blogs/paul/wp-content/plugins/headway-utility-block/css/menus.css' type='text/css' media='all' />
+<link rel='stylesheet' id='headway-general-css'  href='http://www.sqlskills.com/blogs/paul/wp-content/uploads/headway/cache/general-4f15474.css' type='text/css' media='all' />
+<link rel='stylesheet' id='headway-responsive-grid-css'  href='http://www.sqlskills.com/blogs/paul/wp-content/uploads/headway/cache/responsive-grid-e0f42b1.css' type='text/css' media='all' />
+<link rel="stylesheet" type="text/css" media="all" href="http://www.sqlskills.com/blogs/paul/wp-content/themes/SQLskills/style.css" />
+
+<!-- Scripts -->
+<script type='text/javascript' src='http://www.sqlskills.com/blogs/paul/wp-includes/js/jquery/jquery.js'></script>
+<script type='text/javascript' src='http://www.sqlskills.com/blogs/paul/wp-includes/js/jquery/jquery-migrate.min.js'></script>
+<script type='text/javascript' src='http://www.sqlskills.com/blogs/paul/wp-content/themes/Headway/library/blocks/navigation/js/jquery.tinynav.js'></script>
+<script type='text/javascript' src='http://www.sqlskills.com/blogs/paul/wp-includes/js/comment-reply.min.js'></script>
+
+<!--[if lt IE 9]>
+<script src="http://www.sqlskills.com/blogs/paul/wp-content/themes/Headway/library/media/js/html5shiv.js"></script>
+<![endif]-->
+
+<!--[if lt IE 8]>
+<script src="http://www.sqlskills.com/blogs/paul/wp-content/themes/Headway/library/media/js/ie8.js"></script>
+<![endif]-->
+
+
+
+<!-- Extras -->
+<link rel="alternate" type="application/rss+xml" href="http://www.sqlskills.com/blogs/paul/feed/" title="Paul S. Randal" />
+<link rel="pingback" href="http://www.sqlskills.com/blogs/paul/xmlrpc.php" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<link rel="alternate" type="application/rss+xml" title="Paul S. Randal &raquo; Feed" href="http://www.sqlskills.com/blogs/paul/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Paul S. Randal &raquo; Comments Feed" href="http://www.sqlskills.com/blogs/paul/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Paul S. Randal &raquo; Wait statistics, or please tell me where it hurts Comments Feed" href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/feed/" />
+
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/ico" href="http://www.sqlskills.com/images/favicon.ico" />
+
+
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.sqlskills.com/blogs/paul/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.sqlskills.com/blogs/paul/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 3.8.1" />
+<link rel='shortlink' href='http://www.sqlskills.com/blogs/paul/?p=641' />
+<link rel="stylesheet" type="text/css" href="http://www.sqlskills.com/blogs/paul/wp-content/plugins/social-media-widget/social_widget.css" />
+<script type="text/javascript">
+	window._wp_rp_static_base_url = 'http://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "http://www.sqlskills.com/blogs/paul/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.3.2';
+	window._wp_rp_post_id = '641';
+	window._wp_rp_num_rel_posts = '5';
+	window._wp_rp_blog_id = '3930823';
+	window._wp_rp_thumbnails = false;
+	window._wp_rp_post_title = 'Wait+statistics%2C+or+please+tell+me+where+it+hurts';
+	window._wp_rp_post_tags = ['wait+stats', 'performance+tuning', 'surveys', 'grant', 'resourc', 'statist', 'sql', 'issu', 'pool', 'exclus', 'server', 'system', 'walk', 'thread', 'perform', 'troubleshoot', 'data', 'disk'];
+	window._wp_rp_remote_recommendations = true;
+	window._wp_rp_promoted_content = false;
+	window._wp_rp_traffic_exchange = true;
+</script>
+<script type="text/javascript" src="http://wprp.zemanta.com/static/js/loader.js?version=3.3.2" async></script>
+<style type="text/css">
+.related_post_title {
+}
+ul.related_post {
+}
+ul.related_post li {
+}
+ul.related_post li a {
+}
+ul.related_post li img {
+}</style>
+<style type="text/css">.broken_link, a.broken_link {
+	text-decoration: line-through;
+}</style><style type="text/css" id="syntaxhighlighteranchor"></style>
+
+</head><!-- End <head> -->
+
+<body class="single single-post postid-641 single-format-standard custom responsive-grid-enabled responsive-grid-active layout-single-post-641 layout-using-index">
+
+
+<div class="sqlskills-header"> 
+	<div class="sqlskills-search"> 
+		<div class="search-form">
+<script>
+  (function() {
+    var cx = '009895608050443744257:aumy02iaoi8';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<div style="width:0px;overflow:hidden;height:0px;"> 
+<gcse:searchbox-only></gcse:searchbox-only>
+</div>
+<form id="searchbox_009895608050443744257:aumy02iaoi8" action="http://www.sqlskills.com/search/">
+
+<input id="q" value="Search..." style="" name="q" size="40" type="text" onblur="if (this.value == '')  
+					{this.value = 'Search...';}"  
+					onfocus="if (this.value == 'Search...')  
+					{this.value = '';}"/>
+</form>
+		</div>
+		<div class="top-bar-menu">
+		<a href="http://www.sqlskills.com/about/">About</a> 
+		<a href="http://www.sqlskills.com/contact-us/">Contact Us</a> 
+		</div>
+	</div>
+</div>
+<div id="whitewrap">
+
+
+<div id="wrapper-1" class="wrapper responsive-grid">
+
+<div class="grid-container clearfix">
+<section class="row row-1">
+<section class="column column-1 grid-left-0 grid-width-24">
+<div id="block-14" class="nocontent block block-type-utility-block block-fluid-height responsive-block-hiding-device-smartphones"><div class="block-content">			<div id="utility-block-14" class="utilities-wrapper clearfixhas-menu">
+				<p class="blogname-utility">Paul S. Randal</p>
+<h2 class="h5 tagline-utility utility">In Recovery...</h2>
+
+			<span class="logo-utility utility">
+				<a href="http://www.sqlskills.com/blogs/paul" rel="nofollow" class="logo image-logo">
+			<img src="http://www.sqlskills.com/blogs/paul/wp-content/uploads/2013/01/headway-imported-image3.png" alt="Paul S. Randal" />
+				</a>
+			</span>
+			<nav role="navigation" class="nav-horizontal nav-align-left menu-utility utility"><div class="superfish clearfix"><ul id="menu-header-menu-2" class="menu superfish clearfix"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-368"><a href="http://www.sqlskills.com" >SQLskills Home</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-369"><a href="http://www.sqlskills.com/blogs/paul" >Blog Home</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-367"><a href="http://www.sqlskills.com/about/paul-s-randal/" >Bio</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-4082"><a href="mailto:paul@sqlskills.com?subject=Email%20from%20your%20blog">Email Paul</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-372"><a href="http://www.sqlskills.com/sql-server-training/" >Training</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-370"><a href="http://www.sqlskills.com/services/" >Services</a></li>
+</ul></div></nav><!-- .nav-horizontal nav-align-left -->			</div>
+			</div><!-- .block-content -->
+</div><!-- #block-14 -->
+</section><!-- .column --></section><!-- .row -->
+
+<section class="row row-2">
+<section class="column column-1 grid-left-0 grid-width-18">
+<div id="block-12" class="block block-type-content block-fluid-height"><div class="block-content"><p id="breadcrumbs">You are here: <span xmlns:v="http://rdf.data-vocabulary.org/#"><span typeof="v:Breadcrumb"><a href="http://www.sqlskills.com/blogs/paul" rel="v:url" property="v:title">Home</a></span> >> <span typeof="v:Breadcrumb"><a href="http://www.sqlskills.com/blogs/paul/category/performance-tuning/" rel="v:url" property="v:title">Performance Tuning</a></span> >> <span typeof="v:Breadcrumb"><strong class="breadcrumb_last" property="v:title">Wait statistics, or please tell me where it hurts</strong></span></span></p>
+
+<div class='loop'><div class='loop-content'><div id="post-641" class="post-641 post type-post status-publish format-standard hentry category-performance-tuning category-surveys category-wait-stats"><div class='entry-header'><div class="post-breadcrumbs"></div><!--/.entry-title--><div class='entry-utility'><h2 class="entry-title"><a href='http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/'>Wait statistics, or please tell me where it hurts</a></h2></div><!--/.entry-utility--><div class='entry-meta'><div class="post-author">By: <a href="http://www.sqlskills.com/blogs/paul" title="Visit Paul Randal&#8217;s website" rel="author external">Paul Randal</a></div>  <div class="post-date">Posted on: December 9, 2010 3:18 pm </div><div class="edit-post-link"></div></div><!--/.entry-meta--></div><div class='entry-content'><div class="post-content"><p>How many times have you walked up to a SQL Server that has a performance problem and wondered where to start looking?</p>
+<p>One of the most under-utilized performance troubleshooting methodologies in the SQL Server world is one called &#8220;waits and queues&#8221; (also known simply as &#8220;wait stats&#8221;). The basic premise is that SQL Server is permanently tracking why execution threads have to wait. You can ask SQL Server for this information and then use the results to narrow down where to start digging to unearth the cause of performance issues. The &#8220;waits&#8221; are what SQL Server tracks. The &#8220;queues&#8221; are the resources that the threads are waiting for. There are a myriad of waits in the system and they all indicate different resources being waited for. For example, a <em>PAGEIOLATCH_EX</em> wait means a thread is waiting for a data page to be read into the buffer pool from disk. A <em>LCK_M_X</em> wait means a thread is waiting to be granted an exclusive lock on something.</p>
+<p>The great thing about all of this is the SQL Server *knows* where the performance issues are, and you just need to ask it&#8230;. and then interpret what it tells you, which can be a little tricky.</p>
+<p>Now &#8211; where people sometimes get hung up is trying to track down every last wait and figure out what&#8217;s causing it. Waits *always* occur. It&#8217;s the way SQL Server&#8217;s scheduling system works.</p>
+<p>A thread is using the CPU (called RUNNING) until it needs to wait for a resource. It then moves to an unordered list of threads that are SUSPENDED. In the meantime, the next thread on the FIFO (first-in-first-out) queue of threads waiting for the CPU (called being RUNNABLE) is given the CPU and becomes RUNNING. If a thread on the SUSPENDED list is notified that it&#8217;s resource is available, it becomes RUNNABLE and is put on the bottom of the RUNNABLE queue. Threads continue this clockwise movement from RUNNING to SUSPENDED to RUNNABLE to RUNNING again until the task is completed. You can see processes in these states using the <em>sys.dm_exec_requests</em> DMV.</p>
+<p>SQL Server keeps track of the time that elapses between leaving the RUNNING state and becoming RUNNING again (called the &#8220;wait time&#8221;) and the time spent on the RUNNABLE queue (called the &#8220;signal wait time&#8221; &#8211; i.e. how long does the thread need to wait for the CPU after being signaled that its resource is available). We need to work out the time spent waiting on the SUSPENDED list (called the &#8220;resource wait time&#8221;) by subtracting the signal wait time from the overall wait time.</p>
+<p>A great resource is the 2005 whitepaper on &#8216;waits and queues&#8217; which I encourage you to read: <a href="http://download.microsoft.com/download/4/7/a/47a548b9-249e-484c-abd7-29f31282b04d/Performance_Tuning_Waits_Queues.doc" onclick="javascript:_gaq.push(['_trackEvent','download','http://download.microsoft.com/download/4/7/a/47a548b9-249e-484c-abd7-29f31282b04d/Performance_Tuning_Waits_Queues.doc']);">Performance Tuning Using Waits and Queues</a>. Books Online has a <a href="http://technet.microsoft.com/en-us/library/ms179984.aspx" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://technet.microsoft.com']);">section on the <em>sys.dm_os_wait_stats</em> DMV</a> that gives info on some of the newer wait types, and PSS is (very slowly) putting together a repository of info on all the wait types but not much progress has been made. The most in-depth coverage of understanding and using wait statistics that I know of is in my <a href="http://www.pluralsight.com/training/Courses/TableOfContents/sqlserver-waits" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.pluralsight.com']);" target="_blank">Pluralsight online training course</a>.</p>
+<p>You should also check out the following categories on my blog for more along these lines:</p>
+<ul>
+<li><a href="http://www.sqlskills.com/blogs/paul/category/wait-stats/"  target="_blank"><span style="line-height: 12.997159004211426px;">Wait Stats</span></a></li>
+<li><a href="http://www.sqlskills.com/blogs/paul/category/latches/"  target="_blank">Latches</a> (more advanced)</li>
+<li><a href="http://www.sqlskills.com/blogs/paul/category/spinlocks/"  target="_blank">Spinlocks</a> (pretty advanced)</li>
+</ul>
+<p>You can ask SQL Server for the cumulative wait statistics using the <em>sys.dm_os_wait_stats</em> DMV, and many people prefer to wrap the DMV call in some aggregation code. I use code based on a query that I got from fellow-MVP Glenn Berry (<a href="http://www.SQLskills.com/blogs/glenn" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.SQLskills.com']);" target="_blank">blog</a>|<a href="https://twitter.com/GlennAlanBerry" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://twitter.com']);" target="_blank">twitter</a>) and then modified quite a bit. See below for the version updated to take account of the results discussed below:</p>
+<pre class="brush: sql; gutter: true; title: ; toolbar: true; wrap-lines: true; notranslate" title="">
+WITH [Waits] AS
+    (SELECT
+        [wait_type],
+        [wait_time_ms] / 1000.0 AS [WaitS],
+        ([wait_time_ms] - [signal_wait_time_ms]) / 1000.0 AS [ResourceS],
+        [signal_wait_time_ms] / 1000.0 AS [SignalS],
+        [waiting_tasks_count] AS [WaitCount],
+        100.0 * [wait_time_ms] / SUM ([wait_time_ms]) OVER() AS [Percentage],
+        ROW_NUMBER() OVER(ORDER BY [wait_time_ms] DESC) AS [RowNum]
+    FROM sys.dm_os_wait_stats
+    WHERE [wait_type] NOT IN (
+        N'CLR_SEMAPHORE',    N'LAZYWRITER_SLEEP',
+        N'RESOURCE_QUEUE',   N'SQLTRACE_BUFFER_FLUSH',
+        N'SLEEP_TASK',       N'SLEEP_SYSTEMTASK',
+        N'WAITFOR',          N'HADR_FILESTREAM_IOMGR_IOCOMPLETION',
+        N'CHECKPOINT_QUEUE', N'REQUEST_FOR_DEADLOCK_SEARCH',
+        N'XE_TIMER_EVENT',   N'XE_DISPATCHER_JOIN',
+        N'LOGMGR_QUEUE',     N'FT_IFTS_SCHEDULER_IDLE_WAIT',
+        N'BROKER_TASK_STOP', N'CLR_MANUAL_EVENT',
+        N'CLR_AUTO_EVENT',   N'DISPATCHER_QUEUE_SEMAPHORE',
+        N'TRACEWRITE',       N'XE_DISPATCHER_WAIT',
+        N'BROKER_TO_FLUSH',  N'BROKER_EVENTHANDLER',
+        N'FT_IFTSHC_MUTEX',  N'SQLTRACE_INCREMENTAL_FLUSH_SLEEP',
+        N'DIRTY_PAGE_POLL',  N'SP_SERVER_DIAGNOSTICS_SLEEP')
+    )
+SELECT
+    [W1].[wait_type] AS [WaitType],
+    CAST ([W1].[WaitS] AS DECIMAL(14, 2)) AS [Wait_S],
+    CAST ([W1].[ResourceS] AS DECIMAL(14, 2)) AS [Resource_S],
+    CAST ([W1].[SignalS] AS DECIMAL(14, 2)) AS [Signal_S],
+    [W1].[WaitCount] AS [WaitCount],
+    CAST ([W1].[Percentage] AS DECIMAL(4, 2)) AS [Percentage],
+    CAST (([W1].[WaitS] / [W1].[WaitCount]) AS DECIMAL (14, 4)) AS [AvgWait_S],
+    CAST (([W1].[ResourceS] / [W1].[WaitCount]) AS DECIMAL (14, 4)) AS [AvgRes_S],
+    CAST (([W1].[SignalS] / [W1].[WaitCount]) AS DECIMAL (14, 4)) AS [AvgSig_S]
+FROM [Waits] AS [W1]
+INNER JOIN [Waits] AS [W2]
+    ON [W2].[RowNum] &lt;= [W1].[RowNum]
+GROUP BY [W1].[RowNum], [W1].[wait_type], [W1].[WaitS],
+    [W1].[ResourceS], [W1].[SignalS], [W1].[WaitCount], [W1].[Percentage]
+HAVING SUM ([W2].[Percentage]) - [W1].[Percentage] &lt; 95; -- percentage threshold
+GO
+</pre>
+<p>This will show the waits grouped together as a percentage of all waits on the system, in decreasing order. The waits to be concerned about (potentially) are those at the top of the list as this represents the majority of where SQL Server is spending it&#8217;s time waiting. You can see that a bunch of waits are being filtered out of consideration &#8211; as I said above, waits happen all the time and these are the benign ones we can usually ignore.</p>
+<p>You can also reset the aggregated statistics using this code:</p>
+<pre class="brush: sql; gutter: true; title: ; toolbar: true; wrap-lines: true; notranslate" title="">
+DBCC SQLPERF (N'sys.dm_os_wait_stats', CLEAR);
+GO
+</pre>
+<p>And of course you can very easily come up with a way to persist the results every few hours or every day and do some time-series analysis to figure out trends or automatically spot problems as they start to happen. You can also use Performance Dashboard to see these graphically in 2005 and Data Collector in 2008. On SQL Server 2000 you can use <em>DBCC SQLPERF (N&#8217;waitstats&#8217;)</em>.</p>
+<p>Once you get the results, you then start figuring out how to interpret them and where to go looking. The whitepaper I referenced above has a ton of good info on most of the wait types (except those added in 2008). There are various ways you can dig in deeper to this information that I&#8217;ll go into in later posts.</p>
+<p>I&#8217;m going to start blogging about wait stats analysis, either as standalone posts or as part of other things &#8211; and I&#8217;ve already done so in the <a href="http://www.sqlskills.com/blogs/paul/benchmarking-introducing-ssds-part-3-random-inserts-with-wait-stats-details/"  target="&quot;_blank:">last post</a> (at time of writing this) in my <a href="http://www.sqlskills.com/blogs/paul/category/benchmarking/"  target="_blank">benchmarking series</a>.</p>
+<p>For now, I want to report on the results of the <a href="http://www.sqlskills.com/blogs/paul/survey-what-is-the-highest-wait-on-your-system/"  target="_blank">wait stats survey</a> I posted a couple of months back. I asked people to run the code above and let me know the results. I received results for a whopping 1823 SQL Servers out there &#8211; thank you!</p>
+<p>Here&#8217;s a graphical view of the results:</p>
+<p><img alt="waitstatssurvey Wait statistics, or please tell me where it hurts" src="/blogs/paul/wp-content/uploads/2010/12/waitstatssurvey.jpg" title="Wait statistics, or please tell me where it hurts" /></p>
+<p>I&#8217;m not surprised at all by the top four results as I see these over and over on client systems.</p>
+<p>For the remainder of this post, I&#8217;m going to list all the top wait types reported by survey respondents, in descending order, and give a few words about what they might mean if they are the most prevalent wait on your system. The list format shows the number of systems with that wait type as the most prevalent, and then the wait type.</p>
+<ul>
+<li>505: CXPACKET
+<ul>
+<li>This indicates parallelism, not necessarily that there&#8217;s a problem. The coordinator thread in a parallel query always accumulates these waits. If the parallel threads are not given equal amounts of work to do, or one thread blocks, the waiting threads will also accumulate CXPACKET waits, which will make them aggregate a lot faster &#8211; this is a problem. One thread may have a lot more to do than the others, and so the whole query is blocked while the long-running thread completes. If this is combined with a high number of PAGEIOLATCH_XX waits, it could be large parallel table scans going on because of incorrect non-clustered indexes, or a bad query plan. If neither of these are the issue, you might want to try setting MAXDOP to 4, 2, or 1 for the offending queries (or possibly the whole instance). Make sure that if you have a NUMA system that you try setting MAXDOP to the number of cores in a single NUMA node first to see if that helps the problem. You also need to consider the MAXDOP effect on a mixed-load system. To be honest, I&#8217;d play with the <em>cost threshold for parallelism</em> setting (bump it up to 25) before reducing the MAXDOP of the whole instance. And don&#8217;t forget Resource Governor in Enterprise Edition of  SQL Server 2008 onward that allows DOP governing for a particular group of connections to the server.</li>
+</ul>
+</li>
+<li>304: PAGEIOLATCH_XX
+<ul>
+<li>This is where SQL Server is waiting for a data page to be read from disk into memory. It may indicate a bottleneck at the IO subsystem level (which is a common &#8220;knee-jerk&#8221; response to seeing these), but why is the I/O subsystem having to service so many reads? It could be buffer pool/memory pressure (i.e. not enough memory for the workload), a sudden change in query plans causing a large parallel scan instead of a seek, plan cache bloat, or a number of other things. Don&#8217;t assume the root cause is the I/O subsystem.</li>
+</ul>
+</li>
+<li>275: ASYNC_NETWORK_IO
+<ul>
+<li>This is usually where SQL Server is waiting for a client to finish consuming data. It could be that the client has asked for a very large amount of data or just that it&#8217;s consuming it reeeeeally slowly because of poor programming &#8211; I rarely see this being a network issue. Clients often process one row at a time &#8211; called RBAR or Row-By-Agonizing-Row &#8211; instead of caching the data on the client and  acknowledging to SQL Server immediately.</li>
+</ul>
+</li>
+<li>112: WRITELOG
+<ul>
+<li>This is the log management system waiting for a log flush to disk. It commonly indicates that the I/O subsystem can&#8217;t keep up with the log flush volume, but on very high-volume systems it could also be caused by internal log flush limits, that may mean you have to split your workload over multiple databases or even make your transactions a little longer to reduce log flushes. To be sure it&#8217;s the I/O subsystem, use the DMV <em>sys.dm_io_virtual_file_stats</em> to examine the I/O latency for the log file and see if it correlates to the average WRITELOG time. If WRITELOG is longer, you&#8217;ve got internal contention and need to shard. If not, investigate why you&#8217;re creating so much transaction log. See <a href="http://www.sqlperformance.com/2012/12/io-subsystem/trimming-t-log-fat" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.sqlperformance.com']);" target="_blank">here</a> and <a href="http://www.sqlperformance.com/2013/01/io-subsystem/trimming-more-transaction-log-fat" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.sqlperformance.com']);" target="_blank">here</a> for some ideas.</li>
+</ul>
+</li>
+<li>109: BROKER_RECEIVE_WAITFOR
+<ul>
+<li>This is just Service Broker waiting around for new messages to receive. I would add this to the list of waits to filter out and re-run the wait stats query.</li>
+</ul>
+</li>
+<li>086: MSQL_XP
+<ul>
+<li>This is SQL Server waiting for an extended stored-proc to finish. This could indicate a problem in your XP code.</li>
+</ul>
+</li>
+<li>074: OLEDB
+<ul>
+<li>As its name suggests, this is a wait for something communicating using OLEDB &#8211; e.g. a linked server. However, OLEDB is also used by all DMVs and by DBCC CHECKDB, so don&#8217;t assume linked servers are the problem &#8211; it could be a third-party monitoring tool making excessive DMV calls. If it *is* a linked server, go to the linked server and do wait stats analysis there to figure out what the performance issue is there.</li>
+</ul>
+</li>
+<li>054: BACKUPIO
+<ul>
+<li>This shows up when you&#8217;re backing up directly to tape, which is slooooow. I&#8217;d be tempted to filter this out.</li>
+</ul>
+</li>
+<li>041: LCK_M_XX
+<ul>
+<li>This is simply the thread waiting for a lock to be granted and indicates blocking problems. These could be caused by unwanted lock escalation or bad programming, but could also be from I/Os taking a long time causing locks to be held for longer than usual. Look at the resource associated with the lock using the DMV <em>sys.dm_os_waiting_tasks</em>. Don&#8217;t assume that locking is the root cause.</li>
+</ul>
+</li>
+<li>032: ONDEMAND_TASK_QUEUE
+<ul>
+<li>This is normal and is part of the background task system (e.g. deferred drop, ghost cleanup).  I would add this to the list of waits to filter out and re-run the wait stats query.</li>
+</ul>
+</li>
+<li>031: BACKUPBUFFER
+<ul>
+<li>This shows up when you&#8217;re backing up directly to tape, which is slooooow. I&#8217;d be tempted to filter this out.</li>
+</ul>
+</li>
+<li>027: IO_COMPLETION
+<ul>
+<li>This is SQL Server waiting for I/Os to complete and can be an indication of I/O subsystem problems.</li>
+</ul>
+</li>
+<li>024: SOS_SCHEDULER_YIELD
+<ul>
+<li>This is most likely to be code running that doesn&#8217;t hit any resource waits, but it could be (rarely) spinlock contention. More on this in my <a href="http://www.sqlskills.com/blogs/paul/category/spinlocks/"  target="_blank">Spinlocks</a> category.</li>
+</ul>
+</li>
+<li>022: DBMIRROR_EVENTS_QUEUE</li>
+<li>022: DBMIRRORING_CMD
+<ul>
+<li> These two are database mirroring just sitting around waiting for something to do. I would add these to the list of waits to filter out and re-run the wait stats query.</li>
+</ul>
+</li>
+<li>018: PAGELATCH_XX
+<ul>
+<li>This is contention for access to in-memory copies of pages. The most well-known cases of these are the PFS, SGAM, and GAM contention that can occur in <a href="http://www.sqlskills.com/blogs/paul/a-sql-server-dba-myth-a-day-1230-tempdb-should-always-have-one-data-file-per-processor-core/"  target="_blank">tempdb under certain workloads</a>. To find out what page the contention is on, you&#8217;ll need to use the DMV <em>sys.dm_os_waiting_tasks</em> to figure out what page the latch is for. For tempdb issues, Robert Davis (<a href="http://www.sqlservercentral.com/blogs/robert_davis/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.sqlservercentral.com']);" target="_blank">blog</a>|<a href="https://twitter.com/SQLSoldier" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://twitter.com']);" target="_blank">twitter</a>) has a <a href="http://www.sqlservercentral.com/blogs/robert_davis/2010/03/05/Breaking-Down-TempDB-Contention/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.sqlservercentral.com']);" target="_blank">good post showing how to do this</a>. Another common cause I&#8217;ve seen is an index hot-spot with concurrent inserts into an index with an identity value key.</li>
+</ul>
+</li>
+<li>016: LATCH_XX
+<ul>
+<li>This is contention for some non-page structure inside SQL Server &#8211; so not related to IO or data at all. These can be hard to figure out and you&#8217;re going to be using the DMV <em>sys.dm_os_latch_stats</em>. More on this in my <a href="http://www.sqlskills.com/blogs/paul/category/latches/"  target="_blank">Latches</a> category.</li>
+</ul>
+</li>
+<li>013: PREEMPTIVE_OS_PIPEOPS
+<ul>
+<li>This is SQL Server switching to pre-emptive scheduling mode to call out to Windows for something. These were added for 2008 and haven&#8217;t been documented yet (anywhere). The easiest way to figure out what they mean is to remove the PREEMPTIVE_OS_ and then search for what&#8217;s left on MSDN &#8211; it&#8217;ll be the name of a Windows API.</li>
+</ul>
+</li>
+<li>013: THREADPOOL
+<ul>
+<li>This says that there aren&#8217;t enough worker threads on the system to satisfy demand. Commonly this is large numbers of high-DOP queries trying to execute.</li>
+</ul>
+</li>
+<li>009: BROKER_TRANSMITTER
+<ul>
+<li>This is just Service Broker waiting around for new messages to send. I would add this to the list of waits to filter out and re-run the wait stats query.</li>
+</ul>
+</li>
+<li>006: SQLTRACE_WAIT_ENTRIES
+<ul>
+<li>Part of SQL Trace. I would add this to the list of waits to filter out and re-run the wait stats query./li&gt;</li>
+</ul>
+</li>
+<li>005: DBMIRROR_DBM_MUTEX
+<ul>
+<li>This one is undocumented and is contention for the send buffer that database mirroring shares between all the mirroring sessions on a server. It could indicate that you&#8217;ve got too many mirroring sessions.</li>
+</ul>
+</li>
+<li>005: RESOURCE_SEMAPHORE
+<ul>
+<li>This is queries waiting for execution memory (the memory used to process the query operators &#8211; like a sort). This could be memory pressure or a very high concurrent workload.</li>
+</ul>
+</li>
+<li>003: PREEMPTIVE_OS_AUTHENTICATIONOPS</li>
+<li>003: PREEMPTIVE_OS_GENERICOPS
+<ul>
+<li>These are SQL Server switching to pre-emptive scheduling mode to call out to Windows for something. These were added for 2008 and haven&#8217;t been documented yet (anywhere). The easiest way to figure out what they mean is to remove the PREEMPTIVE_OS_ and then search for what&#8217;s left on MSDN &#8211; it&#8217;ll be the name of a Windows API.</li>
+</ul>
+</li>
+<li>003: SLEEP_BPOOL_FLUSH
+<ul>
+<li>This is normal to see and indicates that checkpoint is throttling itself to avoid overloading the IO subsystem. I would add this to the list of waits to filter out and re-run the wait stats query.</li>
+</ul>
+</li>
+<li>002: MSQL_DQ
+<ul>
+<li>This is SQL Server waiting for a distributed query to finish. This could indicate a problem with the distributed query, or it could just be normal.</li>
+</ul>
+</li>
+<li>002: RESOURCE_SEMAPHORE_QUERY_COMPILE
+<ul>
+<li>When there are too many concurrent query compilations going on, SQL Server will throttle them. I don&#8217;t remember the threshold, but this can indicate excessive recompilation, or maybe single-use plans.</li>
+</ul>
+</li>
+<li>001: DAC_INIT
+<ul>
+<li>I&#8217;ve never seen this one before and BOL says it&#8217;s because the dedicated admin connection is initializing. I can&#8217;t see how this is the most common wait on someone&#8217;s system&#8230;</li>
+</ul>
+</li>
+<li>001: MSSEARCH
+<ul>
+<li>This is normal to see for full-text operations.  If this is the highest wait, it could mean your system is spending most of its time doing full-text queries. You might want to consider adding this to the filter list.</li>
+</ul>
+</li>
+<li>001: PREEMPTIVE_OS_FILEOPS</li>
+<li>001: PREEMPTIVE_OS_LIBRARYOPS</li>
+<li>001: PREEMPTIVE_OS_LOOKUPACCOUNTSID</li>
+<li>001: PREEMPTIVE_OS_QUERYREGISTRY
+<ul>
+<li>These are SQL Server switching to pre-emptive scheduling mode to call out to Windows for something. These were added for 2008 and haven&#8217;t been documented yet (anywhere). The easiest way to figure out what they mean is to remove the PREEMPTIVE_OS_ and then search for what&#8217;s left on MSDN &#8211; it&#8217;ll be the name of a Windows API.</li>
+</ul>
+</li>
+<li>001: SQLTRACE_LOCK
+<ul>
+<li>Part of SQL Trace. I would add this to the list of waits to filter out and re-run the wait stats query.</li>
+</ul>
+</li>
+</ul>
+<p>I hope you found this interesting! Let me know if there&#8217;s anything in particular you&#8217;re interested in seeing or just that you&#8217;re following along and enjoying the ride!</p>
+
+<div class="wp_rp_wrap  wp_rp_plain" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">Related Posts</h3><ul class="related_post wp_rp" style="visibility: hidden"><li data-position="0" data-poid="in-488" data-post-type="none" ><a href="http://www.sqlskills.com/blogs/paul/survey-most-prevalent-latch-waits-code-to-run/"  class="wp_rp_title">Survey: most prevalent latch waits (code to run)</a></li><li data-position="1" data-poid="in-480" data-post-type="none" ><a href="http://www.sqlskills.com/blogs/paul/most-common-latch-classes-and-what-they-mean/"  class="wp_rp_title">Most common latch classes and what they mean</a></li><li data-position="2" data-poid="in-574" data-post-type="none" ><a href="http://www.sqlskills.com/blogs/paul/sos_scheduler_yield-waits-and-the-lock_hash-spinlock/"  class="wp_rp_title">SOS_SCHEDULER_YIELD waits and the LOCK_HASH spinlock</a></li><li data-position="3" data-poid="in-497" data-post-type="none" ><a href="http://www.sqlskills.com/blogs/paul/max-server-memory-configuration-survey-results/"  class="wp_rp_title">Max server memory configuration survey results</a></li><li data-position="4" data-poid="in-652" data-post-type="none" ><a href="http://www.sqlskills.com/blogs/paul/survey-what-is-the-highest-wait-on-your-system/"  class="wp_rp_title">Survey: what is the highest wait on your system?</a></li></ul></div><script type="text/javascript">window._wp_rp_callback_widget_exists ? window._wp_rp_callback_widget_exists() : false;</script></div>
+</div></div><div class='entry-footer'><div class='entry-meta'><div class="post-category">Posted in: <a href="http://www.sqlskills.com/blogs/paul/category/performance-tuning/" title="View all posts in Performance Tuning" rel="category tag">Performance Tuning</a>, <a href="http://www.sqlskills.com/blogs/paul/category/surveys/" title="View all posts in Surveys" rel="category tag">Surveys</a>, <a href="http://www.sqlskills.com/blogs/paul/category/wait-stats/" title="View all posts in Wait Stats" rel="category tag">Wait Stats</a> </div><div class="post-comments-link"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comments" title="Comment on Wait statistics, or please tell me where it hurts">72 Comments</a> </div></div><div class='entry-utility'><div class="post-comments-block"><div id="comments"><h3 id="comments">72 Responses to <em>Wait statistics, or please tell me where it hurts</em></h3><ol class="commentlist">		<li class="comment even thread-even depth-1" id="comment-2189">
+				<div id="div-comment-2189" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.nyc-software.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.nyc-software.com']);"  rel='external nofollow' class='url'>David Wetherell</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2189">
+			December 9, 2010 at 6:11 pm</a>		</div>
+
+		<p>WoW &#8230; amazing post &#8230; This makes me feel allot better about my efforts at performance tuning over the past couple of months, I fall pretty much in line with these wait states.  This also clarified allot of little points that the tech net descriptions kind of glosses over.  I&#8217;ve been thinking that a server I&#8217;ve been working on was under CPU pressure, the tech net article says of SOS_SCHEDULER_YIELD &quot;Occurs when a task voluntarily yields the scheduler for other tasks to execute. During this wait the task is waiting for its quantum to be renewed.&quot; ~ errr (sounds like a fortune cookie) but after working out allot of this is one of my top waits states.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2189#respond' onclick='return addComment.moveForm("div-comment-2189", "2189", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2190">
+				<div id="div-comment-2190" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://ericwisdahl.wordpress.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://ericwisdahl.wordpress.com']);"  rel='external nofollow' class='url'>Eric Wisdahl</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2190">
+			December 9, 2010 at 6:43 pm</a>		</div>
+
+		<p>This is very useful information.  I&#8217;ll be sharing this article with my team tomorrow and look forward to the future wait stat analysis posts.  Thanks!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2190#respond' onclick='return addComment.moveForm("div-comment-2190", "2190", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2191">
+				<div id="div-comment-2191" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://rusanu.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://rusanu.com']);"  rel='external nofollow' class='url'>Remus Rusanu</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2191">
+			December 9, 2010 at 9:16 pm</a>		</div>
+
+		<p>BROKER_RECEIVE_WAITFOR: probably some of the surveyed sites were using SqlDependency and/or SqlCacheDependency.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2191#respond' onclick='return addComment.moveForm("div-comment-2191", "2191", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2193">
+				<div id="div-comment-2193" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/"   rel='external nofollow' class='url'>paul</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2193">
+			December 10, 2010 at 7:15 am</a>		</div>
+
+		<p>Hi Jonathan &#8211; I&#8217;d remove those from consideration as well. Cheers</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2193#respond' onclick='return addComment.moveForm("div-comment-2193", "2193", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2194">
+				<div id="div-comment-2194" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Scott Magnan</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2194">
+			December 10, 2010 at 8:04 am</a>		</div>
+
+		<p>This is a great summary.  I look forward to reading your future blogs on LATCH_XX wait tracing specifically the cause of Latch_EX waits under heavy load as this has been a thorn in my side for some time.  </p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2194#respond' onclick='return addComment.moveForm("div-comment-2194", "2194", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2195">
+				<div id="div-comment-2195" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://sqlserverperformance.wordpress.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://sqlserverperformance.wordpress.com']);"  rel='external nofollow' class='url'>Glenn Berry</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2195">
+			December 10, 2010 at 8:21 am</a>		</div>
+
+		<p>Another nice post about a very relevant subject that seems to still be a mystery to so many people. </p>
+<p>Thanks for the mention!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2195#respond' onclick='return addComment.moveForm("div-comment-2195", "2195", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2196">
+				<div id="div-comment-2196" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://fabriciodba.wordpress.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://fabriciodba.wordpress.com']);"  rel='external nofollow' class='url'>Fabricio Lima</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2196">
+			December 10, 2010 at 8:41 am</a>		</div>
+
+		<p>Great Article.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2196#respond' onclick='return addComment.moveForm("div-comment-2196", "2196", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2192">
+				<div id="div-comment-2192" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.simple-talk.com/blogs/author/13359-jonathan-allen/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.simple-talk.com']);"  rel='external nofollow' class='url'>jonathan allen</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2192">
+			December 10, 2010 at 1:41 am</a>		</div>
+
+		<p>Hi Paul, thanks for explaining this as you have, its great to be able to get some background on this sort of topic. I have tried the script on some of my servers here and have at the top of my list on one of them a Wait Type of DBMIRROR_DBM_EVENT which is explained in BOL as &quot;Identified for informational purposes only. Not supported. Future compatibility is not guaranteed.&quot;. 4th in order on the same server is DBMIRROR_WORKER_QUEUE<br />
+with BOL saying &quot;Indicates that the database mirroring worker task is waiting for more work.&quot; from that explanation I think I should be adding that to the excluded list but what should I do about the DBMIRROR_DBM_EVENT waits, is there any cause for concern or should I exclude that from the results too?</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2192#respond' onclick='return addComment.moveForm("div-comment-2192", "2192", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2198">
+				<div id="div-comment-2198" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Farhan</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2198">
+			December 10, 2010 at 11:13 am</a>		</div>
+
+		<p>Great post Paul. Time series analysis really helps to understand the baseline of the system. Looking forward to read the post about it</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2198#respond' onclick='return addComment.moveForm("div-comment-2198", "2198", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2197">
+				<div id="div-comment-2197" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.nhaschools.com/Pages/default.aspx" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.nhaschools.com']);"  rel='external nofollow' class='url'>Don Kolenda</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2197">
+			December 10, 2010 at 10:33 am</a>		</div>
+
+		<p>Thanks for another great labor of love, Paul.  You explain these things in a way that even I can understand!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2197#respond' onclick='return addComment.moveForm("div-comment-2197", "2197", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2199">
+				<div id="div-comment-2199" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">RamaUdaya.K</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2199">
+			December 11, 2010 at 10:54 pm</a>		</div>
+
+		<p>Good Information on waits Statistics..</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2199#respond' onclick='return addComment.moveForm("div-comment-2199", "2199", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2200">
+				<div id="div-comment-2200" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">donaldc</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2200">
+			December 13, 2010 at 4:47 am</a>		</div>
+
+		<p>Fantastic post, Paul &#8211; that&#8217;s the best presentation of wait types I have seen and should give us all no excuses for not applying this troubleshooting methodology more rigorously. </p>
+<p>I have one query about the DBMIRROR_DBM_EVENT wait type. This showed up on one of our systems last year as the lead wait type. After an exhaustive Premier Support Call, we were directed to two issues: this wait type can be symptomatic of an issue where the DBM thread is blocked because the checkpoint process does not yield sufficiently frequently (hence the DBMIRROR_DBM_EVENT wait) &#8211; this was a problem apparently fixed in SQL Server 2005 SP3 CU10; alternatively, it can also be symptomatic of throttling of the send rate for the log via the DbmFlowControl::ControlFlow function. Either way, it might be useful not to filter out DBMIRROR_DBM_EVENT as it can indirectly point to system bottlenecks.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2200#respond' onclick='return addComment.moveForm("div-comment-2200", "2200", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2201">
+				<div id="div-comment-2201" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.execsql.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.execsql.com']);"  rel='external nofollow' class='url'>Allan S. Hansen</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2201">
+			December 13, 2010 at 5:57 am</a>		</div>
+
+		<p>Thanks a million for this post. I&#8217;ve often searched around for descriptions of the various core elements but it is rare you find something described as accessible as this.</p>
+<p>Thank you.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2201#respond' onclick='return addComment.moveForm("div-comment-2201", "2201", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2202">
+				<div id="div-comment-2202" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/"   rel='external nofollow' class='url'>paul</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2202">
+			December 13, 2010 at 7:10 am</a>		</div>
+
+		<p>@Donald Interesting info &#8211; it&#8217;s similar in that respect to the DBMIRROR_DBM_MUTEX counter. Thanks</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2202#respond' onclick='return addComment.moveForm("div-comment-2202", "2202", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2203">
+				<div id="div-comment-2203" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://troubleshootingsql.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://troubleshootingsql.com']);"  rel='external nofollow' class='url'>Amit Banerjee</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2203">
+			December 13, 2010 at 7:45 am</a>		</div>
+
+		<p>DBMIRROR_DBM_EVENT waits can normally be ignored on systems where Database Mirroring is not configured. But if you have mirroring configured and you are seeing the waittime showing abnormally high values on the Principal or Mirror instances, then it could point to database mirroring synchronization taking a long time due to slow IO, other blocking tasks preventing the mirroring threads from continuing further or network latency. The issues that we addressd for Database Mirroring in SQL 2005 SP3 CU10 were for some issues that we identified and additioanl diagnostic information to be printed in the SQL errorlog for mirroring related issues. The manifestation for all these issues would show up as one of the database mirroring waittypes. The common one is: DBMIRROR_DBM_EVENT.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2203#respond' onclick='return addComment.moveForm("div-comment-2203", "2203", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2204">
+				<div id="div-comment-2204" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Litsne</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2204">
+			December 16, 2010 at 2:30 am</a>		</div>
+
+		<p>Interesting. Thanks.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2204#respond' onclick='return addComment.moveForm("div-comment-2204", "2204", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2205">
+				<div id="div-comment-2205" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Frank</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2205">
+			December 16, 2010 at 5:30 am</a>		</div>
+
+		<p>Hi Paul, best article about wait stats I ever read. The reference links are also very helpful.</p>
+<p>I have seen CXPACKET as the biggest wait on some of our servers. Does anyone has a good method to find out the offending parallel queries? Thanks!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2205#respond' onclick='return addComment.moveForm("div-comment-2205", "2205", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2206">
+				<div id="div-comment-2206" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">TedC</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2206">
+			December 16, 2010 at 5:55 am</a>		</div>
+
+		<p>I&#8217;d encourage the SQL Server folks to read up on Cary Millsap&#8217;s Method R work.  All about constraint theory and waits.   </p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2206#respond' onclick='return addComment.moveForm("div-comment-2206", "2206", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2208">
+				<div id="div-comment-2208" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Jakdb</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2208">
+			December 16, 2010 at 2:39 pm</a>		</div>
+
+		<p>Very nice article, though i read this article very late it was interesting and given me alot more indepth knowledge about my system lock waits&#8230; Thanks alot</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2208#respond' onclick='return addComment.moveForm("div-comment-2208", "2208", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2207">
+				<div id="div-comment-2207" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="https://twitter.com/NFDotCom" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','']);"  rel='external nofollow' class='url'>Adam Belebczuk</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2207">
+			December 16, 2010 at 7:13 am</a>		</div>
+
+		<p>Paul,</p>
+<p>Thanks for an excellent blog post! There&#8217;s a ton of awesome information in here and I&#8217;ll definitely be refering to this in the future.</p>
+<p>&#8211; Adam</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2207#respond' onclick='return addComment.moveForm("div-comment-2207", "2207", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2209">
+				<div id="div-comment-2209" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://shaunjstuart.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://shaunjstuart.com']);"  rel='external nofollow' class='url'>Shaun</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2209">
+			December 17, 2010 at 9:58 am</a>		</div>
+
+		<p>Do you have any sort of rule of thumb for when a wait should be considered troublesome or when you should start looking deeper? Running your code on my server shows the biggest wait (60%) to be dbmirror_worker_queue, which can be ignored. The next two waits constitute 9% and 8% of the total wait time. (And the 8% one is dbmirror_send, which I would expect, since I pause mirroring on a 9 GB db while doing DBCC index maintenance, then resume mirroring and it takes about 3 hours for the mirror to become synchronized again). The others are 3% or less of total wait times. Server is running fine and I have no performance complaints from my users, but I&#8217;m just trying to be proactive. I would guess anything over 10%-15% of total wait time would warrant a closer look..</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2209#respond' onclick='return addComment.moveForm("div-comment-2209", "2209", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2210">
+				<div id="div-comment-2210" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/"   rel='external nofollow' class='url'>paul</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2210">
+			December 17, 2010 at 10:49 am</a>		</div>
+
+		<p>Hi Shaun &#8211; anything that&#8217;s at the top of the list warrants investigation, but bear in mind that waits are normal and there may be waits you can do nothing about &#8211; especially if the system is performing well like you say. Filter out the DBM ones and re-run the query &#8211; see what you find then. Cheers</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2210#respond' onclick='return addComment.moveForm("div-comment-2210", "2210", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2211">
+				<div id="div-comment-2211" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlserverblogforum.blogspot.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.sqlserverblogforum.blogspot.com']);"  rel='external nofollow' class='url'>muthukkumaran kaliyamoorthy</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2211">
+			December 20, 2010 at 1:34 am</a>		</div>
+
+		<p>As usual nice survey paul .good collection thanks.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2211#respond' onclick='return addComment.moveForm("div-comment-2211", "2211", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2212">
+				<div id="div-comment-2212" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Ramu</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2212">
+			December 20, 2010 at 12:44 pm</a>		</div>
+
+		<p>Thanks For the Article. I have a server with waits on PREEMPTIVE_OS_WAITFORSINGLEOBJECT. Can you please guide me on this wait.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2212#respond' onclick='return addComment.moveForm("div-comment-2212", "2212", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2213">
+				<div id="div-comment-2213" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/"   rel='external nofollow' class='url'>paul</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2213">
+			December 20, 2010 at 2:22 pm</a>		</div>
+
+		<p>A quick Google search shows this: <a href="http://social.msdn.microsoft.com/Forums/en/sqldatabaseengine/thread/1bf2c509-568e-47fd-8413-67770ecda025" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://social.msdn.microsoft.com']);" rel="nofollow">http://social.msdn.microsoft.com/Forums/en/sqldatabaseengine/thread/1bf2c509-568e-47fd-8413-67770ecda025</a></p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2213#respond' onclick='return addComment.moveForm("div-comment-2213", "2213", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-2214">
+				<div id="div-comment-2214" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn"><a href="http://amenjonathan.wordpress.com/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://amenjonathan.wordpress.com']);"  rel='external nofollow' class='url'>Jonathan Amen</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2214">
+			December 23, 2010 at 8:38 am</a>		</div>
+
+		<p>I had similar CXPACKET wait issues about a year ago. A senior co-worker looked at my code, and mentioned the waits were most likely being generated by my joining of large table variables (&gt; 1000 rows) because the plan views a table variable as a single row, which could cause the optimizer to give unequal amounts of work to parallel processes. When I switched to using temp tables for larger sets of generated data, the CXPACKET waits dissapeared for the particular query.</p>
+<p>Check the code running behind the CXPACKET wait. Look for joins on table variables, and see if you can analyze their approximate row count.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2214#respond' onclick='return addComment.moveForm("div-comment-2214", "2214", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-2215">
+				<div id="div-comment-2215" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=44' class='avatar avatar-44 photo avatar-default' height='44' width='44' />			<cite class="fn">Ramkumar</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-2215">
+			December 31, 2010 at 2:16 am</a>		</div>
+
+		<p>Paul, I love this post<br />
+No one SQL Server tuner in this universe cant escape from your blogs especially this one</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=2215#respond' onclick='return addComment.moveForm("div-comment-2215", "2215", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-4163">
+				<div id="div-comment-4163" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul/benchmarking-multiple-data-files-on-ssds-plus-the-latest-fusion-io-driver/"   rel='external nofollow' class='url'>Benchmarking: Multiple data files on SSDs (plus the latest Fusion-io driver) | Paul S. Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-4163">
+			January 3, 2013 at 7:13 am</a>		</div>
+
+		<p>[...] The test harness takes care of all of this except reformatting the drives, and also captures the wait stats for each test, making note of the most prevalent waits that make up the top 95% of all waits during the test. This uses the script from this blog post. [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=4163#respond' onclick='return addComment.moveForm("div-comment-4163", "4163", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-4202">
+				<div id="div-comment-4202" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/erin/figuring-out-when-wait-stats-were-last-cleared/"   rel='external nofollow' class='url'>Figuring Out When Wait Stats Were Last Cleared | Erin Stellato</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-4202">
+			January 3, 2013 at 10:28 am</a>		</div>
+
+		<p>[...] If you&rsquo;re not familiar with wait statistics, I suggest starting with Paul&rsquo;s post, Wait statistics, or please tell me where it hurts.&nbsp; Whether you have performance issues on your server or not, I highly recommend looking at [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=4202#respond' onclick='return addComment.moveForm("div-comment-4202", "4202", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-4462">
+				<div id="div-comment-4462" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul/advanced-performance-troubleshooting-waits-latches-spinlocks/"   rel='external nofollow' class='url'>Advanced performance troubleshooting: waits, latches, spinlocks - Paul S. Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-4462">
+			January 8, 2013 at 12:42 pm</a>		</div>
+
+		<p>[...] Last December I wrote a long blog post introducing wait statistics, showing how to use the sys.dm_os_wait_stats DMV, giving links to resources, and explaining the most common ones that people see in the field based on data from more than 1800 SQL Servers&nbsp;- see Wait statistics, or please tell me where it hurts. [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=4462#respond' onclick='return addComment.moveForm("div-comment-4462", "4462", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-4464">
+				<div id="div-comment-4464" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul/query-plan-analysis-first-steps/"   rel='external nofollow' class='url'>Query plan analysis first steps - Paul S. Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-4464">
+			January 8, 2013 at 12:42 pm</a>		</div>
+
+		<p>[...] the misconception that if you have wait stats, then you must have a performance problem. See my long blog post on wait stats for more [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=4464#respond' onclick='return addComment.moveForm("div-comment-4464", "4464", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-4976">
+				<div id="div-comment-4976" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul/most-common-latch-classes-and-what-they-mean/"   rel='external nofollow' class='url'>Most common latch classes and what they mean - Paul S. Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-4976">
+			January 15, 2013 at 1:35 pm</a>		</div>
+
+		<p>[...] wait statistics analysis (see here), if you&#039;re seeing LATCH_EX, LATCH_SH, or LATCH_UP wait types are one of the top 3-4 prevalent [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=4976#respond' onclick='return addComment.moveForm("div-comment-4976", "4976", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-4979">
+				<div id="div-comment-4979" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul/sos_scheduler_yield-waits-and-the-lock_hash-spinlock/"   rel='external nofollow' class='url'>SOS_SCHEDULER_YIELD waits and the LOCK_HASH spinlock - Paul S. Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-4979">
+			January 15, 2013 at 1:36 pm</a>		</div>
+
+		<p>[...] Wait statistics, or please tell me where it hurts [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=4979#respond' onclick='return addComment.moveForm("div-comment-4979", "4979", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-6795">
+				<div id="div-comment-6795" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.edugeek.net/forums/mis-systems/108124-peaking-cpu-server.html#post926105" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.edugeek.net']);"  rel='external nofollow' class='url'>[SIMS] Peaking CPU on server</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-6795">
+			February 4, 2013 at 2:42 am</a>		</div>
+
+		<p>[...] through my bookmarks, this is a good in-depth article  SQL Server Wait Statistics: Tell me where it hurts &#8211; Paul Randal               Reply With [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=6795#respond' onclick='return addComment.moveForm("div-comment-6795", "6795", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-6846">
+				<div id="div-comment-6846" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://ignaciosalom.com/2013/02/05/paul-randals-wait-statistics-or-please-tell-me-where-it-hurts/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://ignaciosalom.com']);"  rel='external nofollow' class='url'>Paul Randal’s wait-statistics-or-please-tell-me-where-it-hurts &laquo; SQLDBA Journal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-6846">
+			February 5, 2013 at 11:34 am</a>		</div>
+
+		<p>[...] find on internet about the “waits and queues” Troubleshooting methodology is Paul Randal’s “wait-statistics-or-please-tell-me-where-it-hurts”. I check it very often and whenever you google a waittype you are most likely to get the link to [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=6846#respond' onclick='return addComment.moveForm("div-comment-6846", "6846", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-7494">
+				<div id="div-comment-7494" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://danieladeniji.wordpress.com/2013/02/20/microsoft-sql-server-wait-stats-latch-io/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://danieladeniji.wordpress.com']);"  rel='external nofollow' class='url'>Microsoft &#8211; SQL Server &#8211; Wait Stats &#8211; Latch I/O | Daniel Adeniji&#039;s &#8211; Learning in the Open</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-7494">
+			February 20, 2013 at 12:30 pm</a>		</div>
+
+		<p>[...]  [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=7494#respond' onclick='return addComment.moveForm("div-comment-7494", "7494", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1 parent" id="comment-7767">
+				<div id="div-comment-7767" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/2662db97d438ae34715004ef6723a096?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Andre Savioli</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-7767">
+			March 6, 2013 at 12:37 pm</a>		</div>
+
+		<p>Hi Paul. Thanks for this great post.</p>
+<p>Could a  fragmented log file, with a lot of VLFs, be related to a high writelog wait?</p>
+<p>Regards</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=7767#respond' onclick='return addComment.moveForm("div-comment-7767", "7767", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-2" id="comment-7895">
+				<div id="div-comment-7895" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-7895">
+			March 10, 2013 at 2:48 pm</a>		</div>
+
+		<p>Possibly a contributor but unlikely to be the root cause.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=7895#respond' onclick='return addComment.moveForm("div-comment-7895", "7895", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-8181">
+				<div id="div-comment-8181" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/1b0222f7d7d4507e7f7eddf12489d3b4?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">vishal</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-8181">
+			April 2, 2013 at 7:33 am</a>		</div>
+
+		<p>Hi Paul,<br />
+I want to know, are Inner join and cross apply are RBAR or not? Please justify.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=8181#respond' onclick='return addComment.moveForm("div-comment-8181", "8181", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-2 parent" id="comment-8183">
+				<div id="div-comment-8183" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-8183">
+			April 2, 2013 at 7:53 am</a>		</div>
+
+		<p>How is this relevant to wait stats?</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=8183#respond' onclick='return addComment.moveForm("div-comment-8183", "8183", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment even depth-3 parent" id="comment-8184">
+				<div id="div-comment-8184" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/1b0222f7d7d4507e7f7eddf12489d3b4?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">vishal</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-8184">
+			April 2, 2013 at 8:04 am</a>		</div>
+
+		<p>Yeah obviously it is not relevant to wait stats.<br />
+By mistake I have posted my question here, sorry for that.<br />
+But still, can you answer it Because I didn&#8217;t get any of your articles about RBAR.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=8184#respond' onclick='return addComment.moveForm("div-comment-8184", "8184", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-4" id="comment-8187">
+				<div id="div-comment-8187" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-8187">
+			April 2, 2013 at 9:14 am</a>		</div>
+
+		<p>I haven&#8217;t written any articles about query operator internals &#8211; that&#8217;s not my area. The term RBAR only applies to applications or T-SQL code that process rows one-by-set instead of either caching results or using set-based operations, respectively.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=8187#respond' onclick='return addComment.moveForm("div-comment-8187", "8187", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1 parent" id="comment-9539">
+				<div id="div-comment-9539" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/7f1c7a7af67b76d34ee091b03582fd53?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">M</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-9539">
+			April 23, 2013 at 6:15 am</a>		</div>
+
+		<p>Paul, I am curious about your statement on a BACKUPIO wait. &#8220;This shows up when you’re backing up directly to tape, which is slooooow. I’d be tempted to filter this out.&#8221;  If this is a significant percentage of wait time, wouldn&#8217;t it make sense to look into disk backup or faster tape drives? Thanks.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=9539#respond' onclick='return addComment.moveForm("div-comment-9539", "9539", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-2 parent" id="comment-9567">
+				<div id="div-comment-9567" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-9567">
+			April 23, 2013 at 4:35 pm</a>		</div>
+
+		<p>You could, but if you&#8217;re stuck with direct-to-tape, I&#8217;d filter it out. Even fast tape drives are still going to be slower than going to disk, and many people don&#8217;t have the disk space to go two-step to disk and then off-disk. But a fair point.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=9567#respond' onclick='return addComment.moveForm("div-comment-9567", "9567", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment even depth-3 parent" id="comment-11636">
+				<div id="div-comment-11636" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/8228c13dcc1d399ea4ef9a9453e537b2?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Jeremy</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-11636">
+			June 11, 2013 at 11:02 am</a>		</div>
+
+		<p>On the subject of the BACKUPIO wait, what if you&#8217;re getting this while you&#8217;re backing up a 2TB db to SAN disk across 5 LUNs, wouldn&#8217;t that indicate a problem? Couple that with regular PAGEIOLATCH_SH waits that are consistantly 60% or more of the waits through out the day, and I&#8217;m inclined to think there&#8217;s a problem with the SAN. Is that a fair assumption that I should delve into further?<br />
+Thanks,<br />
+jh</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=11636#respond' onclick='return addComment.moveForm("div-comment-11636", "11636", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-4" id="comment-11798">
+				<div id="div-comment-11798" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-11798">
+			June 16, 2013 at 5:08 am</a>		</div>
+
+		<p>If the BACKUPIO waits are on average longer than you expect, then the I/O isn&#8217;t as efficient as you want and should be investigated. I&#8217;m carefully not saying that there&#8217;s a SAN problem, as it could be a myriad things wrong.</p>
+<p>PAGEIOLATCH_SH doesn&#8217;t necessarily indicate an I/O subsystem problem. First question &#8211; why are physical reads being done in the first place? Why isn&#8217;t the workload in memory? Are query plans driving more I/O than they should? etc.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=11798#respond' onclick='return addComment.moveForm("div-comment-11798", "11798", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-10287">
+				<div id="div-comment-10287" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/f07144d2f72ff600295953123215346e?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Eric</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-10287">
+			May 6, 2013 at 1:29 pm</a>		</div>
+
+		<p>Paul I just recently started seeing high OLE DB wait types.  Now during those times we have our index rebuild script running as maintenance job.  Could that be what&#8217;s causing the OLEDB waits?</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=10287#respond' onclick='return addComment.moveForm("div-comment-10287", "10287", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-2" id="comment-10308">
+				<div id="div-comment-10308" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-10308">
+			May 7, 2013 at 8:10 am</a>		</div>
+
+		<p>No &#8211; it&#8217;s the sys.dm_db_index_physical_stats DMV. DMVs use OLE DB under the covers. Cheers</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=10308#respond' onclick='return addComment.moveForm("div-comment-10308", "10308", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-10290">
+				<div id="div-comment-10290" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://toddjewell.wordpress.com/2013/05/06/my-sql-server-is-being-crushed-under-cpu-pressure/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://toddjewell.wordpress.com']);"  rel='external nofollow' class='url'>My SQL Server is being crushed under CPU pressure! | toddjewell - DBA</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-10290">
+			May 6, 2013 at 3:02 pm</a>		</div>
+
+		<p>[...] run one of my favorite [stolen] [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=10290#respond' onclick='return addComment.moveForm("div-comment-10290", "10290", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-10369">
+				<div id="div-comment-10369" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://ignaciosalom.com/?p=498" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://ignaciosalom.com']);"  rel='external nofollow' class='url'>Paul Randal’s wait-statistics-or-please-tell-me-where-it-hurts</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-10369">
+			May 9, 2013 at 3:41 am</a>		</div>
+
+		<p>[...] find on internet about the “waits and queues” Troubleshooting methodology is Paul Randal’s “wait-statistics-or-please-tell-me-where-it-hurts”. I check it very often and whenever you google a waittype you are most likely to get the link to [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=10369#respond' onclick='return addComment.moveForm("div-comment-10369", "10369", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-11310">
+				<div id="div-comment-11310" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.dbagooner.com/?p=124" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.dbagooner.com']);"  rel='external nofollow' class='url'>What a Week!!! | DBAGooner</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-11310">
+			May 31, 2013 at 6:19 am</a>		</div>
+
+		<p>[...] using some of the queries it contains helped me get at the meat of the server. I also used &#8220;Wait statistics, or please tell me where it hurts&#8221; by Paul Randal which, when combined with Brent&#8217;s guides &amp; scripts allowed me to [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=11310#respond' onclick='return addComment.moveForm("div-comment-11310", "11310", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-11640">
+				<div id="div-comment-11640" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://sladescross.wordpress.com/2013/06/11/sql-server-wait-statistics-tell-me-where-it-hurts-paul-randalpaul-s-randal/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://sladescross.wordpress.com']);"  rel='external nofollow' class='url'>SQL Server Wait Statistics: Tell me where it hurts &#8211; Paul RandalPaul S. Randal | Sladescross&#039;s Blog</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-11640">
+			June 11, 2013 at 1:56 pm</a>		</div>
+
+		<p>[...] <a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/"  rel="nofollow">http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/</a> [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=11640#respond' onclick='return addComment.moveForm("div-comment-11640", "11640", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-11924">
+				<div id="div-comment-11924" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/erin/the-accidental-dba-tools-for-on-going-monitoring/"   rel='external nofollow' class='url'>The Accidental DBA (Day 19 of 30): Tools for On-Going Monitoring - Erin Stellato</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-11924">
+			June 19, 2013 at 6:02 am</a>		</div>
+
+		<p>[...]  [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=11924#respond' onclick='return addComment.moveForm("div-comment-11924", "11924", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-11967">
+				<div id="div-comment-11967" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://danieladeniji.wordpress.com/2013/06/19/technical-microsoft-sql-server-wait-stats-cx-packet/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://danieladeniji.wordpress.com']);"  rel='external nofollow' class='url'>Technical: Microsoft – SQL Server – Wait Stats – CXPacket | Daniel Adeniji&#039;s &#8211; Learning in the Open</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-11967">
+			June 20, 2013 at 11:37 am</a>		</div>
+
+		<p>[...]  <a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/"  rel="nofollow">http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/</a>  [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=11967#respond' onclick='return addComment.moveForm("div-comment-11967", "11967", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-12110">
+				<div id="div-comment-12110" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.sqlskills.com/blogs/erin/the-accidental-dba-day-25-of-30-wait-statistics-analysis/"   rel='external nofollow' class='url'>The Accidental DBA (Day 25 of 30): Wait Statistics Analysis - Erin Stellato</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12110">
+			June 25, 2013 at 9:29 am</a>		</div>
+
+		<p>[...] you haven’t worked with wait statistics, I recommend starting with Paul’s wait stats post, and then working through Tom Davidson’s SQL Server 2005 Waits and Queues [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12110#respond' onclick='return addComment.moveForm("div-comment-12110", "12110", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-odd thread-alt depth-1 parent" id="comment-12537">
+				<div id="div-comment-12537" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/6feacc7d23f1b8d763c57284c8c34bc0?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Mike D</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12537">
+			July 12, 2013 at 12:58 pm</a>		</div>
+
+		<p>Hello Paul,<br />
+  Thank you for this Glenn Berry modified script, I use it frequently.  Need some clarification.  The main part of this I like the best is we weed out the benign waits and can focus on what might actually be a problem, but I think interpretation of the percentage column is misleading.  You state the script will &#8220;show the waits grouped together as a percentage of all waits on the system in descending order&#8221;.  It actually shows the waits grouped together as a percentage of the non-benign wait time, so all that benign wait time has not been factored in. I run this and it shows CXPACKET as 47% of the non-benign waits.  But if I consider the whole time, which means adding in the benign time SQL waited, CXPACKET accounted for 3% of total time waiting.  I think that is more accurate.  Holler if I&#8217;m misinterpreting that, thanks!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12537#respond' onclick='return addComment.moveForm("div-comment-12537", "12537", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor even depth-2" id="comment-12538">
+				<div id="div-comment-12538" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12538">
+			July 12, 2013 at 1:03 pm</a>		</div>
+
+		<p>Hi Mike &#8211; my way is the correct and accepted way. The reason is that some of the benign waits accrue a very large amount of time, dwarfing the non-benign waits as you saw. Because the benign waits always occur and always accrue lots of time, it is generally safe to ignore these and pretend the don&#8217;t exist, as the script does. Hope this helps.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12538#respond' onclick='return addComment.moveForm("div-comment-12538", "12538", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="comment odd alt thread-even depth-1" id="comment-12740">
+				<div id="div-comment-12740" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/22f8aa0620ce98ed253fa7c23d1d78b9?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">G Shivaji</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12740">
+			July 22, 2013 at 11:57 pm</a>		</div>
+
+		<p>Great Article &#8230;</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12740#respond' onclick='return addComment.moveForm("div-comment-12740", "12740", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-odd thread-alt depth-1 comment" id="comment-12743">
+				<div id="div-comment-12743" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.kaifazhe.com/sqlserver_school/178345.html" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.kaifazhe.com']);"  rel='external nofollow' class='url'>Anonymous</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12743">
+			July 23, 2013 at 5:36 am</a>		</div>
+
+		<p>[...] Wait statistics, or please tell me where it hurts [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12743#respond' onclick='return addComment.moveForm("div-comment-12743", "12743", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment odd alt thread-even depth-1 parent" id="comment-12788">
+				<div id="div-comment-12788" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/632040b577173619bdafb7d46bb5e23f?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Luanne</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12788">
+			July 31, 2013 at 11:33 pm</a>		</div>
+
+		<p>Great post!<br />
+My top 5 wait types are:<br />
+cxpacket 35.57%<br />
+resource_semaphore 12.69%<br />
+lck_m_x 7.81%<br />
+oldedb 7.52%<br />
+lck_m_u 6.74%</p>
+<p>Any hint what to do next? We get blocking and low memory alerts. Thanks!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12788#respond' onclick='return addComment.moveForm("div-comment-12788", "12788", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor even depth-2" id="comment-12873">
+				<div id="div-comment-12873" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12873">
+			August 13, 2013 at 1:49 pm</a>		</div>
+
+		<p>Look at the query plans for those queries that have CXPACKET waits and see whether they&#8217;re correct, and the statistics for the tables/indexes being processed are up to date.</p>
+<p>RESOURCE_SEMAPHORE waits: you need to see which plans are waiting for large memory grants as these a likely incorrect plans for some reason. Look in sys.dm_exec_query_memory_grants</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12873#respond' onclick='return addComment.moveForm("div-comment-12873", "12873", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-12822">
+				<div id="div-comment-12822" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://sqltimes.wordpress.com/2013/08/05/sql-server-wait-types-async_network_io/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://sqltimes.wordpress.com']);"  rel='external nofollow' class='url'>Sql Server Wait Types: ASYNC_NETWORK_IO | Playing with database servers...</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-12822">
+			August 5, 2013 at 9:07 am</a>		</div>
+
+		<p>[...] is an interesting wait type. When you run Paul Randall or Glenn Berry&#8217;s query to capture top wait stats you can get a good picture of where is Sql [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=12822#respond' onclick='return addComment.moveForm("div-comment-12822", "12822", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1 parent" id="comment-13090">
+				<div id="div-comment-13090" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/062b3a508b3e4a113b12dcb2655fb072?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Mark</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-13090">
+			September 3, 2013 at 6:15 am</a>		</div>
+
+		<p>Hi Paul,<br />
+This is follow up from a separate email thread i asked regarding ASYNC_NETWORK_IO wait type from one of your newsletters (its almost 2.5 min avg wait time). You asked me to provide the output of the waitstats script, and here it is:</p>
+<p><code><br />
+WaitType	Wait_S	Resource_S	Signal_S	WaitCount	Percentage	AvgWait_S	AvgRes_S	AvgSig_S<br />
+CXPACKET	316520.74	279519.39	37001.35	79265677	44.14	0.0040	0.0035	0.0005<br />
+OLEDB	97706.62	97706.62	0.00	5125028113	13.63	0.0000	0.0000	0.0000<br />
+PAGEIOLATCH_SH	53409.05	53194.78	214.27	10330548	7.45	0.0052	0.0051	0.0000<br />
+BACKUPIO	34581.80	34493.29	88.51	7275243	4.82	0.0048	0.0047	0.0000<br />
+ASYNC_IO_COMPLETION	33451.22	33451.22	0.01	230	4.67	145.4401	145.4401	0.0000<br />
+BACKUPBUFFER	28729.38	28038.97	690.41	12534791	4.01	0.0023	0.0022	0.0001<br />
+LATCH_EX	28245.93	23894.09	4351.84	58297498	3.94	0.0005	0.0004	0.0001<br />
+PAGELATCH_EX	26677.23	4862.10	21815.13	6006699627	3.72	0.0000	0.0000	0.0000<br />
+IO_COMPLETION	19645.24	19612.16	33.08	9283896	2.74	0.0021	0.0021	0.0000<br />
+WRITELOG	15612.81	15429.14	183.66	4666272	2.18	0.0033	0.0033	0.0000<br />
+MSQL_XP	15158.88	15158.88	0.00	2383827	2.11	0.0064	0.0064	0.0000<br />
+PREEMPTIVE_OS_GETPROCADDRESS	15125.38	15125.38	0.00	2383827	2.11	0.0063	0.0063	0.0000</code></p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=13090#respond' onclick='return addComment.moveForm("div-comment-13090", "13090", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment byuser comment-author-paul bypostauthor odd alt depth-2" id="comment-13094">
+				<div id="div-comment-13094" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://0.gravatar.com/avatar/630de809a112f9ee05f86eeb8d7848b7?s=44&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.sqlskills.com/blogs/paul"   rel='external nofollow' class='url'>Paul Randal</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-13094">
+			September 3, 2013 at 7:21 am</a>		</div>
+
+		<p>Check whether you instant file initialization enabled and then I&#8217;d look to see what your parallel plans are doing &#8211; could be parallel table scans that you don&#8217;t want.</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=13094#respond' onclick='return addComment.moveForm("div-comment-13094", "13094", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="comment even thread-odd thread-alt depth-1 parent" id="comment-14059">
+				<div id="div-comment-14059" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/7842c89ce5fc6c9808473f51fea5feac?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Rafael Gonçalez</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-14059">
+			October 3, 2013 at 11:53 am</a>		</div>
+
+		<p>GREAT Post! Thanks a lot! </p>
+<p>but Randal, please.</p>
+<p>I&#8217;m having the PREEMPTIVE_DEBUG wait type in my client. What is it and what can I do ?</p>
+<p>Thanks again!</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=14059#respond' onclick='return addComment.moveForm("div-comment-14059", "14059", "respond", "641")'>Reply</a>		</div>
+				</div>
+		<ul class="children">
+		<li class="comment odd alt depth-2" id="comment-14060">
+				<div id="div-comment-14060" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/7842c89ce5fc6c9808473f51fea5feac?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn">Rafael Gonçalez</cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-14060">
+			October 3, 2013 at 11:55 am</a>		</div>
+
+		<p>sorry, client = Customer*</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=14060#respond' onclick='return addComment.moveForm("div-comment-14060", "14060", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-14956">
+				<div id="div-comment-14956" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.anujvarma.com/iis-asp-net-and-wcf-performance-counters-during-a-stress-test-load-test/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.anujvarma.com']);"  rel='external nofollow' class='url'>IIS, ASP.NET and WCF Performance counters during a stress test (load test) | Anuj Varma, Technical Architect</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-14956">
+			November 4, 2013 at 1:59 pm</a>		</div>
+
+		<p>[...] The three big ones (marked in red) are explained below – for a full understanding of these stats, start here. [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=14956#respond' onclick='return addComment.moveForm("div-comment-14956", "14956", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-16416">
+				<div id="div-comment-16416" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://sqlstudies.com/2013/12/10/t-sql-tuesday-49-wait-for-it/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://sqlstudies.com']);"  rel='external nofollow' class='url'>T-SQL Tuesday #49: Wait for it | SQL Studies</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-16416">
+			December 10, 2013 at 7:43 am</a>		</div>
+
+		<p>[...] lots of great articles by some really smart people out on the interweb. Brent Ozar, Kevin Kline and Paul Randal to name but a few. That being the case I’m not going to discuss wait problems. I’m going to [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=16416#respond' onclick='return addComment.moveForm("div-comment-16416", "16416", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback even thread-even depth-1 comment" id="comment-16417">
+				<div id="div-comment-16417" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.toadworld.com/platforms/sql-server/b/weblog/archive/2013/12/10/t-sql-tuesday-49-wait-for-it.aspx" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.toadworld.com']);"  rel='external nofollow' class='url'>T-SQL Tuesday #49: Wait for it - SQL Server - SQL Server - Toad World</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-16417">
+			December 10, 2013 at 7:46 am</a>		</div>
+
+		<p>[...] lots of great articles by some really smart people out on the interweb. Brent Ozar, Kevin Kline and Paul Randal to name but a few. That being the case I’m not going to discuss wait problems. I’m going to [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=16417#respond' onclick='return addComment.moveForm("div-comment-16417", "16417", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-16821">
+				<div id="div-comment-16821" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://www.dbaservices.com.au/news/how-to-tune-maximum-degree-of-parallelism-maxdop/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.dbaservices.com.au']);"  rel='external nofollow' class='url'>How to Tune Maximum Degree of Parallelism (MAXDOP) | SQL Server Support Services | DBA Services (Australia)</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-16821">
+			December 20, 2013 at 10:43 pm</a>		</div>
+
+		<p>[...] Below are 2 code snippet to retrieve the wait types as a percentage. The first is from Paul Randal; [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=16821#respond' onclick='return addComment.moveForm("div-comment-16821", "16821", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="comment even thread-even depth-1" id="comment-17362">
+				<div id="div-comment-17362" class="comment-body">
+				<div class="comment-author vcard">
+			<img alt='' src='http://1.gravatar.com/avatar/94e61c3fa5c10c85e90ed6a5ba6da906?s=44&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D44&amp;r=G' class='avatar avatar-44 photo' height='44' width='44' />			<cite class="fn"><a href="http://www.bankofamerica.com" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://www.bankofamerica.com']);"  rel='external nofollow' class='url'>Jeremy Brown</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-17362">
+			January 14, 2014 at 10:25 am</a>		</div>
+
+		<p>Hey Paul, I notice that in your article above, you mention the following:</p>
+<p>&#8220;Make sure that if you have a NUMA system that you try setting MAXDOP to the number of cores in a single NUMA node first to see if that helps the problem.&#8221;</p>
+<p>However in 2008 SQL Server (and I believe in the later versions as well) the SQL Scheduler attempts to balance workloads across NUMA but it doesn not ensure parallel threads execute on the SAME NUMA node.  Linchi Shea has an excellent article about that here:</p>
+<p><a href="http://www2.sqlblog.com/blogs/linchi_shea/archive/2012/01/28/no-respect-numa-affinity-meets-query-parallelism.aspx" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://www2.sqlblog.com']);" rel="nofollow">http://www2.sqlblog.com/blogs/linchi_shea/archive/2012/01/28/no-respect-numa-affinity-meets-query-parallelism.aspx</a></p>
+<p>He also goes on to say that it doesn&#8217;t appear to make a huge difference in terms of performance for the remote memory lookups either if parallel threads run on seperate NUMA nodes.</p>
+<p><a href="http://sqlblog.com/blogs/linchi_shea/archive/2012/01/30/performance-impact-the-cost-of-numa-remote-memory-access.aspx" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://sqlblog.com']);" rel="nofollow">http://sqlblog.com/blogs/linchi_shea/archive/2012/01/30/performance-impact-the-cost-of-numa-remote-memory-access.aspx</a></p>
+<p>I&#8217;ve actually found a lot better luck with manually setting processor and IO affinity mask, making sure that no core shares both SQL and IO affinity, and making sure that each NUMA node has the same number of cores dedicated to SQL and IO affinity.  In addition I&#8217;ve turned on resource governor to the default settings making sure that the buffer cache gets trimmed using the 25% default workload rule.</p>
+<p>Then I set up maxdop using the formula widely seen on the internet to divide the number of cores by the number of hyperthreads and never to exceed 8 (again this is just a baseline to get started with testing)</p>
+<p>SELECT CASE<br />
+WHEN cpu_count / hyperthread_ratio &gt; 8 then 8<br />
+ELSE cpu_count / hyperthread_ratio<br />
+END AS &#8216;Optimal Maxdop Setting&#8217;<br />
+FROM sys.dm_os_sys_info</p>
+<p>I also have set my cost threshold for parallelism to 30 (works best for my workload).</p>
+<p>Finally, and a lot of people may not realize this, one thing to really tune your parallelism on your database you really have to watch are your statistics.  As reccomended, its always a good idea to have auto create and auto update stats turned on (I do mine async).  However, many may not realize that auto created stats may be duplicates at the column level.  This not only adds time to your maintenance process to keep all those stats updated, but it adds massive time to query processing and parallelism.  The optimizer has to work double time to process through those stat objects with slightly different heuristics and certainly this adds to overhead in CXPacket wait.</p>
+<p>Matt Bowler has an awesome little script that will go down to the column level and find all the automatically created stats objects which are duplicates of other stats on the table.  Using this, you can actually safely drop those stats at the beginning of your maintenance cycle (with testing of course) but doing so really helps to keep the optimizer running optimally and cut down on those CXPacket waits.</p>
+<p><a href="http://mattsql.wordpress.com/2013/08/28/duplicate-statistics/" onclick="javascript:_gaq.push(['_trackEvent','outbound-comment','http://mattsql.wordpress.com']);" rel="nofollow">http://mattsql.wordpress.com/2013/08/28/duplicate-statistics/</a></p>
+<p>Finally, if you have partitioned tables, another help is to make sure you set the lock escalation on those partitioned tables to AUTO (believe it or not AUTO is not the default).  A large table locked for scan can invoke a parallel scan against the clustered index unneccesarily, especially if a partition scan is only required.  By setting to AUTO, you allow the optimizer to make intelligent decisions about parallelism.  In our environment, I actually create filtered stats down to each partition by the partition key (since most of my tables are read once the data is inserted).  This really helps with performance as well.</p>
+<p>Of course if you have uneven partitions, and there are fewer than 10,000 rows in that partition, the filtered stat will actually not contain any values.  In this case, SQL always does a scan because frankly, its faster.</p>
+<p>Feel free to pick this apart (or provide clarity) but I think this might be helpful to someone&#8230; I plan on writing a good article about all my findings (and why at some point you should consider PDW 2012 for certain workloads).</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=17362#respond' onclick='return addComment.moveForm("div-comment-17362", "17362", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+		<li class="pingback odd alt thread-odd thread-alt depth-1 comment" id="comment-17429">
+				<div id="div-comment-17429" class="comment-body">
+				<div class="comment-author vcard">
+						<cite class="fn"><a href="http://maulinthaker.wordpress.com/2014/01/24/performance-good-site-paul-randal/" onclick="javascript:_gaq.push(['_trackEvent','outbound-commentauthor','http://maulinthaker.wordpress.com']);"  rel='external nofollow' class='url'>Performance good site- Paul Randal | MaulinThaker</a></cite> <span class="says">says:</span>		</div>
+		
+		<div class="comment-meta commentmetadata"><a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#comment-17429">
+			January 23, 2014 at 7:11 pm</a>		</div>
+
+		<p>[...] <a href="http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/"  rel="nofollow">http://www.sqlskills.com/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/</a> [...]</p>
+
+		<div class="reply">
+			<a class='comment-reply-link' href='/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/?replytocom=17429#respond' onclick='return addComment.moveForm("div-comment-17429", "17429", "respond", "641")'>Reply</a>		</div>
+				</div>
+		</li><!-- #comment-## -->
+</ol><!-- .commentlist --><div class="comments-navigation"><div class="alignleft"></div></div>								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/blogs/paul/wait-statistics-or-please-tell-me-where-it-hurts/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://www.sqlskills.com/blogs/paul/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot; rel=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='641' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="80c77b2f1a" /></p>					</form>
+							</div><!-- #respond -->
+			        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                jQuery('#commentform').submit(function () {
+                    _gaq.push(
+                            ['_setAccount', 'UA-5975860-1'],
+                            ['_trackEvent', 'comment', 'submit']
+                    );
+                });
+            });
+        </script>
+		</div><!-- #comments --></div></div></div></div></div><!-- .loop-content --></div><!-- .loop -->
+</div><!-- .block-content -->
+</div><!-- #block-12 -->
+</section><!-- .column --><section class="column column-2 grid-left-0 grid-width-6">
+<aside id="block-13" class="nocontent block block-type-widget-area block-fluid-height responsive-block-hiding-device-smartphones"><div class="block-content"><ul class="widget-area"><li id="social-widget-3" class="widget Social_Widget">
+<span class="widget-title">Follow Us!</span>
+<div class="socialmedia-buttons smw_left"><a href="http://www.twitter.com/paulrandal" rel="nofollow" target="_blank"><img width="32" height="32" src="http://www.sqlskills.com/blogs/paul/wp-content/plugins/social-media-widget/images/default/32/twitter.png" alt="Follow Us on Twitter" title="Follow Us on Twitter" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade" /></a><a href="http://www.linkedin.com/in/paulrandal/" rel="nofollow" target="_blank"><img width="32" height="32" src="http://www.sqlskills.com/blogs/paul/wp-content/plugins/social-media-widget/images/default/32/linkedin.png" alt="Follow Us on LinkedIn" title="Follow Us on LinkedIn" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade" /></a><a href="http://www.sqlskills.com/blogs/paul/feed/rss2/" rel="nofollow" target="_blank"><img width="32" height="32" src="http://www.sqlskills.com/blogs/paul/wp-content/plugins/social-media-widget/images/default/32/rss.png" alt="Follow Us on RSS" title="Follow Us on RSS" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade" /></a><a href="mailto:paul@sqlskills.com?subject=Email%20from%20your%20blog" rel="nofollow" target="_blank"><img width="32" height="32" src="http://www.sqlskills.com/blogs/paul/wp-content/plugins/social-media-widget/images/default/32/email.png" alt="Send Me an E-mail" title="Send Me an E-mail" style="opacity: 0.8; -moz-opacity: 0.8;" class="fade" /></a> </div></li><!-- .widget -->
+		<li id="recent-posts-3" class="widget widget_recent_entries">
+		<span class="widget-title">Recent Posts</span>
+		<ul>
+					<li>
+				<a href="http://www.sqlskills.com/blogs/paul/spring-sqlintersection-conference-in-april-in-orlando/">Spring SQLintersection conference in April in Orlando</a>
+						</li>
+					<li>
+				<a href="http://www.sqlskills.com/blogs/paul/survey-restoring-and-rebuilding-master/">Survey: restoring and rebuilding master</a>
+						</li>
+					<li>
+				<a href="http://www.sqlskills.com/blogs/paul/2013-review-the-year-by-the-numbers/">2013 review: the year by the numbers</a>
+						</li>
+					<li>
+				<a href="http://www.sqlskills.com/blogs/paul/2013-the-year-in-books/">2013: the year in books</a>
+						</li>
+					<li>
+				<a href="http://www.sqlskills.com/blogs/paul/sqlskills-holiday-gift-to-you-all-2012-insider-videos/">SQLskills holiday gift to you: all 2012 Insider videos</a>
+						</li>
+				</ul>
+		</li><!-- .widget -->
+<li id="categories-3" class="widget widget_categories">
+<span class="widget-title">Categories</span>
+		<ul>
+	<li class="cat-item cat-item-12"><a href="http://www.sqlskills.com/blogs/paul/category/auditing/" title="View all posts filed under Auditing">Auditing</a> (6)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://www.sqlskills.com/blogs/paul/category/backuprestore/" title="View all posts filed under Backup/Restore">Backup/Restore</a> (77)
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.sqlskills.com/blogs/paul/category/bad-advice/" title="View all posts filed under Bad Advice">Bad Advice</a> (22)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://www.sqlskills.com/blogs/paul/category/benchmarking/" title="View all posts filed under Benchmarking">Benchmarking</a> (17)
+</li>
+	<li class="cat-item cat-item-17"><a href="http://www.sqlskills.com/blogs/paul/category/books/" title="View all posts filed under Books">Books</a> (11)
+</li>
+	<li class="cat-item cat-item-18"><a href="http://www.sqlskills.com/blogs/paul/category/buffer-pool/" title="View all posts filed under Buffer Pool">Buffer Pool</a> (4)
+</li>
+	<li class="cat-item cat-item-19"><a href="http://www.sqlskills.com/blogs/paul/category/bugfixes/" title="View all posts filed under Bugfixes">Bugfixes</a> (14)
+</li>
+	<li class="cat-item cat-item-20"><a href="http://www.sqlskills.com/blogs/paul/category/career/" title="View all posts filed under Career">Career</a> (11)
+</li>
+	<li class="cat-item cat-item-21"><a href="http://www.sqlskills.com/blogs/paul/category/change-data-capture/" title="View all posts filed under Change Data Capture">Change Data Capture</a> (8)
+</li>
+	<li class="cat-item cat-item-22"><a href="http://www.sqlskills.com/blogs/paul/category/checkdb-from-every-angle/" title="View all posts filed under CHECKDB From Every Angle">CHECKDB From Every Angle</a> (53)
+</li>
+	<li class="cat-item cat-item-23"><a href="http://www.sqlskills.com/blogs/paul/category/checkpoint/" title="View all posts filed under Checkpoint">Checkpoint</a> (5)
+</li>
+	<li class="cat-item cat-item-24"><a href="http://www.sqlskills.com/blogs/paul/category/classes/" title="View all posts filed under Classes">Classes</a> (64)
+</li>
+	<li class="cat-item cat-item-25"><a href="http://www.sqlskills.com/blogs/paul/category/compression/" title="View all posts filed under Compression">Compression</a> (7)
+</li>
+	<li class="cat-item cat-item-26"><a href="http://www.sqlskills.com/blogs/paul/category/conference-questions-pot-pourri/" title="View all posts filed under Conference Questions Pot-Pourri">Conference Questions Pot-Pourri</a> (10)
+</li>
+	<li class="cat-item cat-item-27"><a href="http://www.sqlskills.com/blogs/paul/category/conferences/" title="View all posts filed under Conferences">Conferences</a> (57)
+</li>
+	<li class="cat-item cat-item-28"><a href="http://www.sqlskills.com/blogs/paul/category/constraints/" title="View all posts filed under Constraints">Constraints</a> (4)
+</li>
+	<li class="cat-item cat-item-29"><a href="http://www.sqlskills.com/blogs/paul/category/consulting/" title="View all posts filed under Consulting">Consulting</a> (12)
+</li>
+	<li class="cat-item cat-item-30"><a href="http://www.sqlskills.com/blogs/paul/category/corruption/" title="View all posts filed under Corruption">Corruption</a> (65)
+</li>
+	<li class="cat-item cat-item-31"><a href="http://www.sqlskills.com/blogs/paul/category/database-maintenance/" title="View all posts filed under Database Maintenance">Database Maintenance</a> (126)
+</li>
+	<li class="cat-item cat-item-32"><a href="http://www.sqlskills.com/blogs/paul/category/database-mirroring/" title="View all posts filed under Database Mirroring">Database Mirroring</a> (42)
+</li>
+	<li class="cat-item cat-item-33"><a href="http://www.sqlskills.com/blogs/paul/category/database-snapshots/" title="View all posts filed under Database Snapshots">Database Snapshots</a> (17)
+</li>
+	<li class="cat-item cat-item-34"><a href="http://www.sqlskills.com/blogs/paul/category/dbcc/" title="View all posts filed under DBCC">DBCC</a> (55)
+</li>
+	<li class="cat-item cat-item-35"><a href="http://www.sqlskills.com/blogs/paul/category/disaster-recovery/" title="View all posts filed under Disaster Recovery">Disaster Recovery</a> (82)
+</li>
+	<li class="cat-item cat-item-36"><a href="http://www.sqlskills.com/blogs/paul/category/electronics/" title="View all posts filed under Electronics">Electronics</a> (2)
+</li>
+	<li class="cat-item cat-item-37"><a href="http://www.sqlskills.com/blogs/paul/category/encryption/" title="View all posts filed under Encryption">Encryption</a> (6)
+</li>
+	<li class="cat-item cat-item-38"><a href="http://www.sqlskills.com/blogs/paul/category/example-scripts/" title="View all posts filed under Example Scripts">Example Scripts</a> (64)
+</li>
+	<li class="cat-item cat-item-39"><a href="http://www.sqlskills.com/blogs/paul/category/extended-events/" title="View all posts filed under Extended Events">Extended Events</a> (8)
+</li>
+	<li class="cat-item cat-item-40"><a href="http://www.sqlskills.com/blogs/paul/category/failover-clusters/" title="View all posts filed under Failover Clusters">Failover Clusters</a> (4)
+</li>
+	<li class="cat-item cat-item-41"><a href="http://www.sqlskills.com/blogs/paul/category/filestream/" title="View all posts filed under FILESTREAM">FILESTREAM</a> (17)
+</li>
+	<li class="cat-item cat-item-42"><a href="http://www.sqlskills.com/blogs/paul/category/fragmentation/" title="View all posts filed under Fragmentation">Fragmentation</a> (17)
+</li>
+	<li class="cat-item cat-item-43"><a href="http://www.sqlskills.com/blogs/paul/category/fusion-io/" title="View all posts filed under Fusion-io">Fusion-io</a> (3)
+</li>
+	<li class="cat-item cat-item-44"><a href="http://www.sqlskills.com/blogs/paul/category/general/" title="View all posts filed under General">General</a> (98)
+</li>
+	<li class="cat-item cat-item-45"><a href="http://www.sqlskills.com/blogs/paul/category/hardware/" title="View all posts filed under Hardware">Hardware</a> (13)
+</li>
+	<li class="cat-item cat-item-46"><a href="http://www.sqlskills.com/blogs/paul/category/high-availability/" title="View all posts filed under High Availability">High Availability</a> (31)
+</li>
+	<li class="cat-item cat-item-47"><a href="http://www.sqlskills.com/blogs/paul/category/indexes-from-every-angle/" title="View all posts filed under Indexes From Every Angle">Indexes From Every Angle</a> (45)
+</li>
+	<li class="cat-item cat-item-48"><a href="http://www.sqlskills.com/blogs/paul/category/inside-the-storage-engine/" title="View all posts filed under Inside the Storage Engine">Inside the Storage Engine</a> (53)
+</li>
+	<li class="cat-item cat-item-49"><a href="http://www.sqlskills.com/blogs/paul/category/install-setup/" title="View all posts filed under Install / Setup">Install / Setup</a> (4)
+</li>
+	<li class="cat-item cat-item-50"><a href="http://www.sqlskills.com/blogs/paul/category/instant-initialization/" title="View all posts filed under Instant Initialization">Instant Initialization</a> (6)
+</li>
+	<li class="cat-item cat-item-51"><a href="http://www.sqlskills.com/blogs/paul/category/interviews/" title="View all posts filed under Interviews">Interviews</a> (21)
+</li>
+	<li class="cat-item cat-item-52"><a href="http://www.sqlskills.com/blogs/paul/category/involuntary-dba/" title="View all posts filed under Involuntary DBA">Involuntary DBA</a> (66)
+</li>
+	<li class="cat-item cat-item-53"><a href="http://www.sqlskills.com/blogs/paul/category/io-subsystems/" title="View all posts filed under IO Subsystems">IO Subsystems</a> (29)
+</li>
+	<li class="cat-item cat-item-54"><a href="http://www.sqlskills.com/blogs/paul/category/jokes/" title="View all posts filed under Jokes">Jokes</a> (8)
+</li>
+	<li class="cat-item cat-item-55"><a href="http://www.sqlskills.com/blogs/paul/category/latches/" title="View all posts filed under Latches">Latches</a> (5)
+</li>
+	<li class="cat-item cat-item-56"><a href="http://www.sqlskills.com/blogs/paul/category/lob-data/" title="View all posts filed under LOB data">LOB data</a> (7)
+</li>
+	<li class="cat-item cat-item-57"><a href="http://www.sqlskills.com/blogs/paul/category/locking/" title="View all posts filed under Locking">Locking</a> (13)
+</li>
+	<li class="cat-item cat-item-58"><a href="http://www.sqlskills.com/blogs/paul/category/log-shipping/" title="View all posts filed under Log Shipping">Log Shipping</a> (9)
+</li>
+	<li class="cat-item cat-item-59"><a href="http://www.sqlskills.com/blogs/paul/category/mcm/" title="View all posts filed under MCM">MCM</a> (6)
+</li>
+	<li class="cat-item cat-item-60"><a href="http://www.sqlskills.com/blogs/paul/category/memory/" title="View all posts filed under Memory">Memory</a> (10)
+</li>
+	<li class="cat-item cat-item-61"><a href="http://www.sqlskills.com/blogs/paul/category/misconceptions/" title="View all posts filed under Misconceptions">Misconceptions</a> (47)
+</li>
+	<li class="cat-item cat-item-62"><a href="http://www.sqlskills.com/blogs/paul/category/on-disk-structures/" title="View all posts filed under On-Disk Structures">On-Disk Structures</a> (49)
+</li>
+	<li class="cat-item cat-item-63"><a href="http://www.sqlskills.com/blogs/paul/category/page-checksums/" title="View all posts filed under Page Checksums">Page Checksums</a> (14)
+</li>
+	<li class="cat-item cat-item-64"><a href="http://www.sqlskills.com/blogs/paul/category/partial-database-availability/" title="View all posts filed under Partial Database Availability">Partial Database Availability</a> (6)
+</li>
+	<li class="cat-item cat-item-65"><a href="http://www.sqlskills.com/blogs/paul/category/partitioning/" title="View all posts filed under Partitioning">Partitioning</a> (17)
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.sqlskills.com/blogs/paul/category/performance-tuning/" title="View all posts filed under Performance Tuning">Performance Tuning</a> (119)
+</li>
+	<li class="cat-item cat-item-67"><a href="http://www.sqlskills.com/blogs/paul/category/personal/" title="View all posts filed under Personal">Personal</a> (55)
+</li>
+	<li class="cat-item cat-item-68"><a href="http://www.sqlskills.com/blogs/paul/category/photography/" title="View all posts filed under Photography">Photography</a> (12)
+</li>
+	<li class="cat-item cat-item-69"><a href="http://www.sqlskills.com/blogs/paul/category/pluralsight/" title="View all posts filed under Pluralsight">Pluralsight</a> (8)
+</li>
+	<li class="cat-item cat-item-70"><a href="http://www.sqlskills.com/blogs/paul/category/policy-based-management/" title="View all posts filed under Policy Based Management">Policy Based Management</a> (4)
+</li>
+	<li class="cat-item cat-item-71"><a href="http://www.sqlskills.com/blogs/paul/category/products/" title="View all posts filed under Products">Products</a> (2)
+</li>
+	<li class="cat-item cat-item-72"><a href="http://www.sqlskills.com/blogs/paul/category/query-processor/" title="View all posts filed under Query Processor">Query Processor</a> (3)
+</li>
+	<li class="cat-item cat-item-73"><a href="http://www.sqlskills.com/blogs/paul/category/query-tuning/" title="View all posts filed under Query Tuning">Query Tuning</a> (7)
+</li>
+	<li class="cat-item cat-item-74"><a href="http://www.sqlskills.com/blogs/paul/category/repair/" title="View all posts filed under Repair">Repair</a> (19)
+</li>
+	<li class="cat-item cat-item-75"><a href="http://www.sqlskills.com/blogs/paul/category/replication/" title="View all posts filed under Replication">Replication</a> (11)
+</li>
+	<li class="cat-item cat-item-76"><a href="http://www.sqlskills.com/blogs/paul/category/resource-governor/" title="View all posts filed under Resource Governor">Resource Governor</a> (7)
+</li>
+	<li class="cat-item cat-item-77"><a href="http://www.sqlskills.com/blogs/paul/category/scotland/" title="View all posts filed under Scotland">Scotland</a> (3)
+</li>
+	<li class="cat-item cat-item-78"><a href="http://www.sqlskills.com/blogs/paul/category/search-engine-q-and-a/" title="View all posts filed under Search Engine Q and A">Search Engine Q and A</a> (29)
+</li>
+	<li class="cat-item cat-item-79"><a href="http://www.sqlskills.com/blogs/paul/category/security/" title="View all posts filed under Security">Security</a> (7)
+</li>
+	<li class="cat-item cat-item-80"><a href="http://www.sqlskills.com/blogs/paul/category/sharepoint/" title="View all posts filed under Sharepoint">Sharepoint</a> (8)
+</li>
+	<li class="cat-item cat-item-81"><a href="http://www.sqlskills.com/blogs/paul/category/shrink/" title="View all posts filed under Shrink">Shrink</a> (13)
+</li>
+	<li class="cat-item cat-item-82"><a href="http://www.sqlskills.com/blogs/paul/category/snapshot-isolation/" title="View all posts filed under Snapshot Isolation">Snapshot Isolation</a> (5)
+</li>
+	<li class="cat-item cat-item-83"><a href="http://www.sqlskills.com/blogs/paul/category/sparse-columns/" title="View all posts filed under Sparse Columns">Sparse Columns</a> (3)
+</li>
+	<li class="cat-item cat-item-84"><a href="http://www.sqlskills.com/blogs/paul/category/spinlocks/" title="View all posts filed under Spinlocks">Spinlocks</a> (5)
+</li>
+	<li class="cat-item cat-item-85"><a href="http://www.sqlskills.com/blogs/paul/category/sql-agent/" title="View all posts filed under SQL Agent">SQL Agent</a> (7)
+</li>
+	<li class="cat-item cat-item-86"><a href="http://www.sqlskills.com/blogs/paul/category/sql-server-2008/" title="View all posts filed under SQL Server 2008">SQL Server 2008</a> (89)
+</li>
+	<li class="cat-item cat-item-87"><a href="http://www.sqlskills.com/blogs/paul/category/sql-server-magazine/" title="View all posts filed under SQL Server Magazine">SQL Server Magazine</a> (3)
+</li>
+	<li class="cat-item cat-item-89"><a href="http://www.sqlskills.com/blogs/paul/category/ssds/" title="View all posts filed under SSDs">SSDs</a> (10)
+</li>
+	<li class="cat-item cat-item-90"><a href="http://www.sqlskills.com/blogs/paul/category/statistics/" title="View all posts filed under Statistics">Statistics</a> (5)
+</li>
+	<li class="cat-item cat-item-91"><a href="http://www.sqlskills.com/blogs/paul/category/surveys/" title="View all posts filed under Surveys">Surveys</a> (103)
+</li>
+	<li class="cat-item cat-item-99"><a href="http://www.sqlskills.com/blogs/paul/category/t-sql-tuesday/" title="View all posts filed under T-SQL Tuesday">T-SQL Tuesday</a> (6)
+</li>
+	<li class="cat-item cat-item-92"><a href="http://www.sqlskills.com/blogs/paul/category/technet-magazine/" title="View all posts filed under TechNet Magazine">TechNet Magazine</a> (28)
+</li>
+	<li class="cat-item cat-item-93"><a href="http://www.sqlskills.com/blogs/paul/category/tempdb/" title="View all posts filed under tempdb">tempdb</a> (13)
+</li>
+	<li class="cat-item cat-item-94"><a href="http://www.sqlskills.com/blogs/paul/category/tgif/" title="View all posts filed under TGIF">TGIF</a> (4)
+</li>
+	<li class="cat-item cat-item-95"><a href="http://www.sqlskills.com/blogs/paul/category/tools/" title="View all posts filed under Tools">Tools</a> (28)
+</li>
+	<li class="cat-item cat-item-96"><a href="http://www.sqlskills.com/blogs/paul/category/trace-flags/" title="View all posts filed under Trace Flags">Trace Flags</a> (13)
+</li>
+	<li class="cat-item cat-item-97"><a href="http://www.sqlskills.com/blogs/paul/category/training/" title="View all posts filed under Training">Training</a> (25)
+</li>
+	<li class="cat-item cat-item-98"><a href="http://www.sqlskills.com/blogs/paul/category/transaction-log/" title="View all posts filed under Transaction Log">Transaction Log</a> (68)
+</li>
+	<li class="cat-item cat-item-1"><a href="http://www.sqlskills.com/blogs/paul/category/uncategorized/" title="View all posts filed under Uncategorized">Uncategorized</a> (11)
+</li>
+	<li class="cat-item cat-item-100"><a href="http://www.sqlskills.com/blogs/paul/category/undocumented-commands/" title="View all posts filed under Undocumented commands">Undocumented commands</a> (26)
+</li>
+	<li class="cat-item cat-item-101"><a href="http://www.sqlskills.com/blogs/paul/category/wait-stats/" title="View all posts filed under Wait Stats">Wait Stats</a> (11)
+</li>
+	<li class="cat-item cat-item-103"><a href="http://www.sqlskills.com/blogs/paul/category/where-in-the-world-are-paul-and-kimberly/" title="View all posts filed under Where In The World Are Paul And Kimberly">Where In The World Are Paul And Kimberly</a> (40)
+</li>
+	<li class="cat-item cat-item-104"><a href="http://www.sqlskills.com/blogs/paul/category/whitepapers/" title="View all posts filed under Whitepapers">Whitepapers</a> (11)
+</li>
+		</ul>
+</li><!-- .widget -->
+<li id="linkcat-2" class="widget widget_links">
+<span class="widget-title">Our Blogs</span>
+
+	<ul class='xoxo blogroll'>
+<li><a href="http://www.sqlskills.com/blogs/paul/" title="Paul Randal &#8211; In Recovery&#8230;">Paul S. Randal</a></li>
+<li><a href="http://www.sqlskills.com/blogs/kimberly/" title="Kimberly L. Tripp | Improving my SQL skills through your questions!">Kimberly L. Tripp</a></li>
+<li><a href="http://www.sqlskills.com/blogs/jonathan/" title="Jonathan Kehayias | The Rambling DBA">Jonathan Kehayias</a></li>
+<li><a href="http://www.sqlskills.com/blogs/joe/" title="Joe Sack | If obsession with performance is wrong, I don&#8217;t want to be right!">Joe Sack</a></li>
+<li><a href="http://www.sqlskills.com/blogs/glenn/" title="Semi-random musings about SQL performance">Glenn Berry</a></li>
+<li><a href="http://www.sqlskills.com/blogs/erin/" title="The SQL Sequel">Erin Stellato</a></li>
+
+	</ul>
+</li><!-- .widget -->
+
+<li id="archives-3" class="widget widget_archive">
+<span class="widget-title">Archives</span>
+		<ul>
+			<li><a href='http://www.sqlskills.com/blogs/paul/2014/01/'>January 2014</a>&nbsp;(2)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/12/'>December 2013</a>&nbsp;(4)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/11/'>November 2013</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/10/'>October 2013</a>&nbsp;(1)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/09/'>September 2013</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/08/'>August 2013</a>&nbsp;(4)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/07/'>July 2013</a>&nbsp;(3)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/06/'>June 2013</a>&nbsp;(10)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/05/'>May 2013</a>&nbsp;(9)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/04/'>April 2013</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/03/'>March 2013</a>&nbsp;(3)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/02/'>February 2013</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2013/01/'>January 2013</a>&nbsp;(4)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/12/'>December 2012</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/11/'>November 2012</a>&nbsp;(5)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/10/'>October 2012</a>&nbsp;(3)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/09/'>September 2012</a>&nbsp;(5)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/08/'>August 2012</a>&nbsp;(4)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/07/'>July 2012</a>&nbsp;(1)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/06/'>June 2012</a>&nbsp;(2)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/05/'>May 2012</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/04/'>April 2012</a>&nbsp;(10)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/03/'>March 2012</a>&nbsp;(8)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/02/'>February 2012</a>&nbsp;(4)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2012/01/'>January 2012</a>&nbsp;(2)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/12/'>December 2011</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/11/'>November 2011</a>&nbsp;(5)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/10/'>October 2011</a>&nbsp;(3)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/09/'>September 2011</a>&nbsp;(5)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/08/'>August 2011</a>&nbsp;(8)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/07/'>July 2011</a>&nbsp;(12)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/06/'>June 2011</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/05/'>May 2011</a>&nbsp;(10)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/04/'>April 2011</a>&nbsp;(12)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/03/'>March 2011</a>&nbsp;(16)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/02/'>February 2011</a>&nbsp;(14)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2011/01/'>January 2011</a>&nbsp;(17)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/12/'>December 2010</a>&nbsp;(8)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/11/'>November 2010</a>&nbsp;(10)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/10/'>October 2010</a>&nbsp;(9)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/09/'>September 2010</a>&nbsp;(1)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/08/'>August 2010</a>&nbsp;(5)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/07/'>July 2010</a>&nbsp;(8)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/06/'>June 2010</a>&nbsp;(9)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/05/'>May 2010</a>&nbsp;(11)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/04/'>April 2010</a>&nbsp;(38)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/03/'>March 2010</a>&nbsp;(9)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/02/'>February 2010</a>&nbsp;(4)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2010/01/'>January 2010</a>&nbsp;(13)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/12/'>December 2009</a>&nbsp;(9)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/11/'>November 2009</a>&nbsp;(6)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/10/'>October 2009</a>&nbsp;(12)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/09/'>September 2009</a>&nbsp;(12)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/08/'>August 2009</a>&nbsp;(15)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/07/'>July 2009</a>&nbsp;(6)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/06/'>June 2009</a>&nbsp;(21)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/05/'>May 2009</a>&nbsp;(38)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/04/'>April 2009</a>&nbsp;(26)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/03/'>March 2009</a>&nbsp;(40)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/02/'>February 2009</a>&nbsp;(12)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2009/01/'>January 2009</a>&nbsp;(8)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/12/'>December 2008</a>&nbsp;(6)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/11/'>November 2008</a>&nbsp;(16)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/10/'>October 2008</a>&nbsp;(11)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/09/'>September 2008</a>&nbsp;(13)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/08/'>August 2008</a>&nbsp;(23)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/07/'>July 2008</a>&nbsp;(7)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/06/'>June 2008</a>&nbsp;(6)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/05/'>May 2008</a>&nbsp;(5)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/04/'>April 2008</a>&nbsp;(9)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/03/'>March 2008</a>&nbsp;(15)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/02/'>February 2008</a>&nbsp;(11)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2008/01/'>January 2008</a>&nbsp;(22)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2007/12/'>December 2007</a>&nbsp;(8)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2007/11/'>November 2007</a>&nbsp;(20)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2007/10/'>October 2007</a>&nbsp;(37)</li>
+	<li><a href='http://www.sqlskills.com/blogs/paul/2007/09/'>September 2007</a>&nbsp;(14)</li>
+		</ul>
+</li><!-- .widget -->
+</ul></div><!-- .block-content -->
+</aside><!-- #block-13 -->
+</section><!-- .column --></section><!-- .row -->
+
+<section class="row row-3">
+<section class="column column-1 grid-left-0 grid-width-24">
+<div id="block-15" class="nocontent block block-type-utility-block block-fluid-height responsive-block-hiding-device-smartphones"><div class="block-content">			<div id="utility-block-15" class="utilities-wrapper clearfixhas-menu">
+														<h1 class="logo-utility utility">
+				<a href="http://www.sqlskills.com/blogs/paul" rel="nofollow" class="logo image-logo">
+			<img src="http://www.sqlskills.com/blogs/paul/wp-content/uploads/2013/01/headway-imported-image9.jpg" alt="Paul S. Randal" />
+				</a>
+			</h1>
+			<nav role="navigation" class="nav-horizontal nav-align-left menu-utility utility"><div class="superfish clearfix"><ul id="menu-footer-menu-2" class="menu superfish clearfix"><li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-360"><a href="http://www.sqlskills.com" >SQLskills Home</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-361"><a href="http://www.sqlskills.com/blogs/paul" >Blog Home</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-364"><a href="http://www.sqlskills.com/sql-server-training/" >Training</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-365"><a href="http://www.sqlskills.com/services/" >Services</a></li>
+</ul></div></nav><!-- .nav-horizontal nav-align-left --><a class="totop-utility utility" href="#">Back to Top</a><div class="copyright-utility utility">Copyright &copy; 2014  SQLskills.com</div><ul class="social-utility utility"><li class="first"><a href="http://www.sqlskills.com/blogs/paul/wp-admin"  title="Site-Admin" >Site-Admin</a></li></ul>			</div>
+			</div><!-- .block-content -->
+</div><!-- #block-15 -->
+</section><!-- .column --></section><!-- .row -->
+
+</div><!-- .grid-container -->
+
+</div><!-- .wrapper -->
+
+<!-- Powered by WPtouch: 3.1.5 --><script type='text/javascript' src='http://www.sqlskills.com/blogs/paul/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js'></script>
+<script type='text/javascript' src='http://www.sqlskills.com/blogs/paul/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushSql.js'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://www.sqlskills.com/blogs/paul/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.83c";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "http://www.sqlskills.com/blogs/paul/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.83c";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+
+
+<div class="sqlskills-footer"></div></div><!-- #whitewrap -->
+
+
+
+</body>
+
+
+</html>
+<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+
+Page Caching using wincache
+Database Caching 18/39 queries in 0.026 seconds using wincache
+Object Caching 4483/4586 objects using wincache
+
+ Served from: www.sqlskills.com @ 2014-01-27 14:22:44 by W3 Total Cache -->

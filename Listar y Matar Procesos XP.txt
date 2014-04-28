@@ -1,0 +1,23 @@
+C:\>tasklist /svc /S servername/U username /P password
+
+this will list the processes
+
+in my case these were the processes
+
+Image Name                   PID Services
+========================= ====== =============================================
+System Idle Process            0 N/A
+System                         4 N/A
+smss.exe                     308 N/A
+csrss.exe                    356 N/A
+winlogon.exe                 380 N/A
+services.exe                 428 Eventlog, PlugPlay
+lsass.exe                    440 HTTPFilter, Netlogon, NtLmSsp, PolicyAgent,
+                                 ProtectedStorage, SamSs
+svchost.exe                  696 DcomLaunch
+svchost.exe                  752 RpcSs
+svchost.exe                  820 Dhcp, Dnscache
+svchost.exe                  840 LmHosts, W32Time
+
+
+C:\>pskill -t \\servername -u username -p password 5304

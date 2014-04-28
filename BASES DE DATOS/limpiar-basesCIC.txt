@@ -1,0 +1,7 @@
+CIC has settings which can be used to enable automatic purging of your database. These settings are located in several places within Interaction Administrator.
+
+For Call Detail records and Agent/Workgroup statistics and most other logs, go to the Report Logs container under System Configuration. Each individual log has a Retention tab which sets how long records are to be saved in the database. By default it is 400 days.
+
+The tables you mention below look like Tracker tables, which are configured in a different container. Go to the Interaction Tracker container in Interaction Administrator and open Configuration. There is a Data Purging tab where you have to enable data purging (disabled by default) and set how many days of data you want to keep.
+
+Interaction Recorder Configuration also has a Data Purging tab where you would have to enable data purging (disabled by default) and choose how many days of data to save.

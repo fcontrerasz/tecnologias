@@ -1,0 +1,20 @@
+agregando:
+
+<BODY oncontextmenu="return false" onselectstart="return false" ondragstart="return false"> 
+</body>
+
+
+oncontextmenu = Click derecho. 
+onselectstart = Seleccionar. 
+ondragstart = Arrastrar. 
+
+Bueno aqui el codigo con alerta para bloquear Ctrl: 
+Cita:
+<script language="JavaScript"> 
+function checkKey(evt) { 
+if (evt.ctrlKey) 
+alert("Alerta que se le dara al usuario al tocar la tecla Ctrl en nuestra web"); 
+} 
+</script>
+
+ 

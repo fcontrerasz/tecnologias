@@ -1,0 +1,11 @@
+INTX_PARTICIPANT:
+Appears to hold a list of all the servers that are reporting or has Interaction Recorder connected to the I3 database
+
+INTXANNOTATION:
+This table belongs to Interaction Recorder. When using intercom chat and you leave a note it is written into this table.
+
+INTXSEGMENT:
+Appears to hold the segment information for Interaction Recorder. In other words when you return a query and it shows multiple segments where you can expand it out to see the 2 parties, this table drives that.
+
+INTXTYPE:
+Appears to hold the names for the different types of interactions that can be recorded by Interaction Recorder.

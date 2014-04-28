@@ -1,0 +1,69 @@
+Una práctica habitual en la administración de SQL Server, es tener que reducir una base de datos, ya sea por problemas de configuración del modo de registro y copias de seguridad de LOG (ej: Modo de Registro Completo, 
+sin hacer Backup LOG), por haber eliminado información de la base de datos, etc. 
+En este capítulo se explica cómo reducir una base de datos en SQL Server y qué problemas se pueden producir al intentar reducir una base de datos. 
+Se explican los comandos DBCC SHRINKDATABASE y DBCC SHRINKFILE, los ficheros de log virtuales y el comando DBCC LOGINFO(), cómo ver el espacio usado del LOG con DBCC SQLPERF(LOGSPACE), 
+cómo truncar el LOG de una base de datos con la sentencia BACKUP LOG WITH TRUNCATE_ONLY, etc.
+
+En ocasiones es necesario reducir una base de datos, debido a que por algún motivo ha aumentado su tamaño. Lo más normal, es que sea producido por algún problema con el LOG de transacciones 
+(ej: Modo de Recuperación o Modo de Registro en Completo - FULL - y ausencia de backups del LOG), de tal modo que tengamos un fichero de LOG enorme lleno de transacciones que no deseamos para nada.
+
+¿Cómo hacer para vaciar y reducir la base de datos?.
+
+Si antes de empezar deseamos conocer el tamaño de nuestra base de datos, podemos utilizar el comando sp_spaceused. Sin embargo, en SQL Server 2000, o en SQL Server 2005 con una base de datos recién migrada desde SQL Server 2000,
+interesa ejecutar el comando DBCC UPDATEUSAGE(0) para garantizar que el valor devuelto por sp_spaceused es el correcto (puede comprobarse en la ayuda los distintos parámetros de DBCC UPDATEUSAGE). 
+
+Del mismo modo, podemos utilizar DBCC SQLPERF(LOGSPACE) para ver información de ocupación del LOG (muestra información de todas las bases de datos), y DBCC LOGINFO(nombre_BD) para ver información sobre los ficheros de log virtuales
+(virtual log files) existentes dentro del fichero de LOG físico. Ya puestos, es también útil ejecutar el comando DBCC OPENTRAN para conocer si existen actualmente transacciones abiertas sobre la base de datos en cuestión.
+
+A continuación, podemos ejecutar el comando CHECKPOINT para asegurar que las páginas en memoria pendientes de escribir en disco, se escriben en disco.
+
+Ahora podemos vaciar el fichero de LOG. La forma habitual es realizando un BACKUP LOG, pero si no queremos hacer un BACKUP como tal, podemos utilizar la opción WITH TRUNCATE_ONLY para vaciar el fichero 
+(es como hacer un BACKUP, pero sin hacerlo, es decir, sin escribirlo en ningún dispositivo de Backup). 
+
+Con esto, nuestro fichero (o ficheros) de LOG tendrá el mismo tamaño que antes, pero sus páginas, estarán vacías... pero seguimos con un enorme tamaño de LOG.
+
+Ahora nos queda reducir el fichero, para lo cual, podemos ejecutar el comando DBCC SHRINKDATABASE o DBCC SHRINKFILE. Si sólo deseamos reducir el fichero de LOG, entonces nos interesará más DBCC SHRINKFILE. Debe de tenerse en cuenta,
+ que un fichero no se puede reducir a un tamaño inferior del tamaño de un fichero de log virtual (virtual log file), puesto que la unidad de reducción del LOG es el fichero de log virtual 
+(ej: un LOG de 400MB con 10 fichero de log virtuales, se puede reducir en unidades de 40MB hasta un tamaño mínimo de 40MB), y sólo se pueden eliminar los ficheros de log virtuales en estado inactivo,
+ y deben existir un mínimo de dos ficheros de log virtuales. El motor de base de datos selecciona el tamaño deseado para los ficheros de log virtuales de forma automática y transparente. 
+
+También es útil saber que otros usuarios pueden trabajar en la base de datos miestras se está reduciendo, eso sí, que no se quejen si va algo lento.... jeje ;-). A continuación se muestra un ejemplo:
+
+USE Pruebas
+GO
+
+DBCC UPDATEUSAGE(0)
+GO
+
+EXEC sp_spaceused
+GO
+
+DBCC SQLPERF(LOGSPACE)
+GO
+
+DBCC LOGINFO(Pruebas)
+GO
+
+DBCC OPENTRAN(Pruebas)
+GO
+
+CHECKPOINT
+GO
+
+BACKUP LOG Pruebas WITH TRUNCATE_ONLY
+GO
+
+DBCC SHRINKFILE(Pruebas)
+GO
+
+También cabe la posibilidad de que debido a la ejecución de consultas masivas (borrados, actualizaciones, transacciones largas, etc.) o alta concurrencia, el LOG pueda haber crecido.
+
+Del mismo modo, si hacemos cargas de datos, y después borramos las tablas (o las truncamos con TRUNCATE TABLE), podemos querer reducir el tamaño del fichero o fichero de datos. Para ello, también podemos utilizar DBCC SHRINKFILE. Sin embargo, como probablemente este tipo de actividad pueda haber producido que crezca el LOG, sería posible utilizar el mismo procedimiento descrito antes.
+
+Existe una diferencia vital entre DBCC SHRINKDATABASE y DBCC SHRINKFILE: Con DBCC SHRINKDATABASE no podremos reducir una base de datos a un tamaño inferior del tamaño con que fué creada la base de datos (es decir, con DBCC SHRINK DATABASE no se puede reducir por debajo de su tamaño original). Por el contrario, con DBCC SHRINKFILE si es posible reducir fichero a fichero (individualmente) a un tamaño inferior del tamaño con que fueron creados.
+
+En cualquier caso, como regla general es más recomendable DBCC SHRINKFILE que DBCC SHRINKDATABASE, sobre todo sobre bases de datos con múltiples ficheros. De hecho, en alguna ocasión (probarlo si tenéis ocasión) al reducir con DBCC SHRINK DATABASE no conseguimos reducir la base de datos, mientras que con DBCC SHRINKFILE (eso sí, fichero a fichero), si conseguimos nuestra ansiada reducción.
+
+Un caso especial es reducir TEMPDB. La forma más fácil, es reiniciar la instancia de SQL Server, pero esto es algo que no siempre nos podremos permitir hacer. En SQL Server 2005 existe un truco. Desde SQL Server 2005, aquellas consultas cuya ejecución necesite la creación de tablas de trabajo (WorkTables), implicarán que tras su ejecución, el Plan de Ejecución permanecerá en memoria para su reutilización, pero además, las propias tablas de trabajo (Worktable) permanecerán en TEMPDB después de la ejecución de la consulta para ser reutilizadas (junto al Plan de Ejecución), impidiendo en ocasiones la reducción de TEMPDB. Entonces, si tenemos las tablas de trabajo (que pueden estar ocupando páginas de TEMPDB, por ejemplo, al final del fichero, impidiendo su reducción) ¿Cómo podemos reducir TEMPDB en SQL Server 2005? Bien, pues existe el truco de ejecutar el comando DBCC FREEPROCCACHE, de tal modo que al vaciarse la caché de procedimientos (la zona de memoria en la que se almacenan los Planes de Ejecución para su reutilización) estamos eliminando de forma implícita las Tablas de Trabajo (Worktables) asociadas a dichos Planes de Ejecución. Esto lo leí en un Foro hace tiempo, y he estado esperando hasta que me he encontrado con un caso en un Cliente, que tenía problemas de espacio en disco, y quería reducir TEMPDB (que tenía un montón de Gigas libres) y no lo conseguía (intentándolo una y otra vez, y nada). Finalmente, probamos la ejecución de DBCC FREEPROCCACHE y conseguimos reducir bastante (ojo, que no del todo) la base de datos TEMPDB. Y el mismo día que lo conseguí, me dije.... voy a actualizar ese artículo del que hablaba de reducir bases de datos !!
+
+Además, antes de reducir ficheros, es importante reflexionar si es necesario que lo hagamos: Las operaciones de crecimiento y reducción de ficheros son costosas en acceso a disco, y resulta interesante evitarlas. Lo apropiado es disponer una base de datos en modo de registro completo, con una estrategia correcta de backups de LOG, y ficheros de tamaño fijo para datos y LOG (de tamaño fijo y suficiente, claro ;-). No tiene sentido tener una base de datos que crece continuamente, y de vez en cuando la reducimos, para que vuelva a crecer, y vuelta a empezar. Como siempre, cuanto más crítica y voluminosa sea nuestra base de datos, más nos daremos cuenta de estos detalles. Por poner un ejemplo, el tiempo necesario para realizar una carga de varios gigas sobre una base de datos con ficheros con tamaño suficiente es inferior al tiempo necesario si los ficheros deben de aumentar durante el proceso de carga. Al margen de esto, está la fragmentación que se produce, ese gran amigo de los dispositivos de almacenamiento magnéticos...

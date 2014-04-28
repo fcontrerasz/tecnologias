@@ -1,0 +1,51 @@
+Instructivo Defragmentacion
+
+Dismount Store --> Storage Group que se desee desfragmentar.
+
+E:\Exchange\bin>eseutil /d E:\Exchange\MDBDATA_V2\AgentesCRM.edb /tz:\temp\temporal.edb
+
+
+cuentas con limite
+eseutil /d "E:\Exchange\MDBDATA_V2\VERNE V2.edb" /tz:\temp\temporal.edb
+
+cuentas sistema
+eseutil /d "E:\Exchange\MDBDATA_V2\Sistemas.edb" /tz:\temp\temporal2.edb
+
+cuentas operaciones
+eseutil /d "E:\Exchange\MDBDATA_V3\Operaciones.edb" /tz:\temp\temporal.edb
+
+supervisores
+eseutil /d "E:\Exchange\MDBDATA_V3\Supervision.edb" /t z:\temp\temporal.edb
+
+CRM
+eseutil /d "E:\Exchange\MDBDATA_V2\AgentesCRM.edb" /t z:\temp\temporal.edb
+
+Operaciones 2
+eseutil /d "E:\Exchange\MDBDATA_V3\Operaciones.edb" /t z:\temp\temporal.edb
+
+Clietes VIP
+eseutil /d "E:\Exchange\MDBDATA_V3\CuentasClientesVIP.edb" /t z:\temp\temporal.edb
+
+Gerencia
+eseutil /d "E:\Exchange\MDBDATA_V3\Gerencia.edb" /t z:\temp\temporal.edb
+
+
+Parar servicios
+
+
+
+
+Mantención Corruptos
+
+1) iniciar para la corrección de fallos
+eseutil /p "archivo.edb" "temp.edb"
+* por cada 4-6Gb 1 hora de transcurso.
+
+2) una vez terminado
+eseutil /d 
+
+3) ir chequeando con: isinteg -s {servername} -fix -test alltests
+
+
+
+

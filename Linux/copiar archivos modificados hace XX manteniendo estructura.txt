@@ -1,0 +1,1 @@
+find /var/www/html/candesdev/ -type f -mtime -1 | cpio -pdm /var/www/

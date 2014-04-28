@@ -1,0 +1,3 @@
+resetear
+
+iisreset /restart

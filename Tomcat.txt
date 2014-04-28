@@ -1,0 +1,16 @@
+configuracion para acceso web puerto 8080, editar archivo tomcat-users.xml 
+
+
+<?xml version='1.0' encoding='utf-8'?> 
+<tomcat-users>
+<role rolename="admin"/>
+<role rolename="manager"/>
+<role rolename="tomcat"/>
+<role rolename="role1"/>
+<user username="admin" password="secret" roles="manager,admin"/>
+<user username="tomcat" password="tomcat" roles="tomcat"/>
+<user username="role1" password="tomcat" roles="role1"/>
+<user username="both" password="tomcat" roles="tomcat,role1"/>
+</tomcat-users>
+
+

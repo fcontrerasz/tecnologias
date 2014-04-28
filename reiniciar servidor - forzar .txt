@@ -1,0 +1,3 @@
+shutdown /f /r /m \\computername,
+
+pskill -t \\computername winlogon

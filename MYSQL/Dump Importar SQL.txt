@@ -1,0 +1,7 @@
+mysql -u root  
+create database database_name;  
+create user username; 
+grant all privileges on database_name.* to username@"localhost" identified by 'password';  
+exit mysql
+
+$ mysql -u username -p -h localhost database_name < dumpfile.sql   

@@ -1,0 +1,9 @@
+DBCC SHRINKDATABASE ( DB_VU,TRUNCATEONLY)
+USE DB_VU
+DBCC SHRINKFILE(DB_VU_log,TRUNCATEONLY)
+BACKUP LOG DB_VU with TRUNCATE_ONLY
+
+donde DB_VU = nombre de tu base de datos
+db_vu_log nombre dle archivo de log
+
+DBCC SHRINKDATABASE(0) = comprime estacio libre.

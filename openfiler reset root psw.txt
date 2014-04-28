@@ -1,0 +1,20 @@
+Recuperar y cambiar la contraseña de root en Debian 4.0
+
+Seleccionamos la primera opcion en el prompt de Grub y presionamos la letra e para editar el comando antes del arranque del sistema.
+
+
+Seleccionamos la segunda linea, usualmente empieza con la palabra Kernel
+Nuevamente presionamos e para editar el comando seleccionado
+Al final de la linea escribimos una de los dos paths siguientes:
+init=/bin/sh o init=/bin/bash
+
+
+
+Presionamos la tecla b para iniciar el sistema
+Luego del arranque de Linux Debian el shell nos muestra el prompt de root listo para cambiarle la contraseña, pero antes puede ser necesario montar las particiones del sistema con el siguiente comando:
+
+deathbian:~# mount -o remount,rw / 
+deathbian:~# mount -t proc proc /proc **
+deathbian:~# cp /proc/mounts /etc/mtab **
+deathbian:~# mount -o remount,rw /
+deathbian:~# passwd

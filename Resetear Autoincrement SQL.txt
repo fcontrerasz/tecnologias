@@ -1,0 +1,1 @@
+DBCC CHECKIDENT ('Production.Product', RESEED, 1)

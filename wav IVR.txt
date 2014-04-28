@@ -1,0 +1,1 @@
+ formato WAV PCM mono, 16bits, 8000 Hz

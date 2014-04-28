@@ -1,0 +1,5 @@
+ 
+ftp://cicgateway
+ 
+User: iguser
+Pass: FetchL0gs

@@ -1,0 +1,31 @@
+CREATE TRIGGER tr_movements ON CallHist
+FOR INSERT
+AS
+declare @idtelescript as int
+declare @idcallhist as int
+declare @nidcallhist as int
+declare @ncallback as datetime
+declare @ncalldt as datetime
+declare @nlastcall as datetime
+declare @ntelelink as int
+
+set @idcallhist = (SELECT IDENT_CURRENT('CallHist'))
+set @nidcallhist = @idcallhist - 1
+select @ntelelink = XTeleLink, @idtelescript = IDTelescrp, @ncalldt = CallDT, @ncallback = XCallback from vs_movements where IDCallhist = @idcallhist
+select @nlastcall = lastcall from movements where telelink = @ntelelink order by idmovimientos asc
+select @nlastcall
+
+INSERT INTO [MA130810DB].[dbo].[Movements]
+           ([idcallhist]
+           ,[idtelesrpt]
+           ,[callback]
+           ,[lastcall]
+           ,[calldt]
+		   ,[telelink])
+     VALUES
+           (@idcallhist
+           ,@idtelescript
+           ,@ncallback
+           ,@nlastcall
+           ,@ncalldt
+		   ,@ntelelink)

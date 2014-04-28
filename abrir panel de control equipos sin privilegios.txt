@@ -1,0 +1,57 @@
+This runs Control Panel:
+RunDll32.exe shell32.dll,Control_RunDLL
+
+But calling that with RunAs opens an Explorer window instead of the Control Panel.
+This should work though:
+RunAs /User:AdminUserName "control <applet name>"
+
+runas /user:neutron@mets "control intl.cpl"
+
+I've tested with timedate.cpl, and it lets a limited account change date and time, and with nusrmgr.cpl, and it let me create a new Computer Admin account from a limited account.
+
+The Scanner and Camera applet (sticpl.cpl) can't be run from a command line for some reason.
+Advanced User Manager - control userpasswords2 does not need to use RunAs, it will prompt for an admin account
+
+Here's a list of Control Panel Applets:
+Accessibility Options - access.cpl
+Advanced User Manager - control userpasswords2
+Add Hardware - hdwwiz.cpl
+Add/Remove Programs - appwiz.cpl
+Automatic Updates - wuaucpl.cpl
+BDE Administrator - bdeadmin.cpl
+BlueTooth Properties - bthprops.cpl
+Date and Time - timedate.cpl
+Display Properties - desk.cpl
+Fax - fax.cpl
+Game Controllers - joy.cpl
+Infrared Ports - irprops.cpl
+Install Shield Update Manager - ISUSPM.cpl
+Internet Properties - inetcpl.cpl
+International and Regional Settings - intl.cpl
+Java Control Panel - javacpl.cpl
+Licensing - liccpa.cpl
+Mail - mlcfg32.cpl
+Modem on Hold Settings - cpl_moh.cpl
+Modem and Phone - modem.cpl
+Mouse Properties - main.cpl
+Netware Client - nwc.cpl
+Network and Connectivity - ncpa.cpl
+Network and Dial-up Connectivity - netcpl.cpl
+(Wireless) Network Setup Wizard - netsetup.cpl
+Norton Live Update - s32lucp1.cpl
+ODBC Control - odbccp32.cpl
+PC Card - devapps.cpl
+Ports - ports.cpl
+Power Management - powercfg.cpl
+QuickTime Settings - QuickTime.cpl
+Scanner and Camera - sticpl.cpl
+Server Manger - srvmgr.cpl
+Sounds and Audio Devices - mmsys.cpl
+Speech Properties - sapi.cpl
+System Properties - sysdm.cpl
+Telephony - telephon.cpl
+TweakUI - tweakui.cpl
+User Manager - nusrmgr.cpl
+Windows Firewall - firewall.cpl
+Windows Security Center - wscui.cpl
+WSP Client - wspcpl32.cpl

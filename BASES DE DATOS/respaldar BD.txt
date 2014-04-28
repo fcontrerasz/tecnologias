@@ -1,0 +1,28 @@
+DECLARE @strDatabase nvarchar(50)
+DECLARE @strFolder nvarchar(500)
+
+SET @strDatabase = N'Manantial'
+SET @strFolder = N'C:\'
+
+DECLARE @tToday datetime
+SET @tToday = GETDATE()
+
+DECLARE @strBackupName nvarchar(100)
+SET @strBackupName = @strDatabase
++ STR(DATEPART(year, @tToday), 4, 0)
++ REPLACE(STR(DATEPART(month, @tToday), 2, 0), N' ', N'0')
++ REPLACE(STR(DATEPART(day, @tToday), 2, 0), N' ', N'0')
++ REPLACE(STR(DATEPART(hour, @tToday), 2, 0), N' ', N'0')
++ REPLACE(STR(DATEPART(minute, @tToday), 2, 0), N' ', N'0')
+
+DECLARE @strBackupFile nvarchar(600)
+SET @strBackupFile = @strFolder + N'\' + @strBackupName + N'.bak'
+
+BACKUP DATABASE @strDatabase
+TO DISK = @strBackupFile
+WITH
+   NOFORMAT,
+   INIT,
+   SKIP,
+   NAME = @strBackupName
+GO

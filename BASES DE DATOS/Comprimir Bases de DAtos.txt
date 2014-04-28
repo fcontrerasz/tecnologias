@@ -1,0 +1,15 @@
+/*********
+Shrinking MDF and NDF file is possible and there is no chance of data loss.
+It is not always advisable to shrink those file as those files are usually growing. There are cases when one database is separated in multiple database of any large table is dropped from database MDF and NDF can contain large empty space. This is the time they should be shrank. Shrinking database can be many hours process but it there are very slim chances of data lose.
+Following is the script to shrink whole database.
+DBCC SHRINKDATABASE (dbName)
+Following is the script to shrink single file.
+*****/
+
+DBCC SHRINKFILE (logicalLogFileName) --comprime MDF
+
+USE dbName
+EXEC sp_helpfile
+
+DBCC SHRINKDATABASE (AdventureWorks)
+GO

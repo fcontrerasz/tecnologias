@@ -1,0 +1,39 @@
+informacion de la base y archivos
+
+sp_helpdb i3_ic
+
+Tamaño del log
+
+DBCC SQLPERF(logspace) 
+
+1.-**************************************
+
+Todas los Archivos
+
+SELECT * 
+FROM master.dbo.sysaltfiles
+order by size desc
+GO
+
+
+2.-**************************************
+
+Todas las Bases
+
+EXEC master.dbo.sp_databases
+GO
+
+
+3.- ***********************************
+
+Todas las tablas
+
+exec sp_spaceused 
+
+4.- Actualizar información de espacio
+
+exec sp_spaceused @updateusage = 'true'
+
+
+4.- tamaño de logs
+DBCC SQLPERF(logspace) 

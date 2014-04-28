@@ -1,0 +1,165 @@
+Using 3918 out of 196600 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Salfa-Mets
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 10000 debugging
+!
+no aaa new-model
+!
+resource policy
+!
+clock timezone chi -4
+clock summer-time chi recurring 2 Sun Oct 0:00 2 Sun Mar 0:00
+no errdisable detect cause udld
+no errdisable detect cause bpduguard
+no errdisable detect cause rootguard
+no errdisable detect cause pagp-flap
+no errdisable detect cause dtp-flap
+no errdisable detect cause link-flap
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+ip subnet-zero
+!
+!
+ip cef
+no ip dhcp use vrf connected
+!
+!
+no ip domain lookup
+no ip ips deny-action ips-interface
+!
+!
+!
+!
+no spanning-tree vlan 1
+username kylua privilege 15 password 7 0945401C0004141A0A
+!
+!
+!
+!
+!
+interface FastEthernet0
+ description Hacia Salfa  VPLS 214517, pta 15 switch datacenter
+ ip address 40.40.40.1 255.255.255.0 secondary
+ ip address 172.16.170.2 255.255.255.252
+ ip accounting output-packets
+ speed 10
+ full-duplex
+!
+interface FastEthernet1
+ description Lan Mets
+ ip address 172.16.11.240 255.255.255.0
+ ip access-group salfa in
+ ip accounting output-packets
+ duplex auto
+ speed auto
+!
+interface FastEthernet2
+!
+interface FastEthernet3
+!
+interface FastEthernet4
+!
+interface FastEthernet5
+!
+interface FastEthernet6
+!
+interface FastEthernet7
+!
+interface FastEthernet8
+!
+interface FastEthernet9
+!
+interface Vlan1
+ no ip address
+!
+interface Async1
+ no ip address
+!
+ip classless
+ip route 172.20.1.0 255.255.255.0 172.16.170.1
+ip route 192.9.200.7 255.255.255.255 172.16.170.1
+ip route 192.168.89.0 255.255.255.0 172.16.170.1
+ip route 192.168.99.0 255.255.255.0 172.16.170.1
+!
+!
+no ip http server
+no ip http secure-server
+!
+ip access-list extended salfa
+ permit ip host 172.16.11.103 host 192.168.89.243
+ permit ip host 172.16.11.102 host 172.16.11.240
+ permit ip host 172.16.11.102 host 172.20.1.4
+ permit ip host 172.16.11.102 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.102 host 192.168.89.243
+ permit ip host 172.16.11.215 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.215 host 172.20.1.4
+ permit ip host 172.16.11.215 host 172.16.11.240
+ permit ip host 172.16.11.215 host 192.168.89.243
+ permit ip host 172.16.11.208 192.168.99.0 0.0.0.255
+permit ip host 172.16.11.215 host 172.20.1.4
+ permit ip host 172.16.11.215 host 172.16.11.240
+ permit ip host 172.16.11.215 host 192.168.89.243
+ permit ip host 172.16.11.208 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.208 host 172.20.1.4
+ permit ip host 172.16.11.208 host 172.16.11.240
+ permit ip host 172.16.11.208 host 192.168.89.243
+ permit ip host 172.16.11.200 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.200 host 172.20.1.4
+ permit ip host 172.16.11.200 host 172.16.11.240
+ permit ip host 172.16.11.200 host 192.168.89.243
+ permit ip host 172.16.11.25 host 172.20.1.4
+ permit ip host 172.16.11.25 host 172.20.1.13
+ permit ip host 172.16.11.25 host 172.20.1.14
+ permit ip host 172.16.11.25 host 192.168.89.243
+ permit ip host 172.16.11.11 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.11 host 172.20.1.4
+ permit ip host 172.16.11.11 host 172.16.11.240
+ permit ip host 172.16.11.11 host 192.168.89.243
+ permit ip host 172.16.11.110 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.110 host 172.20.1.4
+ permit ip host 172.16.11.110 host 172.16.11.240
+ permit ip host 172.16.11.110 host 192.168.89.243
+ permit ip host 172.16.11.109 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.109 host 172.20.1.4
+ permit ip host 172.16.11.109 host 172.16.11.240
+ permit ip host 172.16.11.109 host 192.168.89.243
+ permit ip host 172.16.11.25 192.168.99.0 0.0.0.255
+ permit ip host 172.16.11.103 host 172.20.1.4
+ permit ip host 172.16.11.103 192.168.99.0 0.0.0.255
+ permit icmp 172.16.11.0 0.0.0.255 host 192.9.200.7
+ permit ip 172.16.11.0 0.0.0.255 host 192.9.200.7
+ deny   ip any any
+ deny   icmp any any
+!
+no cdp run
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ login local
+line 1
+ modem InOut
+ stopbits 1
+ speed 115200
+ flowcontrol hardware
+line aux 0
+line vty 0 4
+ login local
+!
+no scheduler allocate
+end

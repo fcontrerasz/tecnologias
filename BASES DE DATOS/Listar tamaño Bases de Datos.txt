@@ -1,0 +1,17 @@
+Declare @v varchar(100)
+Declare @v2 varchar(100)
+declare @sql varchar(4000)
+DECLARE authors_cursor CURSOR FOR
+SELECT Name, filename FROM master.dbo.sysdatabases where Name not like '%DB' and Name not like '%_log'
+OPEN authors_cursor
+FETCH NEXT FROM authors_cursor into @v,@v2
+WHILE @@FETCH_STATUS =0
+BEGIN
+set @sql ='USE ' + @v + ' SELECT name, CONVERT(varchar, size) as KB FROM ' + @v + '.dbo.sysfiles'
+--Select @sql
+EXEC(@sql) 
+--SELECT name, CONVERT(varchar, ROUND(size/1024, -1)) + ' MB' FROM dbo.sysfiles
+FETCH NEXT FROM authors_cursor into @v,@v2
+END
+CLOSE authors_cursor
+DEALLOCATE authors_cursor

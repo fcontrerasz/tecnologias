@@ -1,0 +1,38 @@
+** cambiar collate
+ALTER TABLE `postulaciones` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci
+
+** listar procedimientos de la BD
+SHOW PROCEDURE STATUS
+
+** SQL de construccion de una vista, tabla o procedimiento
+show create view listar_maestro_rut
+show create procedure insert_rut
+show create table mitabla
+
+*** RESPALDAR BD
+backup complete database
+
+mysqldump -u myusername --password=mypassword --databases mydatabase --skip-opt --routines > dump.sql
+
+
+if you only want to backup the triggers and functions etc then you could use
+
+mysqldump -u myusername --password=mypassword --database mydatabase --skip-opt --routines --no-create-info --no-data --no-create-db > no-data-dump.sql
+
+Use --opt if you want to include the auto_increment as well in the create command.
+
+***** listar campos de las tablas
+
+select column_name,TABLE_NAME from information_schema.columns where column_name = 'campo'
+
+#saber tipos de lenguaje del campo en cada tabla
+
+select TABLE_SCHEMA, column_name,TABLE_NAME, collation_name from information_schema.columns where TABLE_SCHEMA = 'ecr' and collation_name like '%spanish2%'
+
+****** VER LA ULTIMA QUERY EJECUTADA.
+
+PRIMERO HABILITAR
+
+1) SET GLOBAL log_output = 'TABLE';
+2) SET GLOBAL general_log = 'ON';
+3) SE CREARA UNA TABLA table mysql.general_log 

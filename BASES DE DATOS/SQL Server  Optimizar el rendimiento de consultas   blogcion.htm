@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+	<meta property="og:image" content="	http://mocionsoft.com/blog/wp-content/themes/blogcion/img/logofaceblog.png "/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+
+<title>SQL Server: Optimizar el rendimiento de consultas | blogcion</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://mocionsoft.com/blog/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="http://mocionsoft.com/blog/wp-content/themes/blogcion/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="blogcion &raquo; Feed" href="http://mocionsoft.com/blog/?feed=rss2" />
+<link rel="alternate" type="application/rss+xml" title="blogcion &raquo; Comments Feed" href="http://mocionsoft.com/blog/?feed=comments-rss2" />
+<link rel="alternate" type="application/rss+xml" title="blogcion &raquo; SQL Server: Optimizar el rendimiento de consultas Comments Feed" href="http://mocionsoft.com/blog/?feed=rss2&#038;p=324" />
+<link rel='stylesheet' id='crayon-css'  href='http://mocionsoft.com/blog/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=2.3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-theme-classic-css'  href='http://mocionsoft.com/blog/wp-content/plugins/crayon-syntax-highlighter/themes/classic/classic.css?ver=2.3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-theme-familiar-css'  href='http://mocionsoft.com/blog/wp-content/plugins/crayon-syntax-highlighter/themes/familiar/familiar.css?ver=2.3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-font-consolas-css'  href='http://mocionsoft.com/blog/wp-content/plugins/crayon-syntax-highlighter/fonts/consolas.css?ver=2.3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-font-monaco-css'  href='http://mocionsoft.com/blog/wp-content/plugins/crayon-syntax-highlighter/fonts/monaco.css?ver=2.3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='colorbox-css'  href='http://mocionsoft.com/blog/wp-content/plugins/simple-colorbox/themes/theme1/colorbox.css?ver=3.5.1' type='text/css' media='screen' />
+<link rel='stylesheet' id='pachyderm-style-css'  href='http://mocionsoft.com/blog/wp-content/themes/blogcion/style.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='pachyderm-gudea-css'  href='http://fonts.googleapis.com/css?family=Gudea%3A400%2C400italic%2C700&#038;subset=latin%2Clatin-ext&#038;ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='pachyderm-berkshire-swash-css'  href='http://fonts.googleapis.com/css?family=Berkshire+Swash&#038;subset=latin%2Clatin-ext&#038;ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='pachyderm-poiret-one-css'  href='http://fonts.googleapis.com/css?family=Poiret+One&#038;subset=latin%2Clatin-ext%2Ccyrillic&#038;ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='prettify-css'  href='http://mocionsoft.com/blog/wp-content/plugins/prettify-code-syntax/stylesheets/default.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-paginate-css'  href='http://mocionsoft.com/blog/wp-content/plugins/wp-paginate/wp-paginate.css?ver=1.2.4' type='text/css' media='screen' />
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-includes/js/jquery/jquery.js?ver=1.8.3'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"2.3.0","is_admin":"0","ajaxurl":"http:\/\/mocionsoft.com\/blog\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=2.3.0'></script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-includes/js/comment-reply.min.js?ver=3.5.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://mocionsoft.com/blog/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://mocionsoft.com/blog/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Drupal para dummies –Plantillas de páginas y Sugerencias por tipo de nodo' href='http://mocionsoft.com/blog/?p=507' />
+<link rel='next' title='Mocion en lanzamiento de Firefox OS en Canada' href='http://mocionsoft.com/blog/?p=627' />
+<meta name="generator" content="WordPress 3.5.1" />
+<link rel='canonical' href='http://mocionsoft.com/blog/?p=324' />
+
+<!-- Simple Colorbox Plugin v1.3.1 by Ryan Hellyer ... http://geek.ryanhellyer.net/products/simple-colorbox/ -->
+
+<script>
+	jQuery(function($){
+		$("a[href$='jpg'],a[href$='jpeg'],a[href$='png'],a[href$='bmp'],a[href$='gif'],a[href$='JPG'],a[href$='JPEG'],a[href$='PNG'],a[href$='BMP'],a[href$='GIF']").colorbox({
+			maxWidth:'95%',
+			maxHeight:'95%',
+			opacity:'0.6',
+			rel:'group'
+		});
+	});
+</script><style type="text/css" id="custom-background-css">
+body.custom-background { background-image: url('http://mocionsoft.com/blog/wp-content/themes/blogcion/img/background.png'); background-repeat: repeat; background-position: top left; background-attachment: scroll; }
+</style>
+<script type="text/javascript">
+
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-22461318-1']);
+ _gaq.push(['_setDomainName', 'mocionsoft.com']);
+ _gaq.push(['_trackPageview']);
+
+ (function() {
+   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+
+</script>
+<script type="text/javascript" src="http://select-box.googlecode.com/svn/tags/0.2/jquery.selectbox-0.2.min.js"></script>
+</head>
+
+<body class="single single-post postid-324 single-format-standard custom-background group-blog">
+	
+		<header id="masthead" class="site-header" role="banner">
+		<a rel="home" title="blogcion" href="http://mocionsoft.com"> 
+			<img width="328" height="91" alt="" src="wp-content/themes/blogcion/img/Cortes/LogoBlog.png">
+			 </a>
+
+
+		<hgroup>
+			
+
+		
+	</header><!-- #masthead -->
+
+<div id="page" class="hfeed site">
+	
+	<nav id="searchSocial" >
+			
+			<div id ="search">
+								
+				<form method="get" id="searchform" class="searchform" action="http://mocionsoft.com/blog/" role="search">
+				
+				<input   name="s" id="s" placeholder="Buscar Conocimiento">
+				
+				<input id="buscar" value=" " type="submit"></input>
+								</form>
+				
+			
+				
+			</div>
+				<select id="categoriasSelect" name="" > 
+						<option value="">Buscar por categoria</option> 
+				 <option value="/category/archives/mobile">mobile (1)</option><option value="/category/archives/news">news (2)</option><option value="/category/archives/uncategorized">Uncategorized (1)</option><option value="/category/archives/web">web (13)</option> 			</select>
+ 			<script type="text/javascript">
+ 			(function($) { 
+ 			$(function () {
+	 				$("#categoriasSelect").selectbox({
+		 				
+		 				onChange: function (val, inst) {
+			 					window.location=val;
+			 						
+						},
+						effect: "slide"
+					});
+	 				
+				});
+ 			
+ 			 })(jQuery)
+ 			
+
+</script>
+			<div id ="social">
+			 <a href="https://www.facebook.com/pages/Mocion/137901416275573?fref=ts"><img src="wp-content/themes/blogcion/img/Cortes/Logo-Facebook.png" /> </a>	
+				
+			<a href="https://twitter.com/Mocionsoft">	<img src="wp-content/themes/blogcion/img/Cortes/Logo-Twitter.png" /></a>
+				
+			<a href="http://www.linkedin.com/company/mocion">	<img src="wp-content/themes/blogcion/img/Cortes/Logo-Linkedin.png" /></a>
+				
+			</div>
+			
+		</nav>
+	
+	<div id="main" class="site-main">
+		
+	
+
+	<div id="primary" class="content-area">
+		<div id="content" class="site-content" role="main">
+
+		
+			
+<article id="post-324" class="post-324 post type-post status-publish format-standard hentry category-web tag-index tag-indices tag-query-performance tag-rendimiento tag-sql">
+	<header class="entry-header">
+		<div class="post-format-indicator">
+			<a  href="" title=""> <img src="wp-content/themes/blogcion/img/Cortes/date-table.png" /> </a>
+							
+				
+					</div>
+		
+					<span class="comments-link">
+				
+		<img src="wp-content/themes/blogcion/img/Cortes/web.png" alt="web" />				
+			<span class="dia">30</span> 
+			<span class="mes">Aug</span>
+			<span class="anio">2013</span>
+			
+			</span>
+				<h1 class="entry-title"><a href="http://mocionsoft.com/blog/?p=324" title="Permalink to SQL Server: Optimizar el rendimiento de consultas" rel="bookmark">SQL Server: Optimizar el rendimiento de consultas</a></h1>
+			 <p><img class="alignleft" style="margin: 5px 20px 10px 0;" title="Microsoft SQL Server" alt="" src="http://2.bp.blogspot.com/-Q4Nf6AIk7wA/TzkzwKYCMTI/AAAAAAAABps/YmfsGqHTYh8/s400/SQL-Server-2012-Hugo%2BBernachea.png" width="320" height="264" /></p>
+<p>Muchos administradores de bases de datos atribuyen a la arquitectura física del servidor como causa directa del <strong>rendimiento en la ejecución de consultas</strong> y resuelven estos problemas ajustando algunas características propias del servidor, como incrementar el tamaño de la memoria RAM, el número de procesadores, el tipo del sistema de archivos, entre otros.</p>
+<p>Sin embargo, la mayoría de los problemas de rendimiento <span style="text-decoration: underline;">no sobre-caen únicamente en la arquitectura física del servidor</span> (aunque mejorar algunas de las características mencionadas proveerán un mejor desempeño).</p>
+<p><span id="more-324"></span></p>
+<p>Los problemas de rendimiento en la ejecución de consultas, deberían abordarse más en la forma<strong> como construimos las consultas</strong>, y por ende, se debería solucionar mediante el <strong><em><span style="text-decoration: underline;">análisis de consultas</span></em></strong> y el <strong><em><span style="text-decoration: underline;">esquema de la base de datos</span></em></strong>.</p>
+<blockquote><p>Optimizar el servidor de base de datos es muy importante, pero mejorar el rendimiento de las consultas individuales puede ser incluso más importante que optimizar otros aspectos de la instalación del servidor, como las configuraciones de hardware y software.</p></blockquote>
+<p>Incluso si tenemos un servidor con buenas características de hardware, algunas consultas pueden afectar el rendimiento global del servidor, ya que son muy costosas y consumen gran parte de los recursos asignados al proceso. En este artículo trataré algunas<strong> técnicas para identificar y mejorar las consultas</strong> más costosas o de uso frecuente.</p>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Normalización de Bases de Datos</strong></span></h4>
+<p>El proceso de <a title="Normalización de bases de datos" href="http://es.wikipedia.org/wiki/Normalizaci%C3%B3n_de_bases_de_datos" target="_blank">normalización</a> de bases de datos consiste en aplicar una serie de reglas a las relaciones obtenidas tras el paso del <strong>modelo entidad-relación</strong> al <strong>modelo relacional</strong>. (<a title="Formas normales y dependencias funcionales" href="http://www.scourdesign.com/articulos/BD-FN.php" target="_blank">Formas normales y dependencias funcionales</a>)</p>
+<p>Las bases de datos relacionales se normalizan para:</p>
+<ul>
+<li>Evitar la <strong>redundancia</strong> de los datos.</li>
+<li>Proteger la <strong>integridad</strong> de los datos.</li>
+<li><span style="line-height: 28px;">Evitar <strong>problemas de actualización</strong> de los datos en las tablas.</span></li>
+</ul>
+<p><strong style="color: #800000; font-family: 'Poiret One', 'Times New Roman', serif; font-size: 24px; line-height: normal;">Diseño de Tablas</strong></p>
+<p>En el modelo relacional, una tabla o relación tiene que cumplir con algunas restricciones:</p>
+<ul>
+<li>Cada tabla debe tener su nombre único.</li>
+<li>No puede haber dos filas iguales. No se permiten los duplicados.</li>
+<li>Todos los datos en una columna deben ser del mismo tipo.</li>
+</ul>
+<p>Una característica de una base de datos normalizada es la existencia de varias tablas pequeñas con menos columnas, que se relacionan para evitar la <strong>duplicidad de datos.</strong></p>
+<ul>
+<li><strong>Una tabla solo debe almacenar datos para un único tipo de entidad</strong>. Si intenta abarcar mucha información en la misma tabla puede perder confiabilidad y eficacia en la administración de los datos.
+<ul style="margin-top: 10px;">
+<li><strong>Escenario 1:</strong> Almacenar el nombre del vendedor en la tabla [Ventas]. En este caso, la <strong>confiabilidad</strong> de los datos puede verse comprometida con cada venta realizada, ya que el nombre del vendedor puede variar (Ej: en un registro el vendedor es <em>&#8220;Luis Enrique Alvarado&#8221;</em> y en otro registro el mismo vendedor es <em>&#8220;Enrique Alvarado&#8221;</em>).<br />
+Una solución sería crear una entidad para [Vendedores] y otra para [Ventas] y relacionar el vendedor con una <a title="Claves" href="http://es.wikipedia.org/wiki/Normalizaci%C3%B3n_de_bases_de_datos#Claves" target="_blank">clave foránea</a>.</li>
+<li><strong>Escenario 2:</strong> Guardar en la tabla [Clientes] la cantidad de pedidos. Éste diseño tiene el problema de que al hacer cada pedido se debe <strong>actualizar</strong> la tabla [Clientes], lo cual puede perjudicar el rendimiento si dicha tabla posee índices, ya que el <span style="text-decoration: underline;">costo de actualización</span> del índice puede ser muy alto).</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Utilizar con moderación las columnas que acepten<strong> valores nulos</strong>. Esto se debe a que precisan un control especial que aumenta la complejidad de las operaciones de datos.</li>
+</ul>
+<ul>
+<li><span style="line-height: 28px;"><strong>Una tabla no debe tener columnas con valores que se repitan.</strong> (Por ejemplo, si se desea guardar 2 teléfonos en la tabla [Clientes], </span><strong style="line-height: 28px;">NO</strong><span style="line-height: 28px;"> se deberían crear las columnas telefono1 y telefono2, sino una tabla [Telefonos] que almacene la<span style="text-decoration: underline;"> lista de teléfonos</span> del cliente y se relacione con el Id del cliente).</span><span style="line-height: 28px;"><br />
+</span></li>
+</ul>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Grupos de Archivos</strong></span></h4>
+<p style="padding-left: 30px;">Se pueden agregar<strong> grupos de archivos</strong> y<strong> archivos de datos</strong> a una base de datos para <strong>mejorar su rendimiento</strong> y las estrategias de copias de seguridad y restauración.</p>
+<p style="padding-left: 30px;">El uso de grupos de archivos puede mejorar el rendimiento de la base de datos al permitir crear la<strong> base de datos en varios discos</strong>, o sistemas RAID. Por ejemplo, si el servidor tiene cuatro discos, puede crear una base de datos que contenga tres archivos de datos y un archivo de registro, y mantener un archivo en cada disco. Cuando se produce un acceso a los datos, hay cuatro cabezales de<strong> lectura/escritura</strong> que pueden tener acceso en <strong>paralelo</strong> a los datos, con lo que se <strong>aceleran las operaciones</strong> de la base de datos.</p>
+<h4 style="padding-left: 30px;"><strong>Recomendaciones</strong></h4>
+<ul>
+<li>Utilice grupos de archivos para permitir la<strong> colocación de los objetos</strong> en determinados discos físicos.</li>
+<li style="padding-top: 10px;">Disponga en grupos de archivos distintos las diferentes tablas que se utilicen en las mismas <strong>consultas de combinación</strong>. De ese modo, el rendimiento mejorará debido a que la <strong>búsqueda combinada</strong> se realiza en operaciones de E/S <strong>paralelas</strong> en los discos.</li>
+<li style="padding-top: 10px;">Distribuya en grupos de archivos distintos las<strong> tablas de acceso frecuente</strong> y los <strong>índices no agrupados</strong> que pertenezcan a esas tablas. De ese modo, el rendimiento aumentará debido a que las operaciones de E/S se realizan en paralelo, si los archivos están en discos diferentes.</li>
+<li style="padding-top: 10px;">No coloque el archivo de registro de transacciones (.ldf) en el mismo disco físico con los demás archivos de datos (.mdf y .ndf)</li>
+</ul>
+<p></p><!-- Crayon Syntax Highlighter v2.3.0 -->
+
+		<div id="crayon-52e6f1f99fa13833079543" class="crayon-syntax crayon-theme-familiar crayon-font-consolas crayon-os-pc print-yes" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; float: none; clear: both; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-toolbar" data-settings=" mouseover overlay hide delay" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">Creación de una Base de Datos con grupo de archivos</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Transact-SQL</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="off" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+CREATE DATABASE [MyDB]
+ ON PRIMARY
+(	NAME = N'MyDB_data',
+ 	FILENAME = N'C:\MSSQL\DATA\MyDB_data.mdf',
+ 	SIZE = 2048KB,
+ 	FILEGROWTH = 1024KB ), 
+ FILEGROUP [HISTORIC] 
+(	NAME = N'MyDB_historic',
+ 	FILENAME = N'E:\MSSQL\DATA-WAREHOUSE\MyDB_historic.ndf',
+ 	SIZE = 2048KB,
+ 	FILEGROWTH = 1024KB ), 
+ FILEGROUP [INDEXES] 
+(	NAME = N'MyDB_index',
+ 	FILENAME = N'F:\MSSQL\DATA-INDEX\MyDB_index.ndf',
+ 	SIZE = 2048KB,
+ 	FILEGROWTH = 1024KB )
+ LOG ON 
+(	NAME = N'MyDB_log',
+ 	FILENAME = N'D:\MSSQL\DATA-LOG\MyDB_log.ldf',
+ 	SIZE = 1024KB,
+ 	FILEGROWTH = 10%)
+GO</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-2">2</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-4">4</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-6">6</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-8">8</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-10">10</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-12">12</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-14">14</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-16">16</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-18">18</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-20">20</div><div class="crayon-num" data-line="crayon-52e6f1f99fa13833079543-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa13833079543-22">22</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-1"><span class="crayon-k">CREATE</span><span class="crayon-h"> </span><span class="crayon-k">DATABASE</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">MyDB</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-2"><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-k">PRIMARY</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-3"><span class="crayon-sy">(</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">NAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'MyDB_data'</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-4"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILENAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'C:\MSSQL\DATA\MyDB_data.mdf'</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-5"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">SIZE</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">2048KB</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-6"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILEGROWTH</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">1024KB</span><span class="crayon-h"> </span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-7"><span class="crayon-h"> </span><span class="crayon-i">FILEGROUP</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">HISTORIC</span><span class="crayon-sy">]</span><span class="crayon-h"> </span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-8"><span class="crayon-sy">(</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">NAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'MyDB_historic'</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-9"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILENAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'E:\MSSQL\DATA-WAREHOUSE\MyDB_historic.ndf'</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-10"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">SIZE</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">2048KB</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-11"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILEGROWTH</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">1024KB</span><span class="crayon-h"> </span><span class="crayon-sy">)</span><span class="crayon-sy">,</span><span class="crayon-h"> </span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-12"><span class="crayon-h"> </span><span class="crayon-i">FILEGROUP</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">INDEXES</span><span class="crayon-sy">]</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-13"><span class="crayon-sy">(</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">NAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'MyDB_index'</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-14"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILENAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'F:\MSSQL\DATA-INDEX\MyDB_index.ndf'</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-15"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">SIZE</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">2048KB</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-16"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILEGROWTH</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">1024KB</span><span class="crayon-h"> </span><span class="crayon-sy">)</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-17"><span class="crayon-h"> </span><span class="crayon-i">LOG</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-18"><span class="crayon-sy">(</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">NAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'MyDB_log'</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-19"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILENAME</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">N</span><span class="crayon-s">'D:\MSSQL\DATA-LOG\MyDB_log.ldf'</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-20"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">SIZE</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">1024KB</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa13833079543-21"><span class="crayon-h"> &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">FILEGROWTH</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-cn">10</span><span class="crayon-o">%</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa13833079543-22"><span class="crayon-i">GO</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0132 seconds] -->
+<p><strong>&#8230; o usando SQL Server Management Studio</strong></p>
+<div id="attachment_390" class="wp-caption aligncenter" style="width: 648px"><a href="http://mocionsoft.com/blog/wp-content/uploads/2013/08/New_database_filegroups.png"><img class="wp-image-390 " alt="Crear Grupos de archivos" src="http://mocionsoft.com/blog/wp-content/uploads/2013/08/New_database_filegroups.png" width="638" height="246" /></a><p class="wp-caption-text">Crear Grupos de archivos</p></div>
+<div id="attachment_391" class="wp-caption aligncenter" style="width: 648px"><a href="http://mocionsoft.com/blog/wp-content/uploads/2013/08/New_database_general.png"><img class="wp-image-391 " alt="Crear base de Datos con grupos de archivos" src="http://mocionsoft.com/blog/wp-content/uploads/2013/08/New_database_general.png" width="638" height="332" /></a><p class="wp-caption-text">Crear nueva Base de Datos con grupos de archivos</p></div>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Estadísticas de SQL Server</strong></span></h4>
+<p>Las estadísticas de SQL Server contienen información sobre la <strong>distribución de los datos</strong> existentes en las columnas de las tablas de nuestra base de datos.<strong> </strong>A través de las estadísticas, el servidor conoce si la <strong>información de una columna</strong> varía mucho, si todos los datos son iguales, y los <strong>niveles de variación</strong> que hay.</p>
+<p>Ésta información es utilizada cuando pedimos datos a través de una consulta <em>
+			<span id="crayon-52e6f1f99fa34023097103" class="crayon-syntax crayon-syntax-inline  crayon-theme-classic crayon-theme-classic-inline crayon-font-monaco" style="font-size: 12px !important; line-height: 15px !important;font-size: 12px !important;"><span class="crayon-pre crayon-code" style="font-size: 12px !important; line-height: 15px !important;font-size: 12px !important;"><span class="crayon-v">SELECT</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-h"> </span><span class="crayon-v">FROM</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-h"> </span><span class="crayon-v">WHERE</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span></span></span></em></p>
+<p>El predicado de las condiciones especificadas en el <span style="color: #004ed0; font-size: 12px; font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;">WHERE</span> de una consulta, es analizado por el <strong><em>optimizador de consultas</em></strong> para <strong>determinar</strong> cual es la <span style="text-decoration: underline;">forma más rápida</span> de obtener la información requerida.</p>
+<p>Para lograr esto, el servidor examina las<strong> estadísticas</strong> asociadas a las<strong> columnas referenciadas</strong> en el <span style="color: #004ed0; font-size: 12px; font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;">WHERE</span> como también los <strong>índices</strong> existentes en la tablas, y la participación de dichas columnas.</p>
+<p>Es necesario que nuestra base de datos esté <span style="text-decoration: underline;">configurada</span> para generar <strong>estadísticas automáticamente</strong> y se recomienda que éstas se <strong>actualicen asíncronamente</strong> para evitar el exceso de tiempo que puede tomar la actualización de la estadística.</p><!-- Crayon Syntax Highlighter v2.3.0 -->
+
+		<div id="crayon-52e6f1f99fa43585815064" class="crayon-syntax crayon-theme-familiar crayon-font-monaco crayon-os-pc print-yes" data-settings=" no-popup minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; float: none; clear: both; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-toolbar" data-settings=" mouseover overlay delay" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">Configurar Estadísticas en la base de datos</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Expand Code"><div class="crayon-button-icon"></div></div><span class="crayon-language">Transact-SQL</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="off" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+ALTER DATABASE [MyDB] SET AUTO_CREATE_STATISTICS ON WITH NO_WAIT
+ALTER DATABASE [MyDB] SET AUTO_UPDATE_STATISTICS ON WITH NO_WAIT
+ALTER DATABASE [MyDB] SET AUTO_UPDATE_STATISTICS_ASYNC ON WITH NO_WAIT
+GO</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-52e6f1f99fa43585815064-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa43585815064-2">2</div><div class="crayon-num" data-line="crayon-52e6f1f99fa43585815064-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa43585815064-4">4</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-line" id="crayon-52e6f1f99fa43585815064-1"><span class="crayon-k">ALTER</span><span class="crayon-h"> </span><span class="crayon-k">DATABASE</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">MyDB</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-k">SET</span><span class="crayon-h"> </span><span class="crayon-i">AUTO_CREATE_STATISTICS</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-k">WITH</span><span class="crayon-h"> </span><span class="crayon-i">NO_WAIT</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa43585815064-2"><span class="crayon-k">ALTER</span><span class="crayon-h"> </span><span class="crayon-k">DATABASE</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">MyDB</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-k">SET</span><span class="crayon-h"> </span><span class="crayon-i">AUTO_UPDATE_STATISTICS</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-k">WITH</span><span class="crayon-h"> </span><span class="crayon-i">NO_WAIT</span></div><div class="crayon-line" id="crayon-52e6f1f99fa43585815064-3"><span class="crayon-k">ALTER</span><span class="crayon-h"> </span><span class="crayon-k">DATABASE</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">MyDB</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-k">SET</span><span class="crayon-h"> </span><span class="crayon-i">AUTO_UPDATE_STATISTICS_ASYNC</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-k">WITH</span><span class="crayon-h"> </span><span class="crayon-i">NO_WAIT</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa43585815064-4"><span class="crayon-i">GO</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0043 seconds] -->
+<p></p>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Catálogo interno de SQL Server</strong></span></h4>
+<p>Existen dos formas tradicionales de ver las estadísticas. Una de ellas es consultando el <a title="Consultar el catálogo del sistema de SQL Server" href="http://technet.microsoft.com/es-co/library/ms189082(v=sql.105).aspx" target="_blank"><strong>catálogo del sistema de SQL Server</strong></a> o a través de la interfaz gráfica asociada al<strong> plan de ejecución</strong> de una consulta. Por ahora veremos como obtener las estadísticas desde el catálogo interno de SQL Server.</p>
+<p>Algunas de las tablas a las que hacemos referencia en las consultas <strong>no</strong> necesariamente <strong>existen físicamente</strong> y muchas de ellas, o <strong>son vistas</strong> o <strong>se construyen al momento de ejecutar</strong>. Además, los objetos (tablas, procedimientos, etc) no se almacenan por el nombre que le damos, sino por un identificador interno.</p>
+<p>Para obtener el<strong> identificador interno</strong> de un objeto, existe una función llamada 
+			<span id="crayon-52e6f1f99fa53102452978" class="crayon-syntax crayon-syntax-inline  crayon-theme-familiar crayon-theme-familiar-inline crayon-font-monaco" style="font-size: 12px !important; line-height: 15px !important;font-size: 12px !important;"><span class="crayon-pre crayon-code" style="font-size: 12px !important; line-height: 15px !important;font-size: 12px !important;"><span class="crayon-e">object_id</span><span class="crayon-sy">(</span><span class="crayon-s">'nombre_objeto'</span><span class="crayon-sy">)</span></span></span> que retorna su <em>id</em>, pudiendo usarse en una <span style="text-decoration: underline;">consulta</span> o en una instrucción <span style="color: #004ed0; font-size: 12px; font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;">SET</span>.</p>
+<p>El catálogo donde se almacena la información de los índices y estadísticas de una tabla se llama<strong> <span style="color: #0000ff;"><em>sysindexes</em></span>.</strong> Para consultarlo se debe filtrar la información por el <strong><em>id</em></strong> de la tabla, como se muestra a continuación:</p><!-- Crayon Syntax Highlighter v2.3.0 -->
+
+		<div id="crayon-52e6f1f99fa60481949137" class="crayon-syntax crayon-theme-familiar crayon-font-monaco crayon-os-pc print-yes" data-settings=" no-popup minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; float: none; clear: both; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-52e6f1f99fa60481949137-1">1</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-line" id="crayon-52e6f1f99fa60481949137-1"><span class="crayon-k">SELECT</span><span class="crayon-h"> </span><span class="crayon-i">id</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">name</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">indid</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">rowcnt</span><span class="crayon-h"> </span><span class="crayon-k">FROM</span><span class="crayon-h"> </span><span class="crayon-i">sysindexes</span><span class="crayon-h"> </span><span class="crayon-k">WHERE</span><span class="crayon-h"> </span><span class="crayon-i">id</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">object_id</span><span class="crayon-sy">(</span><span class="crayon-s">'TEST'</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0022 seconds] -->
+<p></p>
+<table style="width: auto; font-size: .9em;">
+<tbody>
+<tr>
+<td><strong>id</strong></td>
+<td><strong>name</strong></td>
+<td><strong>indid</strong></td>
+<td><strong>rowcnt</strong></td>
+</tr>
+<tr>
+<td>80719340</td>
+<td>PK_Test</td>
+<td>1</td>
+<td>30</td>
+</tr>
+<tr>
+<td>80719340</td>
+<td>_WA_Sys_00000002_04CFADEC</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>80719340</td>
+<td>_WA_Sys_00000003_04CFADEC</td>
+<td>3</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>El campo <strong>id</strong> es el identificador de la tabla <em>TEST.</em> El campo <strong>name</strong> nos informa el nombre de las estadísticas de la tabla. El primer<strong> índice</strong> corresponde a la <strong>clave primaria</strong> de la tabla, los demás se <strong>crean automáticamente</strong> dependiendo del predicado de las condiciones en el <span style="color: #004ed0; font-size: 12px; font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;">WHERE</span> de la consulta (o la relación en un <span style="color: #004ed0; font-size: 12px; font-family: Monaco, 'MonacoRegular', 'Courier New', monospace;">JOIN</span>)</p>
+<p>Si queremos saber lo que contiene la estadística, podemos hacerlo con la instrucción <strong><a title="dbcc show_statistics" href="http://technet.microsoft.com/es-es/library/ms174384.aspx" target="_blank">show_statistics</a>.</strong></p><!-- Crayon Syntax Highlighter v2.3.0 -->
+
+		<div id="crayon-52e6f1f99fa71250721263" class="crayon-syntax crayon-theme-familiar crayon-font-monaco crayon-os-pc print-yes" data-settings=" no-popup minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; float: none; clear: both; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-plain-wrap"></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-52e6f1f99fa71250721263-1">1</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-line" id="crayon-52e6f1f99fa71250721263-1"><span class="crayon-k">dbcc</span><span class="crayon-h"> </span><span class="crayon-e">show_statistics </span><span class="crayon-sy">(</span><span class="crayon-i">TEST</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">PK_Test</span><span class="crayon-sy">)</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0009 seconds] -->
+<p></p>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Gestionar Indices</strong></span></h4>
+<p>Los índices son campos elegidos por el constructor de la base de datos diseñados para mejorar el rendimiento de las consultas. Una vez que se crean los índices se deben mantener para asegurar el rendimiento de las consultas, para ello existen varias herramientas que ayudan en la tarea de administración y mantenimiento. La administración comprende las tareas de <strong>reconstrucción</strong>, renombrado y <strong>eliminación</strong> de índices.</p>
+<p>Los índices mal diseñados y la falta de índices constituyen las principales fuentes de atascos en aplicaciones de base de datos. El diseño eficaz de los índices tiene gran importancia para conseguir un buen rendimiento de una base de datos y una aplicación. La selección de los <strong>índices apropiados</strong> para una base de datos y su carga de trabajo, es una compleja operación que busca el equilibrio entre la <span style="text-decoration: underline;">velocidad de consulta</span> y el <span style="text-decoration: underline;">costo de actualización</span>. Los <strong>índices estrechos</strong>, o con pocas columnas en la clave de índice, necesitan menos espacio en el disco y son menos susceptibles de provocar sobrecargas debido a su mantenimiento. Por otra parte, la ventaja de los <strong>índices anchos</strong> es que cubren más consultas.</p>
+<p>El <strong>optimizador de consultas</strong> de SQL Server selecciona de forma confiable el índice más eficaz en la mayoría de los casos. La estrategia general de diseño de índices debe proporcionar una buena selección de índices al optimizador de consultas y confiar en que tomará la decisión correcta. Así se reduce el tiempo de análisis y se obtiene un buen rendimiento en diversas situaciones. Para saber qué índices utiliza el optimizador de consultas para determinada consulta, en <span style="text-decoration: underline;">SQL Server Management Studio</span>, en el menú <span style="text-decoration: underline;"><em>Consulta</em></span>, seleccione <span style="text-decoration: underline;"><em>Incluir plan de ejecución real</em></span>.</p>
+<blockquote><p>Los índices permiten la búsqueda a partir de los campos especificados a una velocidad notablemente superior. Sin embargo, esta ventaja se ve contrarrestada por el hecho de ocupar más memoria y espacio en el disco, además de requerir un tiempo de proceso superior para instrucciones de inserción y actualización.</p>
+<div id="indicesContraproducentes"></div>
+</blockquote>
+<div>Los índices pueden resultar <strong>contraproducentes</strong> si los introducimos sobre campos triviales a partir de los cuales no se realiza ningún tipo de petición ya que, además del problema de memoria ya mencionado, estamos ralentizando otras tareas de la base de datos como son la <strong>edición</strong>, <strong>inserción</strong> y <strong>borrado</strong>. Es por ello que vale la pena pensárselo dos veces antes de indexar un campo que no sirve de criterio para búsquedas o que es usado con muy poca frecuencia por razones de mantenimiento.</div>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Indices Agrupados y No agrupados</strong></span></h4>
+<ul>
+<li><strong>Indice agrupado (clustered): </strong>Es similar a una guía telefónica, los registros con el mismo valor de campo se agrupan. Un índice agrupado determina la secuencia de almacenamiento de los registros en una tabla. Se utilizan para campos con los cuales se realizan búsquedas frecuentes o se accede siguiendo un orden. Una tabla <span style="text-decoration: underline;">sólo puede tener un índice agrupado</span>.</li>
+<li style="padding-top: 10px;"><strong>Indice No agrupado (non-clustered):</strong> Es como el índice de un libro, los datos se almacenan en un lugar diferente al del índice, los apuntadores indican el lugar de almacenamiento de los objetos indexados en la tabla. un índice no agrupado se emplea cuando se realizan distintos tipos de búsqueda, con campos en donde los datos son únicos. <span style="text-decoration: underline;">Los campos de tipo <em>text</em>, <em>ntext</em> e <em>image</em> no se pueden indizar</span>. Es posible crear índices en las vistas.</li>
+</ul>
+<blockquote><p>La diferencia básica entre índices agrupados y no agrupados es que los registros de un índice agrupado están ordenados y almacenados de forma secuencial en función de su clave. SQL Server crea automáticamente índices cuando se crea una restricción &#8220;primary key&#8221; o &#8220;unique&#8221; en una tabla.</p></blockquote>
+<h4 style="margin-top: 30px;"><span style="color: #800000;"><strong>Crear Indices</strong></span></h4>
+<p>Como se menciono anteriormente, la<strong> correcta implementación de un índice</strong> puede mejorar considerablemente el <strong>tiempo de respuesta de una consulta</strong>, pero el uso indebido puede causar una sobrecarga en los procesos de actualización, edición y eliminación, lo cual resultará <a href="#indicesContraproducentes">contraproducente</a>.</p>
+<p>Todos los temas que hemos visto hasta ahora eran necesarios para entender los factores que influyen en el <strong>rendimiento de las consultas en el motor de SQL Server</strong>, ya que se incluyen variables de diseño, de lógica, de normalización, y por supuesto, conocer y aprovechar las <strong>herramientas</strong> que nos brinda <strong>SQL Server</strong>.</p>
+<p>Debido a que las aplicaciones se comportan diferente en la <strong>etapa de desarrollo</strong> y en la <strong>etapa de producción</strong>, se recomienda <a title="CREATE INDEX (Transact-SQL)" href="http://technet.microsoft.com/es-es/library/ms188783(v=sql.105).aspx" target="_blank">crear los índices</a> un <span style="text-decoration: underline;">tiempo después</span> que la aplicación esté en producción, para que el catálogo interno de SQL pueda hacer su trabajo y recolectar la información de búsquedas más significativas. Justamente eso es lo que nos proporciona las <strong>estadísticas</strong> de uso. De esta forma, se pueden crear la índices que serán usados con certeza, sabiendo además cuánto mejorarán esas consultas, y cuan frecuente será su uso.</p>
+<p>Sin más preámbulo los dejo con la consulta sql que me inspiró a crear este artículo, la cual nos provee la información necesaria para que analicemos las estadística recolectadas en el catálogo de SQL Server, y tomemos la mejor decisión a la hora de crear los índices que mejorarán el rendimiento de nuestras consultas.</p><!-- Crayon Syntax Highlighter v2.3.0 -->
+
+		<div id="crayon-52e6f1f99fa92342490661" class="crayon-syntax crayon-theme-familiar crayon-font-monaco crayon-os-pc print-yes" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; float: none; clear: both; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-toolbar" data-settings=" mouseover overlay hide delay" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">CALCULA LOS INDICES SUGERIDOS SEGÚN EL USO DE LAS ESTADISTICAS</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Transact-SQL</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="off" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+USE [MyDB]
+GO
+SELECT
+	DB = db_name(d.database_id),
+	Tabla = object_name(d.object_id, d.database_id),
+	p.Row_count,
+	s.avg_user_impact,
+	s.user_seeks,
+	d.Equality_columns,
+	d.Inequality_columns,
+	d.Included_columns,
+	l.Num_esperas,
+	l.Ms_esperas,
+	s.Last_user_seek,
+	Create_index = Replace('create nonclustered index IX_' +
+		object_name(d.object_id, d.database_id) +'_A# on ' +
+		object_name(d.object_id, d.database_id) + ' (' +
+		Isnull(d.equality_columns + ',', '') + Isnull(d.inequality_columns, '') + ') ' +
+		Isnull('include (' + d.included_columns + ')', '') + ' with(online = on)', ',)', ')')
+FROM	  sys.dm_db_missing_index_details d
+LEFT JOIN sys.dm_db_missing_index_groups g ON d.index_handle =g.index_handle
+LEFT JOIN sys.dm_db_missing_index_group_stats s ON g.index_group_handle = s.group_handle
+LEFT JOIN sys.dm_db_partition_stats p ON d.object_id = p.object_id AND p.index_id &lt; 2
+LEFT JOIN (Select database_id,
+		  object_id,
+		  row_number() Over (Partition By database_id Order By sum(page_io_latch_wait_in_ms) Desc) As row_number,
+		  sum(page_io_latch_wait_count) As num_esperas,
+		  sum(page_io_latch_wait_in_ms) As ms_esperas,
+		  sum(range_scan_count) As range_scans,
+		  sum(singleton_lookup_count) As index_lookups
+		From sys.dm_db_index_operational_stats(NULL, NULL, NULL, NULL)
+		Where page_io_latch_wait_count &gt; 0
+		Group by database_id, object_id) l
+	ON d.object_id = l.object_id AND d.database_id = l.database_id
+WHERE d.database_id = db_id()
+  --AND s.last_user_seek &gt; dateadd(dd, -7, getdate())
+ORDER BY user_seeks desc, Tabla --,floor(s.avg_user_impact) DESC</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-2">2</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-4">4</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-6">6</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-8">8</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-10">10</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-12">12</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-14">14</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-16">16</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-18">18</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-20">20</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-22">22</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-24">24</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-25">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-26">26</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-27">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-28">28</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-29">29</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-30">30</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-31">31</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-32">32</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-33">33</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-34">34</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-35">35</div><div class="crayon-num crayon-striped-num" data-line="crayon-52e6f1f99fa92342490661-36">36</div><div class="crayon-num" data-line="crayon-52e6f1f99fa92342490661-37">37</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-1"><span class="crayon-k">USE</span><span class="crayon-h"> </span><span class="crayon-sy">[</span><span class="crayon-i">MyDB</span><span class="crayon-sy">]</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-2"><span class="crayon-i">GO</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-3"><span class="crayon-k">SELECT</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-4"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">DB</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">db_name</span><span class="crayon-sy">(</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-5"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">Tabla</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">object_name</span><span class="crayon-sy">(</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span><span class="crayon-sy">)</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-6"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">p</span><span class="crayon-sy">.</span><span class="crayon-i">Row_count</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-7"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">s</span><span class="crayon-sy">.</span><span class="crayon-i">avg_user_impact</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-8"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">s</span><span class="crayon-sy">.</span><span class="crayon-i">user_seeks</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-9"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">Equality_columns</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-10"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">Inequality_columns</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-11"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">Included_columns</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-12"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">l</span><span class="crayon-sy">.</span><span class="crayon-i">Num_esperas</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-13"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">l</span><span class="crayon-sy">.</span><span class="crayon-i">Ms_esperas</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">s</span><span class="crayon-sy">.</span><span class="crayon-i">Last_user_seek</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">Create_index</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">Replace</span><span class="crayon-sy">(</span><span class="crayon-s">'create nonclustered index IX_'</span><span class="crayon-h"> </span><span class="crayon-o">+</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-16"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">object_name</span><span class="crayon-sy">(</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-s">'_A# on '</span><span class="crayon-h"> </span><span class="crayon-o">+</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-17"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">object_name</span><span class="crayon-sy">(</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">' ('</span><span class="crayon-h"> </span><span class="crayon-o">+</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-18"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">Isnull</span><span class="crayon-sy">(</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">equality_columns</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">','</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">''</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-e">Isnull</span><span class="crayon-sy">(</span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">inequality_columns</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">''</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">') '</span><span class="crayon-h"> </span><span class="crayon-o">+</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-19"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">Isnull</span><span class="crayon-sy">(</span><span class="crayon-s">'include ('</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">included_columns</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">')'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">''</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-o">+</span><span class="crayon-h"> </span><span class="crayon-s">' with(online = on)'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">',)'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">')'</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-20"><span class="crayon-k">FROM</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">sys</span><span class="crayon-sy">.</span><span class="crayon-i">dm_db_missing_index_details</span><span class="crayon-h"> </span><span class="crayon-i">d</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-21"><span class="crayon-k">LEFT</span><span class="crayon-h"> </span><span class="crayon-k ">JOIN</span><span class="crayon-h"> </span><span class="crayon-i">sys</span><span class="crayon-sy">.</span><span class="crayon-i">dm_db_missing_index_groups</span><span class="crayon-h"> </span><span class="crayon-i">g</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">index_handle</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-i">g</span><span class="crayon-sy">.</span><span class="crayon-i">index_handle</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-22"><span class="crayon-k">LEFT</span><span class="crayon-h"> </span><span class="crayon-k ">JOIN</span><span class="crayon-h"> </span><span class="crayon-i">sys</span><span class="crayon-sy">.</span><span class="crayon-i">dm_db_missing_index_group_stats</span><span class="crayon-h"> </span><span class="crayon-i">s</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-i">g</span><span class="crayon-sy">.</span><span class="crayon-i">index_group_handle</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">s</span><span class="crayon-sy">.</span><span class="crayon-i">group_handle</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-23"><span class="crayon-k">LEFT</span><span class="crayon-h"> </span><span class="crayon-k ">JOIN</span><span class="crayon-h"> </span><span class="crayon-i">sys</span><span class="crayon-sy">.</span><span class="crayon-i">dm_db_partition_stats</span><span class="crayon-h"> </span><span class="crayon-i">p</span><span class="crayon-h"> </span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">p</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-h"> </span><span class="crayon-k ">AND</span><span class="crayon-h"> </span><span class="crayon-i">p</span><span class="crayon-sy">.</span><span class="crayon-i">index_id</span><span class="crayon-h"> </span><span class="crayon-o">&lt;</span><span class="crayon-h"> </span><span class="crayon-cn">2</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-24"><span class="crayon-k">LEFT</span><span class="crayon-h"> </span><span class="crayon-k ">JOIN</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-k">Select</span><span class="crayon-h"> </span><span class="crayon-i">database_id</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-25"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-i">object_id</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-26"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">row_number</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">Over</span><span class="crayon-h"> </span><span class="crayon-sy">(</span><span class="crayon-i">Partition</span><span class="crayon-h"> </span><span class="crayon-k">By</span><span class="crayon-h"> </span><span class="crayon-i">database_id</span><span class="crayon-h"> </span><span class="crayon-k">Order</span><span class="crayon-h"> </span><span class="crayon-k">By</span><span class="crayon-h"> </span><span class="crayon-e">sum</span><span class="crayon-sy">(</span><span class="crayon-i">page_io_latch_wait_in_ms</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">Desc</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">As</span><span class="crayon-h"> </span><span class="crayon-i">row_number</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-27"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">sum</span><span class="crayon-sy">(</span><span class="crayon-i">page_io_latch_wait_count</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">As</span><span class="crayon-h"> </span><span class="crayon-i">num_esperas</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-28"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">sum</span><span class="crayon-sy">(</span><span class="crayon-i">page_io_latch_wait_in_ms</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">As</span><span class="crayon-h"> </span><span class="crayon-i">ms_esperas</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-29"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">sum</span><span class="crayon-sy">(</span><span class="crayon-i">range_scan_count</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">As</span><span class="crayon-h"> </span><span class="crayon-i">range_scans</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-30"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">sum</span><span class="crayon-sy">(</span><span class="crayon-i">singleton_lookup_count</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-k">As</span><span class="crayon-h"> </span><span class="crayon-i">index_lookups</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-31"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">From</span><span class="crayon-h"> </span><span class="crayon-i">sys</span><span class="crayon-sy">.</span><span class="crayon-e">dm_db_index_operational_stats</span><span class="crayon-sy">(</span><span class="crayon-k ">NULL</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-k ">NULL</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-k ">NULL</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-k ">NULL</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-32"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">Where</span><span class="crayon-h"> </span><span class="crayon-i">page_io_latch_wait_count</span><span class="crayon-h"> </span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-cn">0</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-33"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">Group</span><span class="crayon-h"> </span><span class="crayon-k">by</span><span class="crayon-h"> </span><span class="crayon-i">database_id</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">object_id</span><span class="crayon-sy">)</span><span class="crayon-h"> </span><span class="crayon-i">l</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-34"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-k">ON</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">l</span><span class="crayon-sy">.</span><span class="crayon-i">object_id</span><span class="crayon-h"> </span><span class="crayon-k ">AND</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-i">l</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-35"><span class="crayon-k">WHERE</span><span class="crayon-h"> </span><span class="crayon-i">d</span><span class="crayon-sy">.</span><span class="crayon-i">database_id</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-e">db_id</span><span class="crayon-sy">(</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-52e6f1f99fa92342490661-36"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-c">--AND s.last_user_seek &gt; dateadd(dd, -7, getdate())</span></div><div class="crayon-line" id="crayon-52e6f1f99fa92342490661-37"><span class="crayon-k">ORDER</span><span class="crayon-h"> </span><span class="crayon-k">BY</span><span class="crayon-h"> </span><span class="crayon-i">user_seeks</span><span class="crayon-h"> </span><span class="crayon-k">desc</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-i">Tabla</span><span class="crayon-h"> </span><span class="crayon-c">--,floor(s.avg_user_impact) DESC</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0331 seconds] -->
+<p>Ésta consulta nos arroja una tabla con los datos de las estadísticas de uso en cada una de las entidades de la base de datos especificada. Desde luego, no se pueden crear todos los índices que se recogen con esta consulta sin más. Hay que evaluarlos con los conocimientos que se poseen de la base de datos, del entorno, del tamaño de los campos, etc.</p>
+<address><strong>En el siguiente artículo analizaremos a fondo cada uno de los campos de la consulta, y cómo tomar la decisión más acertada en la creación de los índices sugeridos.</strong></address>
+<div class="lazysocialbuttons" data-float="left" data-buttons="twitter,facebook" data-twshareurl="http://mocionsoft.com/blog/?p=324" data-twtext="SQL Server: Optimizar el rendimiento de consultas" data-shareurl="http://mocionsoft.com/blog/?p=324" data-fbhideflyout="false" data-backgroundtype="light"></div>		
+				<div class="entry-meta">
+	
+			
+			
+			 
+			
+			 
+					</div><!-- .entry-meta -->
+			</header><!-- .entry-header -->
+</article><!-- #post-## -->
+			
+
+	<div id="comments" class="comments-area">
+
+	
+	
+	
+									<div id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/blog/?p=324#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://mocionsoft.com/blog/wp-comments-post.php" method="post" id="commentform">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code class=&quot;&quot; title=&quot;&quot; data-url=&quot;&quot;&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; &lt;pre class=&quot;&quot; title=&quot;&quot; data-url=&quot;&quot;&gt; &lt;span class=&quot;&quot; title=&quot;&quot; data-url=&quot;&quot;&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='324' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="d4b514f0a0" /></p>					</form>
+							</div><!-- #respond -->
+						
+</div><!-- #comments -->
+
+		
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+
+	</div><!-- #main -->
+		<!-- #colophon -->
+</div><!-- #page -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+	<div id="info-footer">
+		<div class="footer-column">
+			<img src="wp-content/themes/blogcion/img/left-arrow.png" />
+			<h1>sobre mocion</h1>
+			<img src="wp-content/themes/blogcion/img/right-arrow.png" />
+			
+			<p>
+				Mocion reune la suficiente experiencia para brindar las mejores
+				soluciones de software, atendiendo compañias interesadas en usar 
+				herramientas de tecnilogia dentro de un cilo de vida de su negocio.
+				Nuestros servicios estan agrupados en dos areas principales, 
+				soluciones web y soluciones empresariales.
+			</p>
+			
+		</div>
+		<div class="footer-column">
+			<img src="wp-content/themes/blogcion/img/left-arrow.png" />
+			<h1>sobre el blog</h1>
+			<img src="wp-content/themes/blogcion/img/right-arrow.png" />
+			
+			<p>
+				El objetivo de este blog es compartir las experiencias
+				que viven a diario nuestros programadores y como han 
+				abordado problemas de ingenieria, estamos seguros que
+				en nuestro blog encontraras material util para tu 
+				proximo proyecto de software.
+			</p>
+		</div>
+		<div class="footer-column">
+			<img src="wp-content/themes/blogcion/img/left-arrow.png" />
+			<h1>contactanos</h1>
+			<img src="wp-content/themes/blogcion/img/right-arrow.png" />
+			<p class="contacto">
+				Tel. +57 (1) 545 1988 <br/>
+				Cll. 67A No. 60-46 <br/>
+				Bogota D.C. - Colombia
+				
+<br /><br />
+				<a href="mailto:info@mocionsoft.com">info@mocionsoft.com</a>
+				<br/>
+				<a href="www.mocionsoft.com">www.mocionsoft.com</a>
+				
+				
+			</p>
+		</div>
+		
+	</div>
+	</footer>
+
+<script type='text/javascript'>
+// **** Start Plugin Implementation ****************************
+// Uncomment the code line below to specify the path to the two images
+// under two circumstances: 1) you are using the HTML decoration auto-wireup
+// and 2) your images are not in the same root folder as the executing script
+// (which would be used automatically if not specified)
+var lazySocialButtonsImagePath = 'http://mocionsoft.com/blog/wp-content/plugins/lazy-social-buttons/';
+
+// This is the asynchronous loader for the plugin script.
+// It also handles a ready callback if specified, by checking
+// to see if the plugin is fully loaded before trying to execute
+// the callback.
+(function (loaded){
+  var d = document,
+  id = 'LazySocialButtonsScript',
+  src = 'http://mocionsoft.com/blog/wp-content/plugins/lazy-social-buttons/lazySocialButtons.min.js';
+  var js, st = d.getElementsByTagName('script')[0];
+  if (d.getElementById(id)) { return; }
+  js = d.createElement('script');
+  js.id = id; js.type = 'text/javascript'; js.async = true; js.src = src;
+  st.parentNode.insertBefore(js, st);
+
+  // if we have a callback, execute it
+  if (typeof(loaded) === 'function') {
+    (function checkLoaded() {
+      if (!$.fn.lazySocialButtons) setTimeout(checkLoaded, 100);
+      else loaded();
+    })();
+  }
+})();
+</script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-content/plugins/prettify-code-syntax/javascripts/prettify.js?ver=3.5.1'></script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-content/plugins/prettify-code-syntax/javascripts/load.js?ver=3.5.1'></script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-content/plugins/simple-colorbox/scripts/jquery.colorbox-min.js?ver=1'></script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-content/themes/blogcion/js/navigation.js?ver=20120206'></script>
+<script type='text/javascript' src='http://mocionsoft.com/blog/wp-content/themes/blogcion/js/skip-link-focus-fix.js?ver=20130115'></script>
+
+</body>
+</html>
