@@ -1,7 +1,0 @@
-; ExternalDLLMETS.def : Declares the module parameters for the DLL.
-
-LIBRARY      "ExternalDLLMETS"
-
-EXPORTS
-	ClientCreateDlg
-	ClientDlgTitle
