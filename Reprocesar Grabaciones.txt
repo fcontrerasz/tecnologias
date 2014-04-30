@@ -1,0 +1,34 @@
+Renombrar archivos de ERROR.
+
+@echo off
+cd D:\I3\IC\PMQ\AdminServer\IC Report Logging
+ren *.err *.i3p
+cd D:\I3\IC\PMQ\Ip\IC Report Logging
+ren *.err *.i3p
+cd D:\I3\IC\PMQ\IpServer\IC Report Logging
+ren *.err *.i3p
+cd D:\I3\IC\PMQ\ProcessAutomationServer\AttendantServ er
+ren *.err *.i3p
+cd D:\I3\IC\PMQ\StatServer\IC Report Logging
+ren *.err *.i3p
+
+Primero
+
+sendcustomnotification TrackerServer PMQretry 
+
+Esperar 20 minutos, luego.
+
+
+sendcustomnotification OptimizerServer PMQretry
+
+
+Esperar 20 minutos, luego.
+
+
+SendCustomNotification IRServer PMQRetry
+
+
+Esperar 20 minutos, luego.
+
+
+sendcustomnotification IRServer RescueRecordings \\cicmediaserver\Recordings 15000

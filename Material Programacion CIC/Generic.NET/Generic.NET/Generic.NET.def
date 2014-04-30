@@ -1,0 +1,6 @@
+; Generic.NET.def : Declares the module parameters for the DLL.
+
+LIBRARY      "Generic56"
+
+EXPORTS
+    ; Explicit exports can go here

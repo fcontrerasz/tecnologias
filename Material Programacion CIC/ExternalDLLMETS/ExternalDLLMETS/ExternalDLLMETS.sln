@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExternalDLLMETS", "ExternalDLLMETS.vcproj", "{16158BE2-BD45-43E2-BCC1-46681BA31ABB}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccProjectName0 = ExternalDLLMETS
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Jalindi\u0020Igloo
+		CanCheckoutShared = true
+		SccProjectUniqueName1 = ExternalDLLMETS.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16158BE2-BD45-43E2-BCC1-46681BA31ABB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{16158BE2-BD45-43E2-BCC1-46681BA31ABB}.Debug|Win32.Build.0 = Debug|Win32
+		{16158BE2-BD45-43E2-BCC1-46681BA31ABB}.Release|Win32.ActiveCfg = Release|Win32
+		{16158BE2-BD45-43E2-BCC1-46681BA31ABB}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
