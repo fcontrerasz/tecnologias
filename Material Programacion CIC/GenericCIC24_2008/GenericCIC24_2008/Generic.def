@@ -1,0 +1,6 @@
+; Generic.def : Declares the module parameters for the DLL.
+
+LIBRARY      "Generic"
+
+EXPORTS
+    ; Explicit exports can go here
