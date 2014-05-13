@@ -1,0 +1,5 @@
+## primer server
+mysqldump -h server -u root -p --all-databases > all_dbs.sql
+
+## segundo server
+mysql -u root -p < all_dbs.sql

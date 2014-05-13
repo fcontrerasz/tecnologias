@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 http://www.mcloud.cl
 arriba - logon
 nuevo usuario - pedido de correo.
 
 http://mailadmin.tie.cl
 n: rut mas guion
+=======
+http://www.mcloud.cl
+arriba - logon
+nuevo usuario - pedido de correo.
+
+http://mailadmin.tie.cl
+n: rut mas guion
+>>>>>>> 5a8ee889b0cb3191a2c70bf2665abd47765dfba1
 c: campino1212
