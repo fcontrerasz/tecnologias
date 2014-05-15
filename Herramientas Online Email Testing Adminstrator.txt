@@ -1,0 +1,29 @@
+https://testconnectivity.microsoft.com
+
+MailTester.com’s Email address verification
+http://mailtester.com/testmail.php
+
+Microsoft’s Sender ID Framework SPF Record Wizard
+http://www.microsoft.com/mscorp/safety/content/technologies/senderid/wizard/
+
+Kitterman’s SPF Record Testing Tools
+http://www.kitterman.com/spf/validate.html
+
+WebSitePulse’s Email Validation Test
+http://www.websitepulse.com/help/testtools.emailvalidation-test.html
+
+MxToolbox Online SMTP Diagnostic Tools
+http://mxtoolbox.com/diagnostic.aspx
+
+MxToolbox Email Header Analyzer
+http://mxtoolbox.com/public/tools/emailheaders.aspx
+
+DNSstuff Email Tools
+http://www.dnsstuff.com/tools
+
+Kloth’s Multi DNSBL-check
+http://www.kloth.net/services/dnsbl.php
+
+Central Ops free online network tools
+http://centralops.net/co/
+
