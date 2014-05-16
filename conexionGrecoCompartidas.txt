@@ -3,3 +3,4 @@ net use y: \\greco\servestudiante.mets.cl Yt10p* /USER:mets\neutron /persistent:
 net use z: \\greco\newsuka.mets.cl Yt10p* /USER:mets\neutron /persistent:yes
 net use w: \\greco\mets.cl Yt10p* /USER:mets\neutron /persistent:yes
 net use v: \\greco\Demonios Yt10p* /USER:mets\neutron /persistent:yes
+net use u: \\greco\nicte.mets.cl Yt10p* /USER:mets\neutron /persistent:yes
