@@ -1,0 +1,14 @@
+CreateObject TSFunction, "TSMets.TSFunction"
+
+If GetStatus(COM) = 0 Then Message "Error CreateObject"
+
+Let vemail = Method(TSFunction, "ValidaEmail", Email_rec1)
+WScript.Echo objShell.Environment("USER").Item("MyVar1")
+
+If vemail = 0
+
+    Message "Mail Incorrecto"
+
+    Goto ThisField 
+
+endif

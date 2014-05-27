@@ -1,0 +1,47 @@
+listar permisos de la APP
+
+me/permissions
+
+listar mensajes en wall
+
+me/feed?fields=from,type,message
+
+listar paginas o cuentas que administra
+
+me/accounts
+
+/**
+
+{
+  "data": [
+    {
+      "category": "Community", 
+      "name": "Mets Social Intelligence", 
+      "access_token": "CAAUHlpO8wR8BADy9RmQj54su6B1jXxQliz89VZCkQmdBZBC0ZB1sZA7ic4i5L8TZBmMZA975Uu8hxJZCVzMG35wRBFz9KMlGctZBjnFabxu2dZCZCSLV3ApVZARt54G8a2ZBnzTpZCqc6WWlGav5DcRD7xMEwwZAhPNLAhqYaYK1ZC4u8A8bmFyEZAxpBybPPz0T7knu3GcwZA89e6KPMzgZDZD", 
+      "perms": [
+        "ADMINISTER", 
+        "EDIT_PROFILE", 
+        "CREATE_CONTENT", 
+        "MODERATE_CONTENT", 
+        "CREATE_ADS", 
+        "BASIC_ADMIN"
+      ], 
+      "id": "268574423290474"
+    }
+  ], 
+  "paging": {
+    "next": "https://graph.facebook.com/1147935276/accounts?limit=5000&offset=5000&__after_id=268574423290474"
+  }
+}
+
+luego conectarse  al token y ejecutar me/feed
+
+
+
+
+*/
+
+
+listar muro
+
+me/feed?fields=message,comments.fields(comments,likes,from,id,message,user_likes,created_time,like_count),from,link,id,to,likes.fields(id),created_time,actions,feed_targeting&limit=40

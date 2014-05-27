@@ -1,0 +1,2 @@
+http://20.20.30.236:67/ - solucionandolo FINAL
+http://172.30.10.61:67/ - testing
